@@ -2,7 +2,7 @@
 
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Marquee } from "@/components/ui/marquee";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronRight, Wrench } from "lucide-react";
 import TransBar from "@/components/trans-bar";
@@ -12,13 +12,27 @@ import Coordination from "@/components/coordination";
 import { LogoCarouselDemo } from "@/components/logo-carousel-demo";
 import BlogSection from "@/components/blog-section";
 import { IconsArray } from "@/components/icons/icons-array";
-import { BookingFlow } from "@/components/ui/database-with-rest-api";
+import { motion, useScroll, useTransform } from "motion/react";
+import { Sparkles } from "@/components/ui/sparkles";
 
+const text = [
+  "Booking a mechanic is now as easy as ordering takeout",
+  "•",
+  "See real prices, availability, and reviews instantly.",
+  "•",
+  "No phone calls, no back-and-forth, no guessing.",
+  "•",
+  "AI matches your car with the perfect mechanic.",
+  "•",
+  "Book in minutes, pay once, receipts forever.",
+  "•"
+]
 export default function Home() {
   const [isDark, setIsDark] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const heroSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -36,6 +50,18 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  // Track scroll progress through Hero section
+  // Stop tracking when section end reaches viewport start (before TransBar)
+  const { scrollYProgress } = useScroll({
+    target: heroSectionRef,
+    offset: ["start start", "end start"] // Stop when section end reaches viewport start
+  });
+
+  // Transform scroll progress to opacity and position
+  // Box stays visible until Hero section ends, then fades out
+  // Fade starts at 70% scroll progress and completes at 100%
+  const boxY = useTransform(scrollYProgress, [0, 0.7, 1], [0, 0, 0], { clamp: true });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission here
@@ -51,7 +77,8 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full bg-white">
       <section
-        className="bg-background relative w-full overflow-hidden"
+        ref={heroSectionRef}
+        className="bg-background relative w-full overflow-hidden min-h-screen"
       >
 
         <Image
@@ -71,7 +98,7 @@ export default function Home() {
 
 
         <div className="absolute top-1/7 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
-          <div className="flex self-center w-32 h-32 relative justify-center items-center">
+          <div className="flex self-center w-22 h-22 relative justify-center items-center">
             <svg style={{ display: 'none' }}>
               <filter id="displacementFilter">
                 <feTurbulence
@@ -106,9 +133,9 @@ export default function Home() {
               />
             </div>
 
-            <Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" width={100} height={100} className="object-cover z-20" />
+            <Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" width={100} height={100} className="object-cover z-20 h-22 w-22  mt-3" />
           </div>
-          <div className=" relative pt-12 flex flex-col items-center justify-center">
+          <div className=" relative pt-8 flex flex-col items-center justify-center">
             <p
               className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] text-8xl leading-none font-semibold ">
               Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent ">Waitlist</span>
@@ -190,15 +217,15 @@ export default function Home() {
               </div>
             </form>
 
-            <div className="border-b py-4 h-3 p-2 w-[65%] relative self-center" />
-            <p className="text-sm lg:text-base leading-relaxed text-[#E4E4E4] mt-6">Powered By</p>
-            {/* <Marquee className="w-[65%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-4 flex flex-row">
+            <div className="border-b py-4 h-3 p-2 w-[45%] relative self-center my-4" />
+            {/* <p className="text-sm lg:text-base leading-relaxed text-[#E4E4E4] mt-6">Powered By</p> */}
+            <Marquee className="w-[45%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-2 flex flex-row">
               {
-                IconsArray.map((item) => (
-                  <div key={item.name} className="grayscale"><item.icon className="h-14 w-14 " /></div>
+                text.map((item) => (
+                  <p key={item} className="text-xs leading-relaxed text-[#E4E4E4]">{item}</p>
                 ))
               }
-            </Marquee> */}
+            </Marquee>
           </div>
 
           {/* <div className="border-b py-4 h-3 p-2 w-[40%] relative" />
@@ -213,7 +240,12 @@ export default function Home() {
         </div>
 
 
-        <div className='absolute bottom-8 left-8 z-10 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl'>
+        <motion.div
+          className='absolute bottom-8 left-8 z-10 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl'
+          style={{
+            y: boxY
+          }}
+        >
           <div className="p-5 lg:p-8 lg:pr-6 relative rounded-2xl backdrop-blur-[4px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding ">
             <svg style={{ display: 'none' }}>
               <filter id="displacementFilter">
@@ -261,7 +293,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div >
+        </motion.div>
 
         <div className="absolute bottom-8 right-8 z-10 p-5 lg:p-8 lg:pr-6 text-white ">
           <div className="w-full flex justify-end pr-6"><Wrench className="w-8 h-8 mb-4 rotate-280 self-end flex" /></div>
@@ -276,7 +308,8 @@ export default function Home() {
 
       <OurVision />
       <Flow />
-      <BookingFlow />
+
+      {/* <BookingFlow /> */}
       {/* Coordination Section */}
       <Coordination />
 

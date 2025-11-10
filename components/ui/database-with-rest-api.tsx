@@ -2,9 +2,11 @@
 
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from "motion/react";
-import { Folder, HeartHandshakeIcon, SparklesIcon, LucideIcon, Calendar, CheckCircle2, Clock, Wrench, DollarSign, CheckCircle } from "lucide-react";
+import { Folder, HeartHandshakeIcon, SparklesIcon, LucideIcon, Calendar, CheckCircle2, Clock, Wrench, DollarSign, CheckCircle, Activity, Server, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { ReactLenis } from "lenis/react";
+import { Sparkles } from "./sparkles";
+import { Card } from "../card-stacking";
 interface Mechanic {
   id: string;
   name: string;
@@ -34,6 +36,49 @@ interface DatabaseWithRestApiProps {
   lightColor?: string;
 }
 
+const projects = [
+  {
+    title: 'Matthias Leidinger',
+    description:
+      'Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.',
+    src: 'rock.jpg',
+    link: 'https://images.unsplash.com/photo-1605106702842-01a887a31122?q=80&w=500&auto=format&fit=crop',
+    color: '#5196fd',
+  },
+  {
+    title: 'Clément Chapillon',
+    description:
+      'This is a story on the border between reality and imaginary, about the contradictory feelings that the insularity of a rocky, arid, and wild territory provokes”—so French photographer Clément.',
+    src: 'tree.jpg',
+    link: 'https://images.unsplash.com/photo-1605106250963-ffda6d2a4b32?w=500&auto=format&fit=crop&q=60',
+    color: '#8f89ff',
+  },
+  {
+    title: 'Zissou',
+    description:
+      'Though he views photography as a medium for storytelling, Zissou’s images don’t insist on a narrative. Both crisp and ethereal.',
+    src: 'water.jpg',
+    link: 'https://images.unsplash.com/photo-1605106901227-991bd663255c?w=500&auto=format&fit=crop',
+    color: '#13006c',
+  },
+  {
+    title: 'Mathias Svold and Ulrik Hasemann',
+    description:
+      'The coastlines of Denmark are documented in tonal colors in a pensive new series by Danish photographers Ulrik Hasemann and Mathias Svold; an ongoing project investigating how humans interact with and disrupt the Danish coast.',
+    src: 'house.jpg',
+    link: 'https://images.unsplash.com/photo-1605106715994-18d3fecffb98?w=500&auto=format&fit=crop&q=60',
+    color: '#ed649e',
+  },
+  {
+    title: 'Mark Rammers',
+    description:
+      'Dutch photographer Mark Rammers has shared with IGNANT the first chapter of his latest photographic project, ‘all over again’—captured while in residency at Hektor, an old farm in Los Valles, Lanzarote.',
+    src: 'cactus.jpg',
+    link: 'https://images.unsplash.com/photo-1506792006437-256b665541e2?w=500&auto=format&fit=crop',
+    color: '#fd521a',
+  },
+];
+
 const DatabaseWithRestApi = ({
   className,
   circleText,
@@ -54,44 +99,36 @@ const DatabaseWithRestApi = ({
   // Track scroll progress through the component
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start start", "end start"]
   });
 
-  // Transform scroll progress to step index (0 to stepCount)
-  // Add padding at the end to ensure final step completes
-  const scrollBasedStep = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, stepCount]
-  );
-
   // Calculate path progress for each step with more granular control
-  // Each step gets 25% of scroll, but we add easing to ensure completion
-  // Step 1: 0-25% of scroll
+  // Adjusted ranges to give more time for each step, especially the final one
+  // Step 1: 0-20% of scroll
   const path1Progress = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.25], // Start early, complete by 25%
+    [0, 0.15, 0.2], // Start early, complete by 20%
     [0, 0.95, 1],
     { clamp: true }
   );
-  // Step 2: 25-50% of scroll
+  // Step 2: 20-40% of scroll
   const path2Progress = useTransform(
     scrollYProgress,
-    [0.25, 0.45, 0.5],
+    [0.2, 0.35, 0.4],
     [0, 0.95, 1],
     { clamp: true }
   );
-  // Step 3: 50-75% of scroll
+  // Step 3: 40-60% of scroll
   const path3Progress = useTransform(
     scrollYProgress,
-    [0.5, 0.7, 0.75],
+    [0.4, 0.55, 0.6],
     [0, 0.95, 1],
     { clamp: true }
   );
-  // Step 4: 75-100% of scroll - ensure it completes fully
+  // Step 4: 60-85% of scroll - give more time for final step to complete
   const path4Progress = useTransform(
     scrollYProgress,
-    [0.75, 0.9, 1], // Start at 75%, complete by 100%
+    [0.6, 0.75, 0.85], // Start at 60%, complete by 85% (leaves 15% buffer)
     [0, 0.95, 1],
     { clamp: true }
   );
@@ -102,16 +139,16 @@ const DatabaseWithRestApi = ({
 
   // Use useMotionValueEvent instead of useEffect to prevent infinite loops
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Map scroll progress directly to steps based on scroll ranges
+    // Map scroll progress directly to steps based on adjusted scroll ranges
     let newStep = 0;
-    if (latest < 0.25) {
-      newStep = 1; // Step 1: 0-25%
-    } else if (latest < 0.5) {
-      newStep = 2; // Step 2: 25-50%
-    } else if (latest < 0.75) {
-      newStep = 3; // Step 3: 50-75%
+    if (latest < 0.2) {
+      newStep = 1; // Step 1: 0-20%
+    } else if (latest < 0.4) {
+      newStep = 2; // Step 2: 20-40%
+    } else if (latest < 0.6) {
+      newStep = 3; // Step 3: 40-60%
     } else {
-      newStep = 4; // Step 4: 75-100%
+      newStep = 4; // Step 4: 60-100%
     }
 
     const stepValue = newStep as 1 | 2 | 3 | 4;
@@ -126,9 +163,12 @@ const DatabaseWithRestApi = ({
   // Status messages for each step based on path progress
   const getStatusMessage = (step: number, progress: number): string => {
     if (step === 1) {
-      // Service step messages - spread out more evenly
-      if (progress < 0.3) return "Connecting to local garages...";
-      if (progress < 0.6) return "Scanning for mechanics in your area...";
+      // Service step messages - includes diagnosis phase first, then service search
+      if (progress < 0.2) return "Analyzing vehicle symptoms...";
+      if (progress < 0.4) return "Identifying potential issues...";
+      if (progress < 0.5) return "Diagnosing car problems...";
+      if (progress < 0.65) return "Connecting to local garages...";
+      if (progress < 0.8) return "Scanning for mechanics in your area...";
       if (progress < 0.9) return "Finding available pros...";
       return ""; // Path complete, show service name
     } else if (step === 2) {
@@ -210,6 +250,7 @@ const DatabaseWithRestApi = ({
         mechanic: null,
         time: "",
         confirmed: false,
+        diagnosis: "Brake System Issue",
       };
     } else if (activeStep === 2) {
       return {
@@ -241,462 +282,519 @@ const DatabaseWithRestApi = ({
     };
   }, [activeStep, mechanics]);
 
+  // Dynamic title based on active step
+  const dynamicTitle = React.useMemo(() => {
+    if (title) return title; // Use custom title if provided
+
+    switch (activeStep) {
+      case 1:
+        return "AI diagnostics & mechanic search";
+      case 2:
+        return "Fetching real-time quotes";
+      case 3:
+        return "Syncing calendar availability";
+      case 4:
+        return "Processing booking confirmation";
+      default:
+        return "Real-time booking sync API";
+    }
+  }, [activeStep, title]);
+
+  // Dynamic icon based on active step
+  const DynamicIcon = React.useMemo(() => {
+    switch (activeStep) {
+      case 1:
+        return Server; // Searching/querying
+      case 2:
+        return DollarSign; // Pricing/quotes
+      case 3:
+        return Calendar; // Calendar/scheduling
+      case 4:
+        return CheckCircle; // Confirmation
+      default:
+        return Activity; // Default API activity
+    }
+  }, [activeStep]);
+
+  // Card data for each step
+  const stepCards = [
+    {
+      step: 1,
+      title: "AI Diagnostics & Service Discovery",
+      description: "Our AI connects with your car's information including mileage, service history, and vehicle specifications. We analyze your vehicle symptoms, identify potential issues, and search our network of certified mechanics to find the best match for your specific service needs.",
+      icon: Server,
+      color: "blue",
+      features: [
+        "Real-time vehicle analysis",
+        "Network-wide mechanic search",
+        "Service matching algorithm"
+      ],
+      link: '/service.png',
+
+    },
+    {
+      step: 2,
+      title: "Real-Time Quote Generation",
+      description: "Get instant, transparent pricing from verified mechanics. Our system fetches real-time quotes based on your location, service type, and current market rates.",
+      icon: DollarSign,
+      color: "green",
+      features: [
+        "Transparent pricing",
+        "Market rate comparison",
+        "Instant quote delivery"
+      ],
+      link: '/quote.png',
+
+    },
+    {
+      step: 3,
+      title: "Calendar Synchronization",
+      description: "We sync with mechanic calendars in real-time to show you available time slots. Your preferred time is held while we confirm availability with the shop.",
+      icon: Calendar,
+      color: "purple",
+      features: [
+        "Live calendar sync",
+        "Availability checking",
+        "Time slot reservation"
+      ],
+      link: '/appointment.png',
+
+    },
+    {
+      step: 4,
+      title: "Booking Confirmation",
+      description: "Your appointment is processed and confirmed instantly. You'll receive all booking details, including shop information, time, and service confirmation.",
+      icon: CheckCircle,
+      color: "emerald",
+      features: [
+        "Instant confirmation",
+        "Booking details delivery",
+        "Appointment secured"
+      ],
+      link: '/book.png',
+
+    }
+  ];
+
+
+
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        "relative w-full max-w-5xl",
-        className
-      )}
-      style={{
-        height: `${stepCount * 120}vh`, // Each step gets 120vh of scroll space for better control
-        minHeight: '480vh' // Increased to ensure all animations complete
-      }}
-    >
-      {/* Sticky container that stays in view while scrolling */}
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
-        <div
-          className={cn(
-            "relative flex h-[350px] w-full flex-col items-center",
-          )}
-        >
-          {/* SVG Paths  */}
-          <svg
-            className="h-full sm:w-full text-neutral-600"
-            width="100%"
-            height="100%"
-            viewBox="0 0 200 100"
-          >
-            <g
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="0.4"
-              strokeDasharray="100 100"
-            >
-              <motion.path
-                d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10"
-                pathLength="100"
-                strokeDashoffset={useTransform(path1Progress, (p) => 100 - (p * 100))}
-                stroke={activeStep === 1 ? "#3B82F6" : "currentColor"}
-                strokeWidth={activeStep === 1 ? "0.6" : "0.4"}
-                transition={{ duration: 0.1 }}
-              />
-              <motion.path
-                d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10"
-                pathLength="100"
-                strokeDashoffset={useTransform(path2Progress, (p) => 100 - (p * 100))}
-                stroke={activeStep === 2 ? "#3B82F6" : "currentColor"}
-                strokeWidth={activeStep === 2 ? "0.6" : "0.4"}
-                transition={{ duration: 0.1 }}
-              />
-              <motion.path
-                d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10"
-                pathLength="100"
-                strokeDashoffset={useTransform(path3Progress, (p) => 100 - (p * 100))}
-                stroke={activeStep === 3 ? "#3B82F6" : "currentColor"}
-                strokeWidth={activeStep === 3 ? "0.6" : "0.4"}
-                transition={{ duration: 0.1 }}
-              />
-              <motion.path
-                d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10"
-                pathLength="100"
-                strokeDashoffset={useTransform(path4Progress, (p) => 100 - (p * 100))}
-                stroke={activeStep === 4 ? "#3B82F6" : "currentColor"}
-                strokeWidth={activeStep === 4 ? "0.6" : "0.4"}
-                transition={{ duration: 0.1 }}
-              />
-            </g>
-            {/* Blue Lights */}
-            <g mask="url(#db-mask-1)">
-              <circle
-                className="database db-light-1"
-                cx="0"
-                cy="0"
-                r="12"
-                fill="url(#db-blue-grad)"
-              />
-            </g>
-            <g mask="url(#db-mask-2)">
-              <circle
-                className="database db-light-2"
-                cx="0"
-                cy="0"
-                r="12"
-                fill="url(#db-blue-grad)"
-              />
-            </g>
-            <g mask="url(#db-mask-3)">
-              <circle
-                className="database db-light-3"
-                cx="0"
-                cy="0"
-                r="12"
-                fill="url(#db-blue-grad)"
-              />
-            </g>
-            <g mask="url(#db-mask-4)">
-              <circle
-                className="database db-light-4"
-                cx="0"
-                cy="0"
-                r="12"
-                fill="url(#db-blue-grad)"
-              />
-            </g>
-            {/* Buttons */}
-            <g stroke="currentColor" fill="none" strokeWidth="0.4">
-              {/* First Button - Service */}
-              <g>
-                <motion.rect
-                  fill={activeStep === 1 ? "#3B82F6" : "#FFFFFF"}
-                  x="14"
-                  y="5"
-                  width="34"
-                  height="10"
-                  rx="5"
-                  stroke={activeStep === 1 ? "#2563EB" : "#E5E7EB"}
-                  strokeWidth="0.5"
-                  animate={{
-                    fill: activeStep === 1 ? "#3B82F6" : "#FFFFFF",
-                    stroke: activeStep === 1 ? "#2563EB" : "#E5E7EB",
-                  }}
-                  transition={{ duration: 0.3 }}
-                ></motion.rect>
-                {badgeTexts?.firstIcon ? (
-                  <foreignObject x="18" y="7.5" width="5" height="5">
-                    {React.createElement(badgeTexts.firstIcon, {
-                      className: `w-full h-full ${activeStep === 1 ? 'text-white' : 'text-neutral-700'}`
-                    })}
-                  </foreignObject>
-                ) : (
-                  <DatabaseIcon x="18" y="7.5"></DatabaseIcon>
-                )}
-                <text
-                  x="28"
-                  y="12"
-                  fill={activeStep === 1 ? "#FFFFFF" : "#1F2937"}
-                  stroke="none"
-                  fontSize="5"
-                  fontWeight="500"
-                >
-                  {badgeTexts?.first || "Service"}
-                </text>
-              </g>
-              {/* Second Button - Quote */}
-              <g>
-                <motion.rect
-                  fill={activeStep === 2 ? "#3B82F6" : "#FFFFFF"}
-                  x="60"
-                  y="5"
-                  width="34"
-                  height="10"
-                  rx="5"
-                  stroke={activeStep === 2 ? "#2563EB" : "#E5E7EB"}
-                  strokeWidth="0.5"
-                  animate={{
-                    fill: activeStep === 2 ? "#3B82F6" : "#FFFFFF",
-                    stroke: activeStep === 2 ? "#2563EB" : "#E5E7EB",
-                  }}
-                  transition={{ duration: 0.3 }}
-                ></motion.rect>
-                {badgeTexts?.secondIcon ? (
-                  <foreignObject x="64" y="7.5" width="5" height="5">
-                    {React.createElement(badgeTexts.secondIcon, {
-                      className: `w-full h-full ${activeStep === 2 ? 'text-white' : 'text-neutral-700'}`
-                    })}
-                  </foreignObject>
-                ) : (
-                  <DatabaseIcon x="64" y="7.5"></DatabaseIcon>
-                )}
-                <text
-                  x="74"
-                  y="12"
-                  fill={activeStep === 2 ? "#FFFFFF" : "#1F2937"}
-                  stroke="none"
-                  fontSize="5"
-                  fontWeight="500"
-                >
-                  {badgeTexts?.second || "Quote"}
-                </text>
-              </g>
-              {/* Third Button - Time */}
-              <g>
-                <motion.rect
-                  fill={activeStep === 3 ? "#3B82F6" : "#FFFFFF"}
-                  x="108"
-                  y="5"
-                  width="34"
-                  height="10"
-                  rx="5"
-                  stroke={activeStep === 3 ? "#2563EB" : "#E5E7EB"}
-                  strokeWidth="0.5"
-                  animate={{
-                    fill: activeStep === 3 ? "#3B82F6" : "#FFFFFF",
-                    stroke: activeStep === 3 ? "#2563EB" : "#E5E7EB",
-                  }}
-                  transition={{ duration: 0.3 }}
-                ></motion.rect>
-                {badgeTexts?.thirdIcon ? (
-                  <foreignObject x="112" y="7.5" width="5" height="5">
-                    {React.createElement(badgeTexts.thirdIcon, {
-                      className: `w-full h-full ${activeStep === 3 ? 'text-white' : 'text-neutral-700'}`
-                    })}
-                  </foreignObject>
-                ) : (
-                  <DatabaseIcon x="112" y="7.5"></DatabaseIcon>
-                )}
-                <text
-                  x="122"
-                  y="12"
-                  fill={activeStep === 3 ? "#FFFFFF" : "#1F2937"}
-                  stroke="none"
-                  fontSize="5"
-                  fontWeight="500"
-                >
-                  {badgeTexts?.third || "Time"}
-                </text>
-              </g>
-              {/* Fourth Button - Book */}
-              <g>
-                <motion.rect
-                  fill={activeStep === 4 ? "#3B82F6" : "#FFFFFF"}
-                  x="150"
-                  y="5"
-                  width="40"
-                  height="10"
-                  rx="5"
-                  stroke={activeStep === 4 ? "#2563EB" : "#E5E7EB"}
-                  strokeWidth="0.5"
-                  animate={{
-                    fill: activeStep === 4 ? "#3B82F6" : "#FFFFFF",
-                    stroke: activeStep === 4 ? "#2563EB" : "#E5E7EB",
-                  }}
-                  transition={{ duration: 0.3 }}
-                ></motion.rect>
-                {badgeTexts?.fourthIcon ? (
-                  <foreignObject x="154" y="7.5" width="5" height="5">
-                    {React.createElement(badgeTexts.fourthIcon, {
-                      className: `w-full h-full ${activeStep === 4 ? 'text-white' : 'text-neutral-700'}`
-                    })}
-                  </foreignObject>
-                ) : (
-                  <DatabaseIcon x="154" y="7.5"></DatabaseIcon>
-                )}
-                <text
-                  x="165"
-                  y="12"
-                  fill={activeStep === 4 ? "#FFFFFF" : "#1F2937"}
-                  stroke="none"
-                  fontSize="5"
-                  fontWeight="500"
-                >
-                  {badgeTexts?.fourth || "Book"}
-                </text>
-              </g>
-            </g>
-            <defs>
-              {/* 1 -  user list */}
-              <mask id="db-mask-1">
-                <path
-                  d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10"
-                  strokeWidth="0.5"
-                  stroke="white"
-                />
-              </mask>
-              {/* 2 - task list */}
-              <mask id="db-mask-2">
-                <path
-                  d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10"
-                  strokeWidth="0.5"
-                  stroke="white"
-                />
-              </mask>
-              {/* 3 - backlogs */}
-              <mask id="db-mask-3">
-                <path
-                  d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10"
-                  strokeWidth="0.5"
-                  stroke="white"
-                />
-              </mask>
-              {/* 4 - misc */}
-              <mask id="db-mask-4">
-                <path
-                  d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10"
-                  strokeWidth="0.5"
-                  stroke="white"
-                />
-              </mask>
-              {/* Blue Grad */}
-              <radialGradient id="db-blue-grad" fx="1">
-                <stop offset="0%" stopColor={lightColor || "#00A6F5"} />
-                <stop offset="100%" stopColor="transparent" />
-              </radialGradient>
-            </defs>
-          </svg>
-          {/* Main Box */}
-          <div className="absolute bottom-10 flex w-full flex-col items-center">
-            {/* bottom shadow */}
-            <div className="absolute -bottom-4 h-[100px] w-[62%] rounded-lg bg-neutral-200/40" />
-            {/* box title */}
-            <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border border-neutral-200 bg-white px-2 py-1 sm:-top-4 sm:py-1.5 shadow-sm">
-              <SparklesIcon className="size-3 text-neutral-700" />
-              <span className="ml-2 text-[10px] text-neutral-700">
-                {title ? title : "Data exchange using a customized REST API"}
-              </span>
+    <div className="flex flex-col items-center justify-center w-screen " ref={containerRef}>
+      <div
+        className={cn(
+          "relative w-full ",
+          className
+        )}
+        style={{
+          height: `${stepCount * 100}vh`, // Each step gets 100vh of scroll space for better control
+          minHeight: '480vh' // Increased to ensure all animations complete
+        }}
+      >
+        {/* Sticky container that stays in view while scrolling */}
+        <div className="sticky top-0 flex flex-col items-center justify-center min-h-screen  w-full max-w-8xl">
+          {/* Step Information Cards Section */}
+          <div className="absolute bottom-32 left-1/2 -translate-x-1/2 right-0 z-30 max-w-5xl w-full">
+            <div className="relative w-full flex items-center justify-center" style={{ height: '500px' }}>
+              {/* Single container for all cards to stack */}
+              <div className="relative w-full flex items-center justify-center " style={{ height: '500px' }}>
+                {stepCards.map((project, i) => {
+                  const targetScale = 1 - (stepCards.length - i) * 0.05;
+                  // Map card index to step number (card 0 = step 1, card 1 = step 2, etc.)
+                  const stepNumber = i + 1;
+                  // Adjusted scroll ranges: step 1 = 0-0.2, step 2 = 0.2-0.4, step 3 = 0.4-0.6, step 4 = 0.6-0.85
+                  const stepRanges = [0, 0.2, 0.4, 0.6, 0.85];
+                  const stepStart = stepRanges[i];
+                  const stepEnd = stepRanges[i + 1];
+                  return (
+                    <Card
+                      key={`p_${i}`}
+                      i={i}
+                      url={project?.link}
+                      src={project?.link}
+                      title={project?.title}
+                      features={project?.features}
+                      description={project?.description}
+                      progress={scrollYProgress}
+                      range={[stepStart, stepEnd]}
+                      targetScale={targetScale}
+                      activeStep={activeStep}
+                      stepNumber={stepNumber}
+                    />
+                  );
+                })}
+              </div>
             </div>
-            {/* box outter circle */}
-            {/* <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t border-neutral-200 bg-white font-semibold text-xs text-neutral-700 shadow-sm">
-              {circleText ? circleText : "SVG"}
-            </div> */}
-            {/* box content */}
-            <div className="relative z-10 flex h-[150px] w-full items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-md">
-              {/* Dynamic Content Based on Step */}
-              <AnimatePresence mode="wait">
-                {activeStep === null && (
-                  <motion.div
-                    key="default"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                    {/* Badges */}
-                    <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-white px-3 text-xs border border-neutral-200 flex items-center gap-2 text-neutral-700 shadow-sm">
-                      <HeartHandshakeIcon className="size-4 text-neutral-700" />
-                      <span>{buttonTexts?.first || "LegionDev"}</span>
-                    </div>
-                    <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-white px-3 text-xs sm:flex border border-neutral-200 items-center gap-2 text-neutral-700 shadow-sm">
-                      <Folder className="size-4 text-neutral-700" />
-                      <span>{buttonTexts?.second || "v2_updates"}</span>
-                    </div>
-                  </motion.div>
-                )}
+          </div>
 
-                {activeStep === 1 && (
-                  <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-4"
-                  >
-                    <div className="text-center space-y-2">
-                      <Wrench className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                      <AnimatePresence mode="wait">
-                        {currentStatusMessage && (
-                          <motion.p
-                            key={currentStatusMessage}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.3 }}
-                            className="text-xs text-neutral-600"
-                          >
-                            {currentStatusMessage}
-                          </motion.p>
-                        )}
-                      </AnimatePresence>
-                      <PathProgressIndicator
-                        progress={path1Progress}
-                        threshold={1}
-                      >
-                        <motion.p
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="text-sm font-semibold text-neutral-900 mt-2"
-                        >
-                          {contentData.service || "Service"}
-                        </motion.p>
-                      </PathProgressIndicator>
-                    </div>
-                  </motion.div>
-                )}
 
-                {activeStep === 2 && (
-                  <motion.div
-                    key="step2"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-4"
-                  >
-                    {contentData.mechanic ? (
-                      <div className="text-center">
-                        <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-500" />
-                        <p className="text-sm font-semibold text-neutral-900">${contentData.mechanic.price}</p>
-                        <p className="text-xs text-neutral-600">{contentData.mechanic.shop}</p>
-                        <p className="text-xs text-neutral-500">⭐ {contentData.mechanic.rating}</p>
-                      </div>
+          {/* Original content */}
+          <div className="flex flex-col items-start justify-start h-screen   mt-32 max-w-5xl">
+            <div
+              className={cn(
+                "relative flex h-[350px] w-full flex-col items-center",
+              )}
+            >
+              {/* SVG Paths  */}
+              <svg
+                className="h-full sm:w-full text-neutral-600"
+                width="100%"
+                height="100%"
+                viewBox="0 0 200 100"
+              >
+                <g
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth="0.4"
+                  strokeDasharray="100 100"
+                >
+                  <motion.path
+                    d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10"
+                    pathLength="100"
+                    strokeDashoffset={useTransform(path1Progress, (p) => 100 - (p * 100))}
+                    stroke={activeStep === 1 ? "#3B82F6" : "currentColor"}
+                    strokeWidth={activeStep === 1 ? "0.6" : "0.4"}
+                    transition={{ duration: 0.1 }}
+                  />
+                  <motion.path
+                    d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10"
+                    pathLength="100"
+                    strokeDashoffset={useTransform(path2Progress, (p) => 100 - (p * 100))}
+                    stroke={activeStep === 2 ? "#3B82F6" : "currentColor"}
+                    strokeWidth={activeStep === 2 ? "0.6" : "0.4"}
+                    transition={{ duration: 0.1 }}
+                  />
+                  <motion.path
+                    d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10"
+                    pathLength="100"
+                    strokeDashoffset={useTransform(path3Progress, (p) => 100 - (p * 100))}
+                    stroke={activeStep === 3 ? "#3B82F6" : "currentColor"}
+                    strokeWidth={activeStep === 3 ? "0.6" : "0.4"}
+                    transition={{ duration: 0.1 }}
+                  />
+                  <motion.path
+                    d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10"
+                    pathLength="100"
+                    strokeDashoffset={useTransform(path4Progress, (p) => 100 - (p * 100))}
+                    stroke={activeStep === 4 ? "#3B82F6" : "currentColor"}
+                    strokeWidth={activeStep === 4 ? "0.6" : "0.4"}
+                    transition={{ duration: 0.1 }}
+                  />
+                </g>
+                {/* Blue Lights */}
+                <g mask="url(#db-mask-1)">
+                  <circle
+                    className="database db-light-1"
+                    cx="0"
+                    cy="0"
+                    r="12"
+                    fill="url(#db-blue-grad)"
+                  />
+                </g>
+                <g mask="url(#db-mask-2)">
+                  <circle
+                    className="database db-light-2"
+                    cx="0"
+                    cy="0"
+                    r="12"
+                    fill="url(#db-blue-grad)"
+                  />
+                </g>
+                <g mask="url(#db-mask-3)">
+                  <circle
+                    className="database db-light-3"
+                    cx="0"
+                    cy="0"
+                    r="12"
+                    fill="url(#db-blue-grad)"
+                  />
+                </g>
+                <g mask="url(#db-mask-4)">
+                  <circle
+                    className="database db-light-4"
+                    cx="0"
+                    cy="0"
+                    r="12"
+                    fill="url(#db-blue-grad)"
+                  />
+                </g>
+                {/* Buttons */}
+                <g stroke="currentColor" fill="none" strokeWidth="0.4">
+                  {/* First Button - Service */}
+                  <g>
+                    <motion.rect
+                      fill={activeStep === 1 ? "#3B82F6" : "#FFFFFF"}
+                      x="14"
+                      y="5"
+                      width="34"
+                      height="10"
+                      rx="5"
+                      stroke={activeStep === 1 ? "#2563EB" : "#E5E7EB"}
+                      strokeWidth="0.5"
+                      animate={{
+                        fill: activeStep === 1 ? "#3B82F6" : "#FFFFFF",
+                        stroke: activeStep === 1 ? "#2563EB" : "#E5E7EB",
+                      }}
+                      transition={{ duration: 0.3 }}
+                    ></motion.rect>
+                    {badgeTexts?.firstIcon ? (
+                      <foreignObject x="18" y="7.5" width="5" height="5">
+                        {React.createElement(badgeTexts.firstIcon, {
+                          className: `w-full h-full ${activeStep === 1 ? 'text-white' : 'text-neutral-700'}`
+                        })}
+                      </foreignObject>
                     ) : (
-                      <div className="text-center">
-                        <DollarSign className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                        <p className="text-sm font-semibold text-neutral-900">Quote</p>
-                        <p className="text-xs text-neutral-600">Fetching prices...</p>
-                      </div>
+                      <DatabaseIcon x="18" y="7.5"></DatabaseIcon>
                     )}
-                  </motion.div>
-                )}
-
-                {activeStep === 3 && (
-                  <motion.div
-                    key="step3"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-4"
-                  >
-                    <div className="text-center space-y-2">
-                      <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                      <AnimatePresence mode="wait">
-                        {currentStatusMessage && (
-                          <motion.p
-                            key={currentStatusMessage}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.3 }}
-                            className="text-xs text-neutral-600"
-                          >
-                            {currentStatusMessage}
-                          </motion.p>
-                        )}
-                      </AnimatePresence>
-                      <PathProgressIndicator
-                        progress={path3Progress}
-                        threshold={1}
+                    <text
+                      x="25"
+                      y="12"
+                      fill={activeStep === 1 ? "#FFFFFF" : "#1F2937"}
+                      stroke="none"
+                      fontSize="5"
+                      fontWeight="500"
+                    >
+                      {badgeTexts?.first || "Service"}
+                    </text>
+                  </g>
+                  {/* Second Button - Quote */}
+                  <g>
+                    <motion.rect
+                      fill={activeStep === 2 ? "#3B82F6" : "#FFFFFF"}
+                      x="60"
+                      y="5"
+                      width="34"
+                      height="10"
+                      rx="5"
+                      stroke={activeStep === 2 ? "#2563EB" : "#E5E7EB"}
+                      strokeWidth="0.5"
+                      animate={{
+                        fill: activeStep === 2 ? "#3B82F6" : "#FFFFFF",
+                        stroke: activeStep === 2 ? "#2563EB" : "#E5E7EB",
+                      }}
+                      transition={{ duration: 0.3 }}
+                    ></motion.rect>
+                    {badgeTexts?.secondIcon ? (
+                      <foreignObject x="64" y="7.5" width="5" height="5">
+                        {React.createElement(badgeTexts.secondIcon, {
+                          className: `w-full h-full ${activeStep === 2 ? 'text-white' : 'text-neutral-700'}`
+                        })}
+                      </foreignObject>
+                    ) : (
+                      <DatabaseIcon x="64" y="7.5"></DatabaseIcon>
+                    )}
+                    <text
+                      x="74"
+                      y="12"
+                      fill={activeStep === 2 ? "#FFFFFF" : "#1F2937"}
+                      stroke="none"
+                      fontSize="5"
+                      fontWeight="500"
+                    >
+                      {badgeTexts?.second || "Quote"}
+                    </text>
+                  </g>
+                  {/* Third Button - Time */}
+                  <g>
+                    <motion.rect
+                      fill={activeStep === 3 ? "#3B82F6" : "#FFFFFF"}
+                      x="108"
+                      y="5"
+                      width="34"
+                      height="10"
+                      rx="5"
+                      stroke={activeStep === 3 ? "#2563EB" : "#E5E7EB"}
+                      strokeWidth="0.5"
+                      animate={{
+                        fill: activeStep === 3 ? "#3B82F6" : "#FFFFFF",
+                        stroke: activeStep === 3 ? "#2563EB" : "#E5E7EB",
+                      }}
+                      transition={{ duration: 0.3 }}
+                    ></motion.rect>
+                    {badgeTexts?.thirdIcon ? (
+                      <foreignObject x="112" y="7.5" width="5" height="5">
+                        {React.createElement(badgeTexts.thirdIcon, {
+                          className: `w-full h-full ${activeStep === 3 ? 'text-white' : 'text-neutral-700'}`
+                        })}
+                      </foreignObject>
+                    ) : (
+                      <DatabaseIcon x="112" y="7.5"></DatabaseIcon>
+                    )}
+                    <text
+                      x="122"
+                      y="12"
+                      fill={activeStep === 3 ? "#FFFFFF" : "#1F2937"}
+                      stroke="none"
+                      fontSize="5"
+                      fontWeight="500"
+                    >
+                      {badgeTexts?.third || "Time"}
+                    </text>
+                  </g>
+                  {/* Fourth Button - Book */}
+                  <g>
+                    <motion.rect
+                      fill={activeStep === 4 ? "#3B82F6" : "#FFFFFF"}
+                      x="150"
+                      y="5"
+                      width="40"
+                      height="10"
+                      rx="5"
+                      stroke={activeStep === 4 ? "#2563EB" : "#E5E7EB"}
+                      strokeWidth="0.5"
+                      animate={{
+                        fill: activeStep === 4 ? "#3B82F6" : "#FFFFFF",
+                        stroke: activeStep === 4 ? "#2563EB" : "#E5E7EB",
+                      }}
+                      transition={{ duration: 0.3 }}
+                    ></motion.rect>
+                    {badgeTexts?.fourthIcon ? (
+                      <foreignObject x="154" y="7.5" width="5" height="5">
+                        {React.createElement(badgeTexts.fourthIcon, {
+                          className: `w-full h-full ${activeStep === 4 ? 'text-white' : 'text-neutral-700'}`
+                        })}
+                      </foreignObject>
+                    ) : (
+                      <DatabaseIcon x="154" y="7.5"></DatabaseIcon>
+                    )}
+                    <text
+                      x="165"
+                      y="12"
+                      fill={activeStep === 4 ? "#FFFFFF" : "#1F2937"}
+                      stroke="none"
+                      fontSize="5"
+                      fontWeight="500"
+                    >
+                      {badgeTexts?.fourth || "Book"}
+                    </text>
+                  </g>
+                </g>
+                <defs>
+                  {/* 1 -  user list */}
+                  <mask id="db-mask-1">
+                    <path
+                      d="M 31 10 v 15 q 0 5 5 5 h 59 q 5 0 5 5 v 10"
+                      strokeWidth="0.5"
+                      stroke="white"
+                    />
+                  </mask>
+                  {/* 2 - task list */}
+                  <mask id="db-mask-2">
+                    <path
+                      d="M 77 10 v 10 q 0 5 5 5 h 13 q 5 0 5 5 v 10"
+                      strokeWidth="0.5"
+                      stroke="white"
+                    />
+                  </mask>
+                  {/* 3 - backlogs */}
+                  <mask id="db-mask-3">
+                    <path
+                      d="M 124 10 v 10 q 0 5 -5 5 h -14 q -5 0 -5 5 v 10"
+                      strokeWidth="0.5"
+                      stroke="white"
+                    />
+                  </mask>
+                  {/* 4 - misc */}
+                  <mask id="db-mask-4">
+                    <path
+                      d="M 170 10 v 15 q 0 5 -5 5 h -60 q -5 0 -5 5 v 10"
+                      strokeWidth="0.5"
+                      stroke="white"
+                    />
+                  </mask>
+                  {/* Blue Grad */}
+                  <radialGradient id="db-blue-grad" fx="1">
+                    <stop offset="0%" stopColor={lightColor || "#00A6F5"} />
+                    <stop offset="100%" stopColor="transparent" />
+                  </radialGradient>
+                </defs>
+              </svg>
+              {/* Main Box */}
+              <div className="absolute bottom-10 flex w-full flex-col items-center">
+                {/* bottom shadow */}
+                <div className="absolute -bottom-4 h-[100px] w-[62%] rounded-lg bg-neutral-200/40" />
+                {/* box title */}
+                <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border border-neutral-200 bg-white px-2 py-1 sm:-top-4 sm:py-1.5 shadow-sm ">
+                  <div className="relative w-3 h-3 shrink-0">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`icon-${activeStep}`}
+                        initial={{ rotateY: 90, opacity: 0, scale: 0.8 }}
+                        animate={{ rotateY: 0, opacity: 1, scale: 1 }}
+                        exit={{ rotateY: -90, opacity: 0, scale: 0.8 }}
+                        transition={{
+                          duration: 0.4,
+                          ease: [0.4, 0, 0.2, 1]
+                        }}
+                        style={{
+                          transformStyle: "preserve-3d",
+                          backfaceVisibility: "hidden"
+                        }}
+                        className="absolute inset-0 flex items-center justify-center"
                       >
-                        {contentData.time && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="space-y-1"
-                          >
-                            <p className="text-sm font-semibold text-neutral-900">{contentData.time}</p>
-                            <p className="text-xs text-neutral-600">Time slot confirmed</p>
-                          </motion.div>
-                        )}
-                      </PathProgressIndicator>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeStep === 4 && (
-                  <motion.div
-                    key="step4"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-4"
-                  >
-                    <div className="text-center space-y-2">
-                      <PathProgressRange
-                        progress={path4Progress}
-                        min={0}
-                        max={0.4}
+                        <DynamicIcon className="size-3 text-blue-600" />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  <div className="ml-2 h-[14px] relative w-full min-w-[180px]">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={dynamicTitle}
+                        initial={{ rotateX: 90, opacity: 0 }}
+                        animate={{ rotateX: 0, opacity: 1 }}
+                        exit={{ rotateX: -90, opacity: 0 }}
+                        transition={{
+                          duration: 0.4,
+                          ease: [0.4, 0, 0.2, 1]
+                        }}
+                        style={{
+                          transformStyle: "preserve-3d",
+                          backfaceVisibility: "hidden"
+                        }}
+                        className="absolute inset-0 text-[10px] text-neutral-700 font-medium flex items-center"
                       >
-                        <>
-                          <CheckCircle className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                        {dynamicTitle}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
+                </div>
+                {/* box outter circle */}
+                {/* <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t border-neutral-200 bg-white font-semibold text-xs text-neutral-700 shadow-sm">
+          {circleText ? circleText : "SVG"}
+                  </div> */}
+                {/* box content */}
+                <div className="relative z-10 flex h-[150px] w-[90%] items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-md">
+                  {/* Dynamic Content Based on Step */}
+                  <AnimatePresence mode="wait">
+                    {activeStep === null && (
+                      <motion.div
+                        key="default"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 flex items-center justify-center"
+                      >
+                        {/* Badges */}
+                        <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-white px-3 text-xs border border-neutral-200 flex items-center gap-2 text-neutral-700 shadow-sm">
+                          <HeartHandshakeIcon className="size-4 text-neutral-700" />
+                          <span>{buttonTexts?.first || "LegionDev"}</span>
+                        </div>
+                        <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-white px-3 text-xs sm:flex border border-neutral-200 items-center gap-2 text-neutral-700 shadow-sm">
+                          <Folder className="size-4 text-neutral-700" />
+                          <span>{buttonTexts?.second || "v2_updates"}</span>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeStep === 1 && (
+                      <motion.div
+                        key="step1"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 flex flex-col items-center justify-center p-4"
+                      >
+                        <div className="text-center space-y-2">
+                          <Wrench className="w-8 h-8 mx-auto mb-2 text-blue-500" />
                           <AnimatePresence mode="wait">
                             {currentStatusMessage && (
                               <motion.p
@@ -711,41 +809,71 @@ const DatabaseWithRestApi = ({
                               </motion.p>
                             )}
                           </AnimatePresence>
-                        </>
-                      </PathProgressRange>
-                      <PathProgressRange
-                        progress={path4Progress}
-                        min={0.4}
-                        max={0.8}
-                      >
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                          className="flex flex-col items-center gap-2"
-                        >
-                          <motion.div
-                            className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
+                          {/* Show diagnosis first (when progress < 0.5), then service */}
+                          <PathProgressRange
+                            progress={path1Progress}
+                            min={0}
+                            max={0.5}
                           >
-                            <motion.svg
-                              initial={{ pathLength: 0 }}
-                              animate={{ pathLength: 1 }}
-                              transition={{ duration: 0.5, delay: 0.2 }}
-                              className="w-6 h-6 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-sm font-semibold text-neutral-900 mt-2"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={3}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </motion.svg>
-                          </motion.div>
+                              {contentData.diagnosis || "Diagnosis"}
+                            </motion.p>
+                          </PathProgressRange>
+                          <PathProgressIndicator
+                            progress={path1Progress}
+                            threshold={0.5}
+                          >
+                            <motion.p
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-sm font-semibold text-neutral-900 mt-2"
+                            >
+                              {contentData.service || "Service"}
+                            </motion.p>
+                          </PathProgressIndicator>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeStep === 2 && (
+                      <motion.div
+                        key="step2"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 flex flex-col items-center justify-center p-4"
+                      >
+                        {contentData.mechanic ? (
+                          <div className="text-center">
+                            <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-500" />
+                            <p className="text-sm font-semibold text-neutral-900">${contentData.mechanic.price}</p>
+                            <p className="text-xs text-neutral-600">{contentData.mechanic.shop}</p>
+                            <p className="text-xs text-neutral-500">⭐ {contentData.mechanic.rating}</p>
+                          </div>
+                        ) : (
+                          <div className="text-center">
+                            <DollarSign className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                            <p className="text-sm font-semibold text-neutral-900">Quote</p>
+                            <p className="text-xs text-neutral-600">Fetching prices...</p>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+
+                    {activeStep === 3 && (
+                      <motion.div
+                        key="step3"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 flex flex-col items-center justify-center p-4"
+                      >
+                        <div className="text-center space-y-2">
+                          <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-500" />
                           <AnimatePresence mode="wait">
                             {currentStatusMessage && (
                               <motion.p
@@ -754,98 +882,212 @@ const DatabaseWithRestApi = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.3 }}
-                                className="text-sm font-semibold text-neutral-900"
+                                className="text-xs text-neutral-600"
                               >
                                 {currentStatusMessage}
                               </motion.p>
                             )}
                           </AnimatePresence>
-                        </motion.div>
-                      </PathProgressRange>
-                      <PathProgressRange
-                        progress={path4Progress}
-                        min={0.8}
-                        max={1}
-                      >
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="flex flex-col items-center gap-2"
-                        >
-                          <motion.div
-                            className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
+                          <PathProgressIndicator
+                            progress={path3Progress}
+                            threshold={1}
                           >
-                            <motion.svg
-                              initial={{ pathLength: 0 }}
-                              animate={{ pathLength: 1 }}
-                              transition={{ duration: 0.5, delay: 0.2 }}
-                              className="w-6 h-6 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={3}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </motion.svg>
-                          </motion.div>
-                          <AnimatePresence mode="wait">
-                            {currentStatusMessage && (
-                              <motion.p
-                                key={currentStatusMessage}
+                            {contentData.time && (
+                              <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.3 }}
-                                className="text-xs text-neutral-600 text-center"
+                                className="space-y-1"
                               >
-                                {currentStatusMessage}
-                              </motion.p>
+                                <p className="text-sm font-semibold text-neutral-900">{contentData.time}</p>
+                                <p className="text-xs text-neutral-600">Time slot confirmed</p>
+                              </motion.div>
                             )}
-                          </AnimatePresence>
-                        </motion.div>
-                      </PathProgressRange>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {/* Circles */}
-              <motion.div
-                className="absolute -bottom-14 h-[100px] w-[100px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-                animate={{
-                  scale: [0.98, 1.02, 0.98, 1, 1, 1, 1, 1, 1],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -bottom-20 h-[145px] w-[145px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-                animate={{
-                  scale: [1, 1, 1, 0.98, 1.02, 0.98, 1, 1, 1],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -bottom-[100px] h-[190px] w-[190px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-                animate={{
-                  scale: [1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1, 1],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -bottom-[120px] h-[235px] w-[235px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-                animate={{
-                  scale: [1, 1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
+                          </PathProgressIndicator>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeStep === 4 && (
+                      <motion.div
+                        key="step4"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 flex flex-col items-center justify-center p-4"
+                      >
+                        <div className="text-center space-y-2">
+                          <PathProgressRange
+                            progress={path4Progress}
+                            min={0}
+                            max={0.4}
+                          >
+                            <>
+                              <CheckCircle className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                              <AnimatePresence mode="wait">
+                                {currentStatusMessage && (
+                                  <motion.p
+                                    key={currentStatusMessage}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="text-xs text-neutral-600"
+                                  >
+                                    {currentStatusMessage}
+                                  </motion.p>
+                                )}
+                              </AnimatePresence>
+                            </>
+                          </PathProgressRange>
+                          <PathProgressRange
+                            progress={path4Progress}
+                            min={0.4}
+                            max={0.8}
+                          >
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                              className="flex flex-col items-center gap-2"
+                            >
+                              <motion.div
+                                className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center"
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                              >
+                                <motion.svg
+                                  initial={{ pathLength: 0 }}
+                                  animate={{ pathLength: 1 }}
+                                  transition={{ duration: 0.5, delay: 0.2 }}
+                                  className="w-6 h-6 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </motion.svg>
+                              </motion.div>
+                              <AnimatePresence mode="wait">
+                                {currentStatusMessage && (
+                                  <motion.p
+                                    key={currentStatusMessage}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="text-sm font-semibold text-neutral-900"
+                                  >
+                                    {currentStatusMessage}
+                                  </motion.p>
+                                )}
+                              </AnimatePresence>
+                            </motion.div>
+                          </PathProgressRange>
+                          <PathProgressRange
+                            progress={path4Progress}
+                            min={0.8}
+                            max={1}
+                          >
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="flex flex-col items-center gap-2"
+                            >
+                              <motion.div
+                                className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center"
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                              >
+                                <motion.svg
+                                  initial={{ pathLength: 0 }}
+                                  animate={{ pathLength: 1 }}
+                                  transition={{ duration: 0.5, delay: 0.2 }}
+                                  className="w-6 h-6 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </motion.svg>
+                              </motion.div>
+                              <AnimatePresence mode="wait">
+                                {currentStatusMessage && (
+                                  <motion.p
+                                    key={currentStatusMessage}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="text-xs text-neutral-600 text-center"
+                                  >
+                                    {currentStatusMessage}
+                                  </motion.p>
+                                )}
+                              </AnimatePresence>
+                            </motion.div>
+                          </PathProgressRange>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  {/* Circles */}
+                  {/* <motion.div
+                      className="absolute -bottom-14 h-[100px] w-[100px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
+            animate={{
+              scale: [0.98, 1.02, 0.98, 1, 1, 1, 1, 1, 1],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.div
+                      className="absolute -bottom-20 h-[145px] w-[145px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
+            animate={{
+              scale: [1, 1, 1, 0.98, 1.02, 0.98, 1, 1, 1],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.div
+                      className="absolute -bottom-[100px] h-[190px] w-[190px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
+            animate={{
+              scale: [1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1, 1],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.div
+                      className="absolute -bottom-[120px] h-[235px] w-[235px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
+            animate={{
+              scale: [1, 1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+                   /> */}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sparkles */}
+          <div className="absolute bottom-0 left-0 right-0 w-full h-1/2 ">
+            <div className='relative h-1/2 w-full overflow-hidden mask-[radial-gradient(50%_50%,white,transparent)] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#369eff,transparent_90%)] before:opacity-100  after:absolute after:border-2 after:-left-1/2 after:top-1/3 after:aspect-[1/1.8] after:w-[200%] after:rounded-[50%] after:border-b after:border-[#7876c566] after:bg-zinc-200'>
+              <div className='absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px] '></div>
+              <Sparkles
+                density={400}
+                size={1.4}
+                direction='top'
+                className='absolute inset-x-0 top-0 h-full w-full mask-[radial-gradient(50%_50%,white,transparent_85%)]'
               />
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
@@ -926,390 +1168,4 @@ const DatabaseIcon = ({ x = "0", y = "0" }: { x: string; y: string }) => {
   );
 };
 
-// Booking Flow Component
-interface Mechanic {
-  id: string;
-  name: string;
-  shop: string;
-  price: number;
-  rating: number;
-  photo?: string;
-}
 
-interface BookingFlowProps {
-  className?: string;
-}
-
-export const BookingFlow = ({ className }: BookingFlowProps) => {
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [selectedService, setSelectedService] = useState<string>("");
-  const [selectedMechanic, setSelectedMechanic] = useState<Mechanic | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [loadingStatus, setLoadingStatus] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [bookingConfirmed, setBookingConfirmed] = useState(false);
-
-  const services = ["Brake Replacement", "Oil Change", "Tire Rotation", "Engine Diagnostic"];
-  const mechanics: Mechanic[] = [
-    { id: "1", name: "Mike", shop: "Mike's Auto", price: 150, rating: 4.8 },
-    { id: "2", name: "Sarah", shop: "Quick Fix Garage", price: 175, rating: 4.9 },
-    { id: "3", name: "Tom", shop: "Tom's Service", price: 200, rating: 4.7 },
-  ];
-  const timeSlots = ["9:00 AM", "12:00 PM", "4:00 PM", "6:00 PM"];
-
-  // Step 1: Service Selection
-  const handleServiceSelect = async (service: string) => {
-    setSelectedService(service);
-    setIsLoading(true);
-
-    const statusMessages = [
-      "Connecting to local garages...",
-      "Scanning for mechanics in your area...",
-      "Finding available pros...",
-    ];
-
-    for (let i = 0; i < statusMessages.length; i++) {
-      setLoadingStatus(statusMessages[i]);
-      await new Promise(resolve => setTimeout(resolve, 600));
-    }
-
-    setIsLoading(false);
-    setStep(2);
-  };
-
-  // Step 3: Time Selection
-  const handleTimeSelect = async (time: string) => {
-    setSelectedTime(time);
-    setIsLoading(true);
-
-    const statusMessages = [
-      `Checking ${time} availability...`,
-      `Confirming schedule with '${selectedMechanic?.shop}'...`,
-      "Holding your spot...",
-    ];
-
-    for (let i = 0; i < statusMessages.length; i++) {
-      setLoadingStatus(statusMessages[i]);
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-
-    setIsLoading(false);
-    setStep(4);
-  };
-
-  // Step 4: Booking Confirmation
-  const handleBookNow = async () => {
-    setIsLoading(true);
-    setLoadingStatus("Connecting you now...");
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    setLoadingStatus("Booking confirmed!");
-    setBookingConfirmed(true);
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    setIsLoading(false);
-  };
-
-  return (
-    <div className={cn("w-full max-w-2xl mx-auto p-6 space-y-6", className)}>
-      {/* Step 1: Service Selection */}
-      {step === 1 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-6"
-        >
-          <h2 className="text-2xl font-semibold text-neutral-900">Select a Service</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {services.map((service) => (
-              <motion.button
-                key={service}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleServiceSelect(service)}
-                className="p-4 rounded-lg border border-neutral-200 bg-white hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-              >
-                <span className="font-medium text-neutral-900">{service}</span>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      {/* Loading State for Step 1 */}
-      {step === 1 && isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-4"
-        >
-          <div className="flex items-center gap-3">
-            <motion.div
-              className="w-2 h-2 rounded-full bg-blue-500"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [1, 0.5, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="w-2 h-2 rounded-full bg-blue-500"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [1, 0.5, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                delay: 0.2,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="w-2 h-2 rounded-full bg-blue-500"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [1, 0.5, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                delay: 0.4,
-                ease: "easeInOut",
-              }}
-            />
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={loadingStatus}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="text-sm text-neutral-600"
-            >
-              {loadingStatus}
-            </motion.p>
-          </AnimatePresence>
-        </motion.div>
-      )}
-
-      {/* Step 2: Quote Display */}
-      {step === 2 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-6"
-        >
-          <div>
-            <h2 className="text-2xl font-semibold text-neutral-900 mb-2">
-              Available Mechanics for {selectedService}
-            </h2>
-            <p className="text-sm text-neutral-600">Select a mechanic to continue</p>
-          </div>
-
-          <div className="space-y-3">
-            {mechanics.map((mechanic, idx) => (
-              <motion.div
-                key={mechanic.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.1, duration: 0.4 }}
-                onClick={() => {
-                  setSelectedMechanic(mechanic);
-                  setStep(3);
-                }}
-                className="p-4 rounded-lg border border-neutral-200 bg-white hover:border-blue-500 hover:shadow-md cursor-pointer transition-all"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="text-blue-600 font-semibold">{mechanic.name[0]}</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-neutral-900">{mechanic.shop}</h3>
-                      <p className="text-sm text-neutral-600">⭐ {mechanic.rating}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-neutral-900">${mechanic.price}</p>
-                    <p className="text-xs text-neutral-500">Starting price</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      {/* Step 3: Time Selection */}
-      {step === 3 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-6"
-        >
-          <div>
-            <h2 className="text-2xl font-semibold text-neutral-900 mb-2">
-              Select a Time
-            </h2>
-            <p className="text-sm text-neutral-600">
-              Booking with {selectedMechanic?.shop}
-            </p>
-          </div>
-
-          {isLoading ? (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                >
-                  <Calendar className="w-5 h-5 text-blue-500" />
-                </motion.div>
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={loadingStatus}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="text-sm text-neutral-600"
-                  >
-                    {loadingStatus}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {timeSlots.map((time) => (
-                <motion.button
-                  key={time}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleTimeSelect(time)}
-                  className="p-4 rounded-lg border border-neutral-200 bg-white hover:border-blue-500 hover:bg-blue-50 transition-colors"
-                >
-                  <span className="font-medium text-neutral-900">{time}</span>
-                </motion.button>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      )}
-
-      {/* Step 4: Booking Confirmation */}
-      {step === 4 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-6"
-        >
-          <div>
-            <h2 className="text-2xl font-semibold text-neutral-900 mb-2">
-              Confirm Your Booking
-            </h2>
-            <div className="p-4 rounded-lg bg-neutral-50 space-y-2">
-              <p className="text-sm text-neutral-600">
-                <span className="font-medium">Service:</span> {selectedService}
-              </p>
-              <p className="text-sm text-neutral-600">
-                <span className="font-medium">Mechanic:</span> {selectedMechanic?.shop}
-              </p>
-              <p className="text-sm text-neutral-600">
-                <span className="font-medium">Time:</span> {selectedTime}
-              </p>
-              <p className="text-sm font-semibold text-neutral-900 pt-2">
-                Total: ${selectedMechanic?.price}
-              </p>
-            </div>
-          </div>
-
-          {isLoading && !bookingConfirmed ? (
-            <div className="space-y-4">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={loadingStatus}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="text-sm text-neutral-600 text-center"
-                >
-                  {loadingStatus}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-          ) : bookingConfirmed ? (
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="space-y-4 text-center"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="w-16 h-16 mx-auto rounded-full bg-green-500 flex items-center justify-center"
-              >
-                <motion.svg
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={3}
-                    d="M5 13l4 4L19 7"
-                  />
-                </motion.svg>
-              </motion.div>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-lg font-semibold text-neutral-900"
-              >
-                You're all set!
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="text-sm text-neutral-600"
-              >
-                {selectedMechanic?.shop} will see you at {selectedTime}.
-              </motion.p>
-            </motion.div>
-          ) : (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleBookNow}
-              className="w-full py-3 px-6 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
-            >
-              Book Now
-            </motion.button>
-          )}
-        </motion.div>
-      )}
-    </div>
-  );
-};

@@ -15,6 +15,7 @@ import {
   CreditCard
 } from 'lucide-react'
 import { ProgressiveBlur } from './ui/progressive-blur'
+import TextAnimation from './ui/scroll-text'
 
 export default function Coordination() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -137,10 +138,25 @@ export default function Coordination() {
 
   return (
     <section className="w-full px-6 lg:px-12 py-12 grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto">
-      <div className="space-y-6">
-        <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2>
-        <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2>
-        <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2>
+      <div className="space-y-6 flex flex-col">
+        <TextAnimation
+        text="You need clarity before you drive over."
+        direction="left"
+        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+        />
+        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
+        <TextAnimation
+        text="You need confidence when you hand over the keys."
+        direction="left"
+        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+        />
+        <TextAnimation
+        text="You need coordination."
+        direction="left"
+        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+        />
+        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
+        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
       </div>
 
       {/* Add height to enable scrolling through items */}

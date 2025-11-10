@@ -8,8 +8,8 @@ import { Calendar, Clock, DollarSign, Wrench } from "lucide-react";
 export default function Flow() {
     return (
         <section
-            className="relative w-full max-w-5xl mx-auto h-full min-h-screen flex flex-col p-8 items-center justify-center px-8 py-12 ">
-            <div className="text-start w-full flex flex-row space-x-8">
+            className="relative w-full max-w-8xl mx-auto h-full min-h-screen flex flex-col p-8 items-center justify-center px-8 py-12 ">
+            <div className="text-start w-full max-w-5xl flex flex-row space-x-8">
                 <div className="flex flex-col space-y-8">
                     <p className=" text-black text-3xl font-[--font-lora] leading-tight tracking-tight">RepairConnect reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 

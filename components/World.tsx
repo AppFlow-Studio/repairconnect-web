@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
+import { Sparkles } from "./ui/sparkles";
 
 const WorldGlobe = dynamic(() => import("./ui/globe").then((m) => m.World), {
     ssr: false,
@@ -398,6 +399,7 @@ export function World() {
             <div className="w-full relative overflow-hidden h-full md:h-[32rem] px-4">
                 <div className="absolute w-full -bottom-10 h-68  md:h-full z-10">
                     <WorldGlobe data={sampleArcs} globeConfig={globeConfig} />
+                    
                 </div>
             </div>
         </div>
