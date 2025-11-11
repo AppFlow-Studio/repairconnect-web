@@ -9,11 +9,9 @@ import TransBar from "@/components/trans-bar";
 import OurVision from "@/components/our-vision";
 import Flow from "@/components/Flow";
 import Coordination from "@/components/coordination";
-import { LogoCarouselDemo } from "@/components/logo-carousel-demo";
+import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent } from "motion/react";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import BlogSection from "@/components/blog-section";
-import { IconsArray } from "@/components/icons/icons-array";
-import { motion, useScroll, useTransform } from "motion/react";
-import { Sparkles } from "@/components/ui/sparkles";
 
 const text = [
   "Booking a mechanic is now as easy as ordering takeout",
@@ -26,6 +24,18 @@ const text = [
   "•",
   "Book in minutes, pay once, receipts forever.",
   "•"
+]
+
+const endtoend = [
+  'bookings',
+  'payments',
+  'pickups',
+  'reminders',
+  'diagnostics',
+  'receipts',
+  'scheduling',
+  'coordinating'
+
 ]
 export default function Home() {
   const [isDark, setIsDark] = useState(false);
@@ -57,10 +67,27 @@ export default function Home() {
     offset: ["start start", "end start"] // Stop when section end reaches viewport start
   });
 
-  // Transform scroll progress to opacity and position
-  // Box stays visible until Hero section ends, then fades out
-  // Fade starts at 70% scroll progress and completes at 100%
-  const boxY = useTransform(scrollYProgress, [0, 0.7, 1], [0, 0, 0], { clamp: true });
+  // Transform scroll progress to position for the card
+  // Card moves down as user scrolls through hero section
+  const cardTop = useMotionValue('calc(100vh - 278px)');
+
+  // Update card position based on scroll progress
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (typeof window === 'undefined') return;
+    const vh = window.innerHeight;
+    const startTop = vh - 278;
+    const endTop = vh - 150;
+    const currentTop = startTop + (endTop - startTop) * latest;
+    cardTop.set(`${currentTop}px`);
+  });
+
+  // Opacity: keep card visible throughout
+  const cardOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 1],
+    [1, 1, 0.9], // Stay fully visible
+    { clamp: true }
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,19 +101,20 @@ export default function Home() {
     }, 3000);
   };
 
+
+
   return (
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="bg-background relative w-full overflow-hidden min-h-screen"
+        className="relative w-full overflow-hidden min-h-screen flex-1"
       >
-
         <Image
           src="/home11.png"
           alt="Cityscape background"
           width={1000}
           height={1000}
-          className="w-full h-auto min-h-screen object-cover"
+          className="w-full h-full object-cover"
         />
 
         <div
@@ -95,7 +123,6 @@ export default function Home() {
             background: "linear-gradient(to bottom, rgba(30,30,32,0.1) 80%, transparent 120%)"
           }}
         />
-
 
         <div className="absolute top-1/7 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
           <div className="flex self-center w-22 h-22 relative justify-center items-center">
@@ -241,12 +268,13 @@ export default function Home() {
 
 
         <motion.div
-          className='absolute bottom-8 left-8 z-10 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl'
+          className='absolute z-50 left-4 md:left-8 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl'
           style={{
-            y: boxY
+            top: cardTop,
+            opacity: cardOpacity
           }}
         >
-          <div className="p-5 lg:p-8 lg:pr-6 relative rounded-2xl backdrop-blur-[4px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding ">
+          <div className="p-5 lg:p-8 lg:pr-6 relative rounded-2xl shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding ">
             <svg style={{ display: 'none' }}>
               <filter id="displacementFilter">
                 <feTurbulence
@@ -308,9 +336,6 @@ export default function Home() {
 
       <OurVision />
       <Flow />
-
-      {/* <BookingFlow /> */}
-      {/* Coordination Section */}
       <Coordination />
 
       <section className="w-full  min-h-screen flex flex-col mt-4 items-center justify-center relative ">
@@ -366,7 +391,7 @@ export default function Home() {
 
                 {/* Sub-headline */}
                 <p className="text-base lg:text-lg text-white/90 mb-6 leading-relaxed">
-                  RepairConnect can help you with things like bookings, scheduling, and coordinating with mechanics to make car care seamless.
+                  RepairConnect helps manage <TypingAnimation words={endtoend} loop />
                 </p>
 
                 <div className="flex flex-row items-center w-full justify-start gap-4">
@@ -449,43 +474,9 @@ export default function Home() {
             </div>
 
             {/* Info Box - Bottom Left */}
-            <div className=" z-10 max-w-xl p-14 absolute bottom-0 left-0">
-              <div className="relative p-5 lg:p-10 ml-8 rounded-2xl   shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding">
-                {/* SVG Filter Definition */}
-                <svg style={{ display: 'none' }}>
-                  <filter id="displacementFilter">
-                    <feTurbulence
-                      type="turbulence"
-                      baseFrequency="0.08"
-                      numOctaves="8"
-                      result="turbulence"
-                    />
-                    <feDisplacementMap
-                      in="SourceGraphic"
-                      in2="turbulence"
-                      scale="200"
-                      xChannelSelector="R"
-                      yChannelSelector="G"
-                    />
-                  </filter>
-                </svg>
+            <div className=" z-10 max-w-xl p-14 absolute bottom-1/5 -left-10">
+              <div className="relative p-5 lg:p-10 ml-8 rounded-2xl   ">
 
-                {/* Liquid Glass Input Background */}
-                <div
-                  className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden"
-                  style={{
-                    filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                    backdropFilter: 'brightness(1.1) blur(2px)',
-                    border: '1px solid rgba(255, 255, 255, 0.7)',
-                  }}
-                >
-                  <div
-                    className="absolute inset-0 rounded-2xl"
-                    style={{
-                      boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                    }}
-                  />
-                </div>
                 {/* Content */}
                 <div className="relative z-10 flex items-center gap-3">
                   <Wrench className="w-5 h-5 text-white shrink-0" />
@@ -498,6 +489,9 @@ export default function Home() {
           </div>
         </section>
       </section>
+
+
+      <BlogSection />
 
 
     </main >

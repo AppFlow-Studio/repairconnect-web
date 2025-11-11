@@ -9,22 +9,22 @@ const blogPosts = [
         id: 1,
         headline: "Book Car Repairs in NYC in 6 Taps",
         author: "by Bilal Ahmed",
-        background: "/blog-1.jpg", // You'll need to add this image
+        background: "/quote.png",
         backgroundType: "image" as const
     },
     {
         id: 2,
         headline: "Book Car Repairs in NYC in Under 2 Minutes",
         author: "by Bilal Ahmed",
-        background: "bg-blue-400", // Light blue background
-        backgroundType: "color" as const,
+        background: "/appointment.png", 
+        backgroundType: "image" as const,
         icon: "🔧" // Wrench icon
     },
     {
         id: 3,
         headline: "Help Us Launch the Fair Way to Fix Your Car",
         author: "by Bilal Ahmed",
-        background: "/blog-3.jpg", // You'll need to add this image with gears/wrenches
+        background: "/book.png", 
         backgroundType: "image" as const
     }
 ]
@@ -35,8 +35,8 @@ export default function BlogSection() {
             <div className="max-w-7xl mx-auto">
                 {/* Header Section */}
                 <div className="mb-12">
-                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-black mb-4">
-                        Our vision for the future of the world
+                    <h2 className="text-4xl font-serif text-black mb-4">
+                        Driving the Future of Car Care
                     </h2>
                     <a
                         href="/articles"
@@ -52,7 +52,7 @@ export default function BlogSection() {
                     {blogPosts.map((post) => (
                         <article
                             key={post.id}
-                            className="relative rounded-2xl overflow-hidden aspect-[4/5] group cursor-pointer"
+                            className="relative rounded-2xl overflow-hidden aspect-square group cursor-pointer"
                         >
                             {/* Background */}
                             {post.backgroundType === "image" ? (
@@ -71,30 +71,11 @@ export default function BlogSection() {
                             )}
 
                             {/* Liquid Glass Overlay */}
-                            <div className="absolute inset-0 flex items-end justify-center p-6 lg:p-8">
+                            <div className="absolute inset-0 flex items-end justify-center p-6 ">
                                 <div className="relative w-full">
-                                    {/* SVG Filter Definition for Liquid Glass Effect */}
-                                    <svg style={{ display: 'none' }}>
-                                        <filter id={`liquid-glass-filter-${post.id}`}>
-                                            <feTurbulence
-                                                type="turbulence"
-                                                baseFrequency="0.08"
-                                                numOctaves="8"
-                                                result="turbulence"
-                                            />
-                                            <feDisplacementMap
-                                                in="SourceGraphic"
-                                                in2="turbulence"
-                                                scale="200"
-                                                xChannelSelector="R"
-                                                yChannelSelector="G"
-                                            />
-                                        </filter>
-                                    </svg>
-
                                     {/* Liquid Glass Background Overlay */}
                                     <div
-                                        className="relative rounded-2xl overflow-hidden backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-white/10 via-white/5 to-white/5 bg-clip-padding"
+                                        className="relative rounded-2xl overflow-hidden backdrop-blur-[15px] "
                                         style={{
                                             filter: 'drop-shadow(-8px -10px 46px #0000005f)',
                                         }}
@@ -108,10 +89,10 @@ export default function BlogSection() {
 
                                         {/* Content */}
                                         <div className="relative z-10 p-6 lg:p-8 text-center">
-                                            <h3 className="text-xl lg:text-2xl font-semibold text-white mb-3 leading-tight">
+                                            <h3 className="text-xl font-semibold text-white mb-3 leading-tight">
                                                 {post.headline}
                                             </h3>
-                                            <p className="text-sm lg:text-base text-white/90">
+                                            <p className="text-sm text-white/90">
                                                 {post.author}
                                             </p>
                                         </div>

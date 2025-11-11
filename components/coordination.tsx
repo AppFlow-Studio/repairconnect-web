@@ -16,10 +16,21 @@ import {
 } from 'lucide-react'
 import { ProgressiveBlur } from './ui/progressive-blur'
 import TextAnimation from './ui/scroll-text'
+import Image from 'next/image'
 
 export default function Coordination() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [currentTime, setCurrentTime] = useState(new Date())
   const notificationsRef = useRef<HTMLDivElement>(null)
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
 
   const items = [
     {
@@ -138,28 +149,6 @@ export default function Coordination() {
 
   return (
     <section className="w-full px-6 lg:px-12 py-12 grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto">
-      <div className="space-y-6 flex flex-col">
-        <TextAnimation
-        text="You need clarity before you drive over."
-        direction="left"
-        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
-        />
-        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
-        <TextAnimation
-        text="You need confidence when you hand over the keys."
-        direction="left"
-        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
-        />
-        <TextAnimation
-        text="You need coordination."
-        direction="left"
-        classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
-        />
-        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
-        {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
-      </div>
-
-      {/* Add height to enable scrolling through items */}
       <div
         ref={notificationsRef}
         className='w-full relative min-h-[200vh]'
@@ -172,6 +161,26 @@ export default function Coordination() {
         <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center'>
           <div className='w-[70%] h-full flex items-center justify-center px-8'>
             <div className="w-full flex items-start flex-col justify-end h-[70%] px-8 gap-y-8 ">
+              <div className="space-y-6 flex flex-col">
+                <TextAnimation
+                  text="You need clarity before you drive over."
+                  direction="left"
+                  classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                />
+                {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
+                <TextAnimation
+                  text="You need confidence when you hand over the keys."
+                  direction="left"
+                  classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                />
+                <TextAnimation
+                  text="You need coordination."
+                  direction="left"
+                  classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                />
+                {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
+                {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
+              </div>
               {/* Vertical Rectangle Indicator */}
               <div className="flex flex-row items-end gap-3 h-full mt-auto flex-1 justify-end">
                 {items.map((_, idx) => (
@@ -232,6 +241,53 @@ export default function Coordination() {
           <div className="flex w-[40%] justify-center lg:justify-end items-center">
             <Iphone className=' relative w-full h-full' src="/liquidglassphone.png">
               <div className="p-4  w-full h-full">
+                <div className='w-full mb-4 flex items-center justify-center relative'>
+                  {/* Blurred text behind for liquid glass effect */}
+                  <div
+                    className="absolute text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight select-none"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.6) 50%, rgba(150,180,255,0.4) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      filter: 'blur(12px)',
+                      WebkitFilter: 'blur(12px)',
+                      opacity: 0.7,
+                    }}
+                  >
+                    {currentTime.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true
+                    }).split(' ')[0]}
+                  </div>
+                  {/* Main time text with liquid glass gradient */}
+                  <div
+                    className="relative text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight select-none z-10"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,245,255,0.95) 25%, rgba(220,235,255,0.85) 50%, rgba(200,225,255,0.75) 75%, rgba(180,210,255,0.65) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      // textShadow: `
+                      //   0 0 40px rgba(200,220,255,0.6),
+                      //   0 0 80px rgba(180,210,255,0.4),
+                      //   0 0 120px rgba(150,180,255,0.2),
+                      //   0 2px 10px rgba(0, 0, 0, 0.15),
+                      //   0 0 2px rgba(255, 255, 255, 0.5)
+                      // `,
+                      WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.3)',
+                      filter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
+                      WebkitFilter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
+                    }}
+                  >
+                    {currentTime.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true
+                    }).split(' ')[0]}
+                  </div>
+                </div>
                 <AnimatedList
                   className='w-full h-full'
                   onActiveIndexChange={setActiveIndex}
@@ -279,24 +335,27 @@ export default function Coordination() {
                           />
                         </div>
                         <div className="flex items-start gap-3 relative">
-                          {/* Icon with background */}
-                          <div className={`${item.bgColor} rounded-full p-2 aspect-square shrink-0`}>
-                            {item.emoji}
+                          <div className='w-10 h-10 rounded-2xl flex items-center justify-center relative self-center'>
+                            <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
+                          {/* Icon with background */}
+                          {/* <div className={`${item.bgColor} rounded-full p-2 aspect-square shrink-0`}>
+                            {item.emoji}
+                          </div> */}
 
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="text-sm font-semibold text-neutral-900 leading-tight">
-                                {item.headline}
+                                {item.headline} {item.emoji}
                               </h3>
                             </div>
                             <p className="text-xs text-neutral-800 leading-relaxed mb-1.5">
                               {item.sub}
                             </p>
-                            <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                            {/* <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
                               {item.cta} →
-                            </button>
+                            </button> */}
                           </div>
                         </div>
                       </div>

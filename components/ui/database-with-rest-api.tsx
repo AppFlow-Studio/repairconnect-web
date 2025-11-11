@@ -428,7 +428,7 @@ const DatabaseWithRestApi = ({
 
 
           {/* Original content */}
-          <div className="flex flex-col items-start justify-start h-screen   mt-32 max-w-5xl">
+          <div className="flex flex-col items-start justify-start h-screen mt-32 max-w-5xl">
             <div
               className={cn(
                 "relative flex h-[350px] w-full flex-col items-center",
@@ -436,7 +436,7 @@ const DatabaseWithRestApi = ({
             >
               {/* SVG Paths  */}
               <svg
-                className="h-full sm:w-full text-neutral-600"
+                className="h-full sm:w-full text-white"
                 width="100%"
                 height="100%"
                 viewBox="0 0 200 100"
@@ -518,28 +518,29 @@ const DatabaseWithRestApi = ({
                   />
                 </g>
                 {/* Buttons */}
-                <g stroke="currentColor" fill="none" strokeWidth="0.4">
+                <g fill="none" strokeWidth="0.4">
                   {/* First Button - Service */}
-                  <g>
+                  <g
+                  >
                     <motion.rect
-                      fill={activeStep === 1 ? "#3B82F6" : "#FFFFFF"}
                       x="14"
                       y="5"
                       width="34"
                       height="10"
                       rx="5"
-                      stroke={activeStep === 1 ? "#2563EB" : "#E5E7EB"}
+                      fill={(activeStep ?? 0) > 1 ? "#3B82F6" : activeStep === 1 ? "rgba(59, 130, 246, 0.15)" : "transparent"}
+                      stroke={(activeStep ?? 0) >= 1 ? "#2563EB" : "#E5E7EB"}
                       strokeWidth="0.5"
                       animate={{
-                        fill: activeStep === 1 ? "#3B82F6" : "#FFFFFF",
-                        stroke: activeStep === 1 ? "#2563EB" : "#E5E7EB",
+                        fill: (activeStep ?? 0) > 1 ? "#3B82F6" : activeStep === 1 ? "rgba(59, 130, 246, 0.15)" : "transparent",
+                        stroke: (activeStep ?? 0) >= 1 ? "#2563EB" : "#E5E7EB",
                       }}
                       transition={{ duration: 0.3 }}
                     ></motion.rect>
                     {badgeTexts?.firstIcon ? (
                       <foreignObject x="18" y="7.5" width="5" height="5">
                         {React.createElement(badgeTexts.firstIcon, {
-                          className: `w-full h-full ${activeStep === 1 ? 'text-white' : 'text-neutral-700'}`
+                          className: `w-full h-full text-white`
                         })}
                       </foreignObject>
                     ) : (
@@ -548,7 +549,7 @@ const DatabaseWithRestApi = ({
                     <text
                       x="25"
                       y="12"
-                      fill={activeStep === 1 ? "#FFFFFF" : "#1F2937"}
+                      fill={`#FFFFFF`}
                       stroke="none"
                       fontSize="5"
                       fontWeight="500"
@@ -559,24 +560,24 @@ const DatabaseWithRestApi = ({
                   {/* Second Button - Quote */}
                   <g>
                     <motion.rect
-                      fill={activeStep === 2 ? "#3B82F6" : "#FFFFFF"}
+                      fill={(activeStep ?? 0) > 2 ? "#3B82F6" : activeStep === 2 ? "rgba(59, 130, 246, 0.15)" : "transparent"}
                       x="60"
                       y="5"
                       width="34"
                       height="10"
                       rx="5"
-                      stroke={activeStep === 2 ? "#2563EB" : "#E5E7EB"}
+                      stroke={(activeStep ?? 0) >= 2 ? "#2563EB" : "#E5E7EB"}
                       strokeWidth="0.5"
                       animate={{
-                        fill: activeStep === 2 ? "#3B82F6" : "#FFFFFF",
-                        stroke: activeStep === 2 ? "#2563EB" : "#E5E7EB",
+                        fill: (activeStep ?? 0) > 2 ? "#3B82F6" : activeStep === 2 ? "rgba(59, 130, 246, 0.15)" : "transparent",
+                        stroke: (activeStep ?? 0) >= 2 ? "#2563EB" : "#E5E7EB",
                       }}
                       transition={{ duration: 0.3 }}
                     ></motion.rect>
                     {badgeTexts?.secondIcon ? (
                       <foreignObject x="64" y="7.5" width="5" height="5">
                         {React.createElement(badgeTexts.secondIcon, {
-                          className: `w-full h-full ${activeStep === 2 ? 'text-white' : 'text-neutral-700'}`
+                          className: `w-full h-full text-white`
                         })}
                       </foreignObject>
                     ) : (
@@ -585,7 +586,7 @@ const DatabaseWithRestApi = ({
                     <text
                       x="74"
                       y="12"
-                      fill={activeStep === 2 ? "#FFFFFF" : "#1F2937"}
+                      fill={`#FFFFFF`}
                       stroke="none"
                       fontSize="5"
                       fontWeight="500"
@@ -596,24 +597,24 @@ const DatabaseWithRestApi = ({
                   {/* Third Button - Time */}
                   <g>
                     <motion.rect
-                      fill={activeStep === 3 ? "#3B82F6" : "#FFFFFF"}
+                      fill={(activeStep ?? 0) > 3 ? "#3B82F6" : activeStep === 3 ? "rgba(59, 130, 246, 0.15)" : "transparent"}
                       x="108"
                       y="5"
                       width="34"
                       height="10"
                       rx="5"
-                      stroke={activeStep === 3 ? "#2563EB" : "#E5E7EB"}
+                      stroke={(activeStep ?? 0) >= 3 ? "#2563EB" : "#E5E7EB"}
                       strokeWidth="0.5"
                       animate={{
-                        fill: activeStep === 3 ? "#3B82F6" : "#FFFFFF",
-                        stroke: activeStep === 3 ? "#2563EB" : "#E5E7EB",
+                        fill: (activeStep ?? 0) > 3 ? "#3B82F6" : activeStep === 3 ? "rgba(59, 130, 246, 0.15)" : "transparent",
+                        stroke: (activeStep ?? 0) >= 3 ? "#2563EB" : "#E5E7EB",
                       }}
                       transition={{ duration: 0.3 }}
                     ></motion.rect>
                     {badgeTexts?.thirdIcon ? (
                       <foreignObject x="112" y="7.5" width="5" height="5">
                         {React.createElement(badgeTexts.thirdIcon, {
-                          className: `w-full h-full ${activeStep === 3 ? 'text-white' : 'text-neutral-700'}`
+                          className: `w-full h-full text-white`
                         })}
                       </foreignObject>
                     ) : (
@@ -622,7 +623,7 @@ const DatabaseWithRestApi = ({
                     <text
                       x="122"
                       y="12"
-                      fill={activeStep === 3 ? "#FFFFFF" : "#1F2937"}
+                      fill={`#FFFFFF`}
                       stroke="none"
                       fontSize="5"
                       fontWeight="500"
@@ -633,24 +634,24 @@ const DatabaseWithRestApi = ({
                   {/* Fourth Button - Book */}
                   <g>
                     <motion.rect
-                      fill={activeStep === 4 ? "#3B82F6" : "#FFFFFF"}
+                      fill={(activeStep ?? 0) > 4 ? "#3B82F6" : activeStep === 4 ? "rgba(59, 130, 246, 0.15)" : "transparent"}
                       x="150"
                       y="5"
                       width="40"
                       height="10"
                       rx="5"
-                      stroke={activeStep === 4 ? "#2563EB" : "#E5E7EB"}
+                      stroke={(activeStep ?? 0) >= 4 ? "#2563EB" : "#E5E7EB"}
                       strokeWidth="0.5"
                       animate={{
-                        fill: activeStep === 4 ? "#3B82F6" : "#FFFFFF",
-                        stroke: activeStep === 4 ? "#2563EB" : "#E5E7EB",
+                        fill: (activeStep ?? 0) > 4 ? "#3B82F6" : activeStep === 4 ? "rgba(59, 130, 246, 0.15)" : "transparent",
+                        stroke: (activeStep ?? 0) >= 4 ? "#2563EB" : "#E5E7EB",
                       }}
                       transition={{ duration: 0.3 }}
                     ></motion.rect>
                     {badgeTexts?.fourthIcon ? (
                       <foreignObject x="154" y="7.5" width="5" height="5">
                         {React.createElement(badgeTexts.fourthIcon, {
-                          className: `w-full h-full ${activeStep === 4 ? 'text-white' : 'text-neutral-700'}`
+                          className: `w-full h-full text-white`
                         })}
                       </foreignObject>
                     ) : (
@@ -659,7 +660,7 @@ const DatabaseWithRestApi = ({
                     <text
                       x="165"
                       y="12"
-                      fill={activeStep === 4 ? "#FFFFFF" : "#1F2937"}
+                      fill={`#FFFFFF`}
                       stroke="none"
                       fontSize="5"
                       fontWeight="500"
@@ -708,12 +709,11 @@ const DatabaseWithRestApi = ({
                   </radialGradient>
                 </defs>
               </svg>
+
               {/* Main Box */}
               <div className="absolute bottom-10 flex w-full flex-col items-center">
-                {/* bottom shadow */}
-                <div className="absolute -bottom-4 h-[100px] w-[62%] rounded-lg bg-neutral-200/40" />
                 {/* box title */}
-                <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border border-neutral-200 bg-white px-2 py-1 sm:-top-4 sm:py-1.5 shadow-sm ">
+                <div className="absolute -top-3 z-20 flex items-center justify-center rounded-lg border border-neutral-200 bg-transparent backdrop-blur-lg px-2 py-1 sm:-top-4 sm:py-1.5 shadow-sm ">
                   <div className="relative w-3 h-3 shrink-0">
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -731,7 +731,7 @@ const DatabaseWithRestApi = ({
                         }}
                         className="absolute inset-0 flex items-center justify-center"
                       >
-                        <DynamicIcon className="size-3 text-blue-600" />
+                        <DynamicIcon className="size-3 text-blue-400" />
                       </motion.div>
                     </AnimatePresence>
                   </div>
@@ -750,7 +750,7 @@ const DatabaseWithRestApi = ({
                           transformStyle: "preserve-3d",
                           backfaceVisibility: "hidden"
                         }}
-                        className="absolute inset-0 text-[10px] text-neutral-700 font-medium flex items-center"
+                        className="absolute inset-0 text-[10px] text-white font-medium flex items-center"
                       >
                         {dynamicTitle}
                       </motion.span>
@@ -758,11 +758,11 @@ const DatabaseWithRestApi = ({
                   </div>
                 </div>
                 {/* box outter circle */}
-                {/* <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t border-neutral-200 bg-white font-semibold text-xs text-neutral-700 shadow-sm">
+                {/* <div className="absolute -bottom-8 z-30 grid h-[60px] w-[60px] place-items-center rounded-full border-t border-neutral-200 bg-white font-semibold text-xs text-white shadow-sm">
           {circleText ? circleText : "SVG"}
                   </div> */}
                 {/* box content */}
-                <div className="relative z-10 flex h-[150px] w-[90%] items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-md">
+                <div className="relative z-10 flex h-[150px] w-[90%] items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-transparent backdrop-blur-sm shadow-md">
                   {/* Dynamic Content Based on Step */}
                   <AnimatePresence mode="wait">
                     {activeStep === null && (
@@ -774,12 +774,12 @@ const DatabaseWithRestApi = ({
                         className="absolute inset-0 flex items-center justify-center"
                       >
                         {/* Badges */}
-                        <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-white px-3 text-xs border border-neutral-200 flex items-center gap-2 text-neutral-700 shadow-sm">
-                          <HeartHandshakeIcon className="size-4 text-neutral-700" />
+                        <div className="absolute bottom-8 left-12 z-10 h-7 rounded-full bg-white px-3 text-xs border border-neutral-200 flex items-center gap-2 text-white shadow-sm">
+                          <HeartHandshakeIcon className="size-4 text-white" />
                           <span>{buttonTexts?.first || "LegionDev"}</span>
                         </div>
-                        <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-white px-3 text-xs sm:flex border border-neutral-200 items-center gap-2 text-neutral-700 shadow-sm">
-                          <Folder className="size-4 text-neutral-700" />
+                        <div className="absolute right-16 z-10 hidden h-7 rounded-full bg-white px-3 text-xs sm:flex border border-neutral-200 items-center gap-2 text-white shadow-sm">
+                          <Folder className="size-4 text-white" />
                           <span>{buttonTexts?.second || "v2_updates"}</span>
                         </div>
                       </motion.div>
@@ -794,7 +794,7 @@ const DatabaseWithRestApi = ({
                         className="absolute inset-0 flex flex-col items-center justify-center p-4"
                       >
                         <div className="text-center space-y-2">
-                          <Wrench className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                          <Wrench className="w-8 h-8 mx-auto mb-2 text-blue-400" />
                           <AnimatePresence mode="wait">
                             {currentStatusMessage && (
                               <motion.p
@@ -803,7 +803,7 @@ const DatabaseWithRestApi = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.3 }}
-                                className="text-xs text-neutral-600"
+                                className="text-xs text-white"
                               >
                                 {currentStatusMessage}
                               </motion.p>
@@ -851,14 +851,14 @@ const DatabaseWithRestApi = ({
                           <div className="text-center">
                             <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-500" />
                             <p className="text-sm font-semibold text-neutral-900">${contentData.mechanic.price}</p>
-                            <p className="text-xs text-neutral-600">{contentData.mechanic.shop}</p>
+                            <p className="text-xs text-white">{contentData.mechanic.shop}</p>
                             <p className="text-xs text-neutral-500">⭐ {contentData.mechanic.rating}</p>
                           </div>
                         ) : (
                           <div className="text-center">
-                            <DollarSign className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                            <DollarSign className="w-8 h-8 mx-auto mb-2 text-blue-400" />
                             <p className="text-sm font-semibold text-neutral-900">Quote</p>
-                            <p className="text-xs text-neutral-600">Fetching prices...</p>
+                            <p className="text-xs text-white">Fetching prices...</p>
                           </div>
                         )}
                       </motion.div>
@@ -873,7 +873,7 @@ const DatabaseWithRestApi = ({
                         className="absolute inset-0 flex flex-col items-center justify-center p-4"
                       >
                         <div className="text-center space-y-2">
-                          <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                          <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-400" />
                           <AnimatePresence mode="wait">
                             {currentStatusMessage && (
                               <motion.p
@@ -882,7 +882,7 @@ const DatabaseWithRestApi = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.3 }}
-                                className="text-xs text-neutral-600"
+                                className="text-xs text-white"
                               >
                                 {currentStatusMessage}
                               </motion.p>
@@ -899,7 +899,7 @@ const DatabaseWithRestApi = ({
                                 className="space-y-1"
                               >
                                 <p className="text-sm font-semibold text-neutral-900">{contentData.time}</p>
-                                <p className="text-xs text-neutral-600">Time slot confirmed</p>
+                                <p className="text-xs text-white">Time slot confirmed</p>
                               </motion.div>
                             )}
                           </PathProgressIndicator>
@@ -922,7 +922,7 @@ const DatabaseWithRestApi = ({
                             max={0.4}
                           >
                             <>
-                              <CheckCircle className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                              <CheckCircle className="w-8 h-8 mx-auto mb-2 text-blue-400" />
                               <AnimatePresence mode="wait">
                                 {currentStatusMessage && (
                                   <motion.p
@@ -931,7 +931,7 @@ const DatabaseWithRestApi = ({
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.3 }}
-                                    className="text-xs text-neutral-600"
+                                    className="text-xs text-white"
                                   >
                                     {currentStatusMessage}
                                   </motion.p>
@@ -1028,7 +1028,7 @@ const DatabaseWithRestApi = ({
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.3 }}
-                                    className="text-xs text-neutral-600 text-center"
+                                    className="text-xs text-white text-center"
                                   >
                                     {currentStatusMessage}
                                   </motion.p>
@@ -1040,35 +1040,6 @@ const DatabaseWithRestApi = ({
                       </motion.div>
                     )}
                   </AnimatePresence>
-                  {/* Circles */}
-                  {/* <motion.div
-                      className="absolute -bottom-14 h-[100px] w-[100px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-            animate={{
-              scale: [0.98, 1.02, 0.98, 1, 1, 1, 1, 1, 1],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <motion.div
-                      className="absolute -bottom-20 h-[145px] w-[145px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-            animate={{
-              scale: [1, 1, 1, 0.98, 1.02, 0.98, 1, 1, 1],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <motion.div
-                      className="absolute -bottom-[100px] h-[190px] w-[190px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-            animate={{
-              scale: [1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1, 1],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <motion.div
-                      className="absolute -bottom-[120px] h-[235px] w-[235px] rounded-full border-t border-neutral-200 bg-neutral-100/30"
-            animate={{
-              scale: [1, 1, 1, 1, 1, 1, 0.98, 1.02, 0.98, 1],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-                   /> */}
                 </div>
               </div>
             </div>
