@@ -206,8 +206,8 @@ const PriceIcon = ({
   endY: number;
 }) => {
   const priceProgress = useTransform(progress, (p: number) => {
-    if (p < 0.3) return 0;
-    return (p - 0.3) / 0.7;
+    // No delay - starts immediately when Phase 3 begins
+    return p;
   });
 
   // Calculate position along quadratic curve
@@ -269,43 +269,61 @@ const
       offset: ["start start", "end start"]
     });
 
-    // Calculate path progress for each step
+    // Create eased scroll progress for smoother, slower animations
+    // This applies easing to make animations progress more gradually
+    // Additional easing for steps 2-4 to make them even smoother
+    const easedScrollProgress = useTransform(scrollYProgress, (p) => {
+      // Ease-in-out cubic function for smooth, slower progression
+      if (p <= 0) return 0;
+      if (p >= 1) return 1;
+
+      // Apply stronger easing for steps 2-4 (after 25% scroll)
+      if (p >= 0.25) {
+        // Normalize to 0-1 for steps 2-4
+        const steps2to4Progress = (p - 0.25) / 0.75;
+        // Apply stronger easing (quintic ease-in-out for very smooth progression)
+        const eased = steps2to4Progress < 0.5
+          ? 16 * steps2to4Progress * steps2to4Progress * steps2to4Progress * steps2to4Progress * steps2to4Progress
+          : 1 - Math.pow(-2 * steps2to4Progress + 2, 5) / 2;
+        return 0.25 + eased * 0.75;
+      }
+
+      // Step 1 uses standard cubic easing
+      return p < 0.5
+        ? 4 * p * p * p
+        : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    });
+
+    // Calculate path progress for each step - using eased progress for smoother animations
     // Step 1: 0-25% of scroll - split into 3 phases
     const path1Progress = useTransform(
-      scrollYProgress,
+      easedScrollProgress,
       [0, 0.2, 0.25],
       [0, 0.95, 1],
       { clamp: true }
     );
 
     // Step 1 Phase breakdown: 
-    // Phase 1 (0-25%): Data packets flow from car to AI brain
-    // Phase 2 (25-50%): AI brain processes
-    // Phase 3 (50-75%): Signal/path goes back from AI brain to car
-    // Phase 4 (75-100%): Mechanic search starts
+    // Phase 1 (0-33%): Data packets flow from car to AI brain
+    // Phase 2 (33-66%): AI brain processes
+    // Phase 3 (66-100%): Signal/path goes back from AI brain to car
     const phase1Progress = useTransform(path1Progress, (p) => {
-      if (p < 0.25) return p / 0.25; // 0-1 for first quarter
+      if (p < 0.33) return p / 0.33; // 0-1 for first third
       return 1;
     });
     const phase2Progress = useTransform(path1Progress, (p) => {
-      if (p < 0.25) return 0;
-      if (p < 0.5) return (p - 0.25) / 0.25; // 0-1 for second quarter
+      if (p < 0.33) return 0;
+      if (p < 0.66) return (p - 0.33) / 0.33; // 0-1 for second third
       return 1;
     });
     const phase3Progress = useTransform(path1Progress, (p) => {
-      if (p < 0.5) return 0;
-      if (p < 0.75) return (p - 0.5) / 0.25; // 0-1 for third quarter
-      return 1;
-    });
-    const phase4Progress = useTransform(path1Progress, (p) => {
-      if (p < 0.75) return 0;
-      return (p - 0.75) / 0.25; // 0-1 for final quarter
+      if (p < 0.66) return 0;
+      return (p - 0.66) / 0.34; // 0-1 for final third
     });
 
     // Opacity transforms for conditional rendering
     const phase1Opacity = useTransform(phase1Progress, (p) => p > 0 ? 1 : 0);
     const phase3Opacity = useTransform(phase3Progress, (p) => p > 0 ? 1 : 0);
-    const phase4Opacity = useTransform(phase4Progress, (p) => p > 0 ? 1 : 0);
     const aiBrainOpacity = useTransform(phase1Progress, (p) => p > 0.2 ? 1 : 0); // Show earlier, when data starts arriving
     // AI Brain should be visible only before Phase 3 (Signal Sent) starts
     const shouldShowAiBrain = useTransform(phase3Progress, (p) => p < 0.1);
@@ -322,24 +340,43 @@ const
       // Increase glow during processing
       return 0.3 + (p * 0.7);
     });
-    // Step 2: 25-50% of scroll
+    // Step 2: 25-50% of scroll - expanded range for smoother animation
     const path2Progress = useTransform(
-      scrollYProgress,
-      [0.25, 0.45, 0.5],
+      easedScrollProgress,
+      [0.25, 0.48, 0.5],
       [0, 0.95, 1],
       { clamp: true }
     );
-    // Step 3: 50-75% of scroll
+
+    // Step 2 Phase breakdown:
+    // Phase 1 (0-33%): Mechanic search - query lines from car to mechanics
+    // Phase 2 (33-66%): Mechanic selection - highlight selected mechanic
+    // Phase 3 (66-100%): Price being sent back from selected mechanic to car
+    const step2Phase1Progress = useTransform(path2Progress, (p) => {
+      if (p < 0.33) return p / 0.33; // 0-1 for first third
+      return 1;
+    });
+    const step2Phase2Progress = useTransform(path2Progress, (p) => {
+      if (p < 0.12) return 0;
+      if (p < 0.66) return (p - 0.33) / 0.33; // 0-1 for second third
+      return 1;
+    });
+    const step2Phase3Progress = useTransform(path2Progress, (p) => {
+      if (p < 0.66) return 0;
+      return (p - 0.66) / 0.34; // 0-1 for final third
+    });
+
+    // Step 3: 50-75% of scroll - expanded range for smoother animation
     const path3Progress = useTransform(
-      scrollYProgress,
-      [0.5, 0.7, 0.75],
+      easedScrollProgress,
+      [0.5, 0.73, 0.75],
       [0, 0.95, 1],
       { clamp: true }
     );
-    // Step 4: 75-100% of scroll
+    // Step 4: 75-100% of scroll - expanded range for smoother animation
     const path4Progress = useTransform(
-      scrollYProgress,
-      [0.75, 0.9, 1],
+      easedScrollProgress,
+      [0.75, 0.95, 1],
       [0, 0.95, 1],
       { clamp: true }
     );
@@ -347,11 +384,37 @@ const
     // Create strokeDashoffset transforms at top level (hooks cannot be in loops)
     // Step 1 Phase 1: Data stream from car to AI Brain (longer path now)
     const phase1DashOffset = useTransform(phase1Progress, (p) => 800 - (p * 800));
-    // Step 1 Phase 4: Query lines from Car to mechanics (mechanic search)
-    const phase4DashOffset = useTransform(phase4Progress, (p) => 1000 - (p * 1000));
+    // Step 2 Phase 1: Query lines from Car to mechanics (mechanic search)
+    const step2Phase1DashOffset = useTransform(step2Phase1Progress, (p) => 1000 - (p * 1000));
+
+    // Create opacity transforms for each mechanic's path
+    // All mechanics visible in Phase 1, only selected in Phase 2+
+    // Selected mechanic (idx 0) - always visible once Phase 1 completes
+    const mechanicPathOpacity0 = useTransform(step2Phase1Progress, (p) => {
+      return p > 0 ? 1 : 0; // Visible once Phase 1 starts, stays visible
+    });
+    // Non-selected mechanics (idx 1, 2) - visible in Phase 1, fade out in Phase 2
+    // Use path2Progress to determine overall step 2 progress
+    const mechanicPathOpacity1 = useTransform(path2Progress, (p) => {
+      // Phase 1 (0-33%): Show line
+      if (p < 0.1) return 1 
+      // Phase 2 (33-66%): Fade out after selection starts
+      if (p < 0.2) return Math.max(0, 1 - ((p - 0.33) / 0.17) * 1); // Fade from 1 to 0
+      // Phase 3+: Hidden
+      return 0;
+    });
+    const mechanicPathOpacity2 = useTransform(path2Progress, (p) => {
+       // Phase 1 (0-33%): Show line
+       if (p < 0.1) return 1 
+       // Phase 2 (33-66%): Fade out after selection starts
+       if (p < 0.2) return Math.max(0, 1 - ((p - 0.33) / 0.17) * 1); // Fade from 1 to 0
+       // Phase 3+: Hidden
+       return 0;
+    });
+    // Step 2 Phase 3: Price path (removed - price icon handles its own animation)
     const path2DashOffset = useTransform(path2Progress, (p) => {
-      if (p < 0.3) return 1000;
-      return 1000 - ((p - 0.3) / 0.7 * 1000);
+      // Not used for price path anymore, but keep for compatibility
+      return 0;
     });
     const path3DashOffset = useTransform(path3Progress, (p) => 1000 - (p * 1000));
     const path4DashOffset = useTransform(path4Progress, (p) => 1500 - (p * 1500)); // Longer path: car → mechanic → calendar
@@ -369,9 +432,9 @@ const
     });
 
     // Car icon celebration animation - triggers when price icon reaches car
-    const priceProgressForCar = useTransform(path2Progress, (p: number) => {
-      if (p < 0.3) return 0;
-      return (p - 0.3) / 0.7; // Normalize to 0-1 for price animation
+    // Price is sent in Step 2 Phase 3
+    const priceProgressForCar = useTransform(step2Phase3Progress, (p: number) => {
+      return p; // Already normalized to 0-1
     });
     const carPulseScale = useTransform(priceProgressForCar, (p) => {
       if (p < 0.85) return 1; // Normal size until price is close
@@ -399,6 +462,12 @@ const
     // Use useMotionValueEvent to avoid infinite loops - only update when step actually changes
     const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4 | null>(null);
     const activeStepRef = useRef<1 | 2 | 3 | 4 | null>(null);
+    const [mechanicsVisible, setMechanicsVisible] = useState(false);
+
+    // Track when mechanics should be visible - they appear in Step 2 Phase 1
+    useMotionValueEvent(step2Phase1Progress, "change", (latest) => {
+      setMechanicsVisible(latest > 0.1 && (activeStep ?? 0) >= 2);
+    });
 
     // Use useMotionValueEvent instead of useEffect to prevent infinite loops
     useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -426,26 +495,31 @@ const
     // Status messages for each step based on path progress
     const getStatusMessage = (step: number, progress: number): string => {
       if (step === 1) {
-        // Phase 1: Data Streaming (0-25%)
-        if (progress < 0.1) return "Syncing Vehicle Data (via Smartcar API)...";
-        if (progress < 0.2) return "Reading: mileage, oil_life, DTC codes...";
-        if (progress < 0.25) return "Data stream complete";
-        // Phase 2: AI Diagnosis (25-50%)
-        if (progress < 0.35) return "AI analyzing diagnostic data...";
-        if (progress < 0.4) return "Processing: DTC P0420 detected...";
-        if (progress < 0.5) return "Diagnosis: Catalyst System Issue";
-        // Phase 3: Return Signal (50-75%)
-        if (progress < 0.6) return "Sending diagnosis back to vehicle...";
-        if (progress < 0.7) return "Signal received, ready to search...";
-        if (progress < 0.75) return "Ready for mechanic search";
-        // Phase 4: Service Discovery (75-100%)
-        if (progress < 0.85) return "Searching for certified mechanics...";
-        if (progress < 0.9) return "Matching service requirements...";
-        if (progress < 0.95) return "Found available shops in your area";
-        return ""; // Path complete, show service name
+        // Phase 1: Data Streaming (0-33%)
+        if (progress < 0.15) return "Syncing Vehicle Data (via Smartcar API)...";
+        if (progress < 0.25) return "Reading: mileage, oil_life, DTC codes...";
+        if (progress < 0.33) return "Data stream complete";
+        // Phase 2: AI Diagnosis (33-66%)
+        if (progress < 0.45) return "AI analyzing diagnostic data...";
+        if (progress < 0.55) return "Processing: DTC P0420 detected...";
+        if (progress < 0.66) return "Diagnosis: Catalyst System Issue";
+        // Phase 3: Return Signal (66-100%)
+        if (progress < 0.8) return "Sending diagnosis back to vehicle...";
+        if (progress < 0.9) return "Signal received, ready to search...";
+        return "Ready for mechanic search";
       } else if (step === 2) {
-        // Price step - no messages, just show price
-        return "";
+        // Step 2 Phase 1: Mechanic Search (0-33%)
+        if (progress < 0.15) return "Searching for certified mechanics...";
+        if (progress < 0.25) return "Matching service requirements...";
+        if (progress < 0.33) return "Found available shops in your area";
+        // Step 2 Phase 2: Mechanic Selection (33-66%)
+        if (progress < 0.45) return "Analyzing best match...";
+        if (progress < 0.55) return "Selecting optimal mechanic...";
+        if (progress < 0.66) return "Mechanic selected";
+        // Step 2 Phase 3: Price Sending (66-100%)
+        if (progress < 0.8) return "Requesting price quote...";
+        if (progress < 0.9) return "Price received, sending to vehicle...";
+        return ""; // Price complete, show price
       } else if (step === 3) {
         // Time step messages - spread out more evenly
         if (progress < 0.3) return "Checking 4:00 PM availability...";
@@ -648,6 +722,7 @@ const
     ];
 
 
+    console.log('step2Phase2Progress', step2Phase2Progress.get());
 
     return (
       <div className="flex flex-col items-center justify-center w-screen " ref={containerRef}>
@@ -657,8 +732,8 @@ const
             className
           )}
           style={{
-            height: `${stepCount * 100}vh`, // Each step gets 100vh of scroll space for better control
-            minHeight: '480vh' // Increased to ensure all animations complete
+            height: `${stepCount * 300}vh`, // Each step gets 300vh of scroll space - more space for steps 2-4
+            minHeight: '1200vh' // Increased significantly to slow down animations, especially for steps 2-4
           }}
         >
 
@@ -776,8 +851,8 @@ const
                         />
                       )}
 
-                      {/* Step 1 Phase 4: Query lines from Car to Mechanics (mechanic search starts from car) */}
-                      {(activeStep ?? 0) >= 1 && (
+                      {/* Step 2 Phase 1: Query lines from Car to Mechanics (mechanic search starts from car) */}
+                      {(activeStep ?? 0) >= 2 && (
                         <>
                           {mechanics.map((mechanic, idx) => {
                             // Car right edge: 124px, Mechanic centers calculated
@@ -788,19 +863,24 @@ const
                             const midX = (carX + mechanicX) / 2;
                             const pathD = `M ${carX} ${carY} Q ${midX} ${carY - 30} ${mechanicX} ${mechanicY}`;
 
+                            // Use the pre-created opacity transforms
+                            const pathOpacity = idx === 0
+                              ? mechanicPathOpacity0
+                              : idx === 1
+                                ? mechanicPathOpacity1
+                                : mechanicPathOpacity2;
+
                             return (
                               <motion.path
-                                key={`path-1-phase4-${mechanic.id}`}
+                                key={`path-2-phase1-${mechanic.id}`}
                                 d={pathD}
                                 fill="none"
                                 stroke="url(#pathGradient)"
                                 strokeWidth="2"
                                 strokeDasharray="1000"
-                                strokeDashoffset={phase4DashOffset}
+                                strokeDashoffset={step2Phase1DashOffset}
                                 filter="url(#glow)"
-                                style={{
-                                  opacity: (activeStep ?? 0) === 1 ? phase4Opacity : ((activeStep ?? 0) > 1 && idx === 0 ? 1 : 0)
-                                }}
+                                style={{ opacity: pathOpacity }}
                                 transition={{ duration: 0.3 }}
                               />
                             );
@@ -958,11 +1038,48 @@ const
                           >
                             <p className="text-[10px] font-semibold text-white mb-0.5">Your Vehicle</p>
                             <p className="text-[9px] text-white/70 leading-tight">
-                              {phase1Progress.get() > 0 && phase1Progress.get() < 1
-                                ? "Syncing Vehicle Data..."
-                                : (activeStep ?? 0) >= 1
-                                  ? "AI analyzing..."
-                                  : "Starting point"}
+                              {(() => {
+                                const step = activeStep ?? 0;
+                                if (step === 1) {
+                                  // Step 1: AI Diagnostics
+                                  if (phase1Progress.get() > 0 && phase1Progress.get() < 1) {
+                                    return "Syncing Vehicle Data...";
+                                  } else if (phase2Progress.get() > 0 && phase3Progress.get() === 0) {
+                                    return "AI analyzing...";
+                                  } else if (phase3Progress.get() > 0) {
+                                    return "Ready for mechanic search";
+                                  }
+                                  return "Starting point";
+                                } else if (step === 2) {
+                                  // Step 2: Pricing
+                                  if (step2Phase3Progress.get() > 0 && step2Phase3Progress.get() < 1) {
+                                    return "Receiving price quote...";
+                                  } else if (step2Phase3Progress.get() >= 1) {
+                                    return "Price received";
+                                  } else if (step2Phase2Progress.get() > 0.3) {
+                                    return "Mechanic selected";
+                                  } else {
+                                    return "Searching for mechanics...";
+                                  }
+                                } else if (step === 3) {
+                                  // Step 3: Calendar Sync
+                                  if (path3Progress.get() > 0 && path3Progress.get() < 1) {
+                                    return "Syncing calendar...";
+                                  } else if (path3Progress.get() >= 1) {
+                                    return "Calendar synced";
+                                  }
+                                  return "Checking availability...";
+                                } else if (step === 4) {
+                                  // Step 4: Booking Confirmation
+                                  if (path4Progress.get() > 0.85) {
+                                    return "Booking confirmed!";
+                                  } else if (path4Progress.get() > 0) {
+                                    return "Processing booking...";
+                                  }
+                                  return "Finalizing...";
+                                }
+                                return "Starting point";
+                              })()}
                             </p>
                           </motion.div>
                         </motion.div>
@@ -1110,93 +1227,95 @@ const
                         </>
                       )}
 
-                      {/* Mechanic Nodes - appear in step 1 Phase 4 (after return signal) - positioned to fit 400px container */}
-                      {mechanics.map((mechanic, idx) => {
-                        // Position mechanics: idx 0 (top-left), idx 1 (middle), idx 2 (top-right)
-                        const x = 280 + (idx === 2 ? 120 : 0); // 280 for idx 0&1, 400 for idx 2
-                        const y = idx === 1 ? 260 : 140; // Middle one lower, others higher
-                        const isSelected = idx === 0;
-                        // Mechanics appear in Phase 4 of Step 1 (after return signal from AI brain)
-                        const shouldShow = (activeStep ?? 0) >= 1 && phase4Progress.get() > 0.3;
-                        const shouldFade = (activeStep ?? 0) >= 2 && !isSelected;
+                      {/* Mechanic Nodes - appear in Step 2 Phase 1 (mechanic search) - positioned to fit 400px container */}
+                      <AnimatePresence>
+                        {mechanics.map((mechanic, idx) => {
+                          // Position mechanics: idx 0 (top-left), idx 1 (middle), idx 2 (top-right)
+                          const x = 280 + (idx === 2 ? 120 : 0); // 280 for idx 0&1, 400 for idx 2
+                          const y = idx === 1 ? 260 : 140; // Middle one lower, others higher
+                          const isSelected = idx === 0;
+                          // Fade non-selected mechanics in Step 2 Phase 2 (selection phase)
+                          const shouldFade = (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > -0.4 && !isSelected;
 
-                        return (
-                          <motion.div
-                            key={mechanic.id}
-                            className="absolute group cursor-pointer flex flex-col items-center"
-                            style={{ left: `${x}px`, top: `${y}px` }}
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{
-                              scale: shouldShow ? (shouldFade ? 0.3 : 1) : 0,
-                              opacity: shouldShow ? (shouldFade ? 0.2 : 1) : 0,
-                            }}
-                            whileHover={{ scale: shouldFade ? 0.4 : 1.15 }}
-                            whileTap={{ scale: 0.9 }}
-                            transition={{ duration: 0.4, delay: idx * 0.1 }}
-                          >
-                            {/* Liquid Glass Node - scaled down */}
-                            <div
-                              className={cn(
-                                "w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden transition-all",
-                                isSelected && (activeStep ?? 0) >= 2 && "ring-2 ring-green-400/50"
-                              )}
-                              style={{
-                                background: isSelected && (activeStep ?? 0) >= 2
-                                  ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.35) 0%, rgba(16, 185, 129, 0.4) 100%)'
-                                  : 'linear-gradient(135deg, rgba(75, 85, 99, 0.3) 0%, rgba(31, 41, 55, 0.35) 100%)',
-                                backdropFilter: 'blur(20px) saturate(180%)',
-                                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                                border: isSelected && (activeStep ?? 0) >= 2
-                                  ? '1px solid rgba(34, 197, 94, 0.5)'
-                                  : '1px solid rgba(255, 255, 255, 0.25)',
-                                boxShadow: isSelected && (activeStep ?? 0) >= 2
-                                  ? `0 8px 32px rgba(34, 197, 94, 0.4),
+                          return (
+                            <motion.div
+                              key={mechanic.id}
+                              className="absolute group cursor-pointer flex flex-col items-center"
+                              style={{ left: `${x}px`, top: `${y}px` }}
+                              initial={{ scale: 0, opacity: 0 }}
+                              animate={{
+                                scale: mechanicsVisible ? (shouldFade ? 0.3 : 1) : 0,
+                                opacity: mechanicsVisible ? (shouldFade ? 0 : 1) : 0,
+                              }}
+                              exit={{ scale: 0, opacity: 0 }}
+                              whileHover={{ scale: shouldFade ? 0.4 : 1.15 }}
+                              whileTap={{ scale: 0.9 }}
+                              transition={{ duration: 0.4, delay: idx * 0.1 }}
+                            >
+                              {/* Liquid Glass Node - scaled down */}
+                              <div
+                                className={cn(
+                                  "w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden transition-all",
+                                  isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 && "ring-2 ring-green-400/50"
+                                )}
+                                style={{
+                                  background: isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
+                                    ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.35) 0%, rgba(16, 185, 129, 0.4) 100%)'
+                                    : 'linear-gradient(135deg, rgba(75, 85, 99, 0.3) 0%, rgba(31, 41, 55, 0.35) 100%)',
+                                  backdropFilter: 'blur(20px) saturate(180%)',
+                                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                                  border: isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
+                                    ? '1px solid rgba(34, 197, 94, 0.5)'
+                                    : '1px solid rgba(255, 255, 255, 0.25)',
+                                  boxShadow: isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
+                                    ? `0 8px 32px rgba(34, 197, 94, 0.4),
                                    inset 0 1px 0 rgba(255, 255, 255, 0.4),
                                    inset 0 -1px 0 rgba(0, 0, 0, 0.1)`
-                                  : `0 8px 32px rgba(0, 0, 0, 0.3),
+                                    : `0 8px 32px rgba(0, 0, 0, 0.3),
                                    inset 0 1px 0 rgba(255, 255, 255, 0.2),
                                    inset 0 -1px 0 rgba(0, 0, 0, 0.1)`,
-                              }}
-                            >
-                              <div
-                                className="absolute inset-0 rounded-full"
-                                style={{
-                                  background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 70%)',
                                 }}
-                              />
-                              <Users className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
-                            </div>
-                            {/* Informational Text - scaled down */}
-                            <motion.div
-                              className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
-                              style={{
-                                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
-                                backdropFilter: 'blur(12px) saturate(180%)',
-                                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-                                border: '1px solid rgba(255, 255, 255, 0.15)',
-                                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
-                              }}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: shouldShow ? 1 : 0, y: 0 }}
-                              transition={{ delay: 0.4 + (idx * 0.1) }}
-                            >
-                              <p className="text-[9px] font-semibold text-white mb-0.5">
-                                {isSelected && (activeStep ?? 0) >= 2 ? "Selected" : mechanic.shop}
-                              </p>
-                              <p className="text-[8px] text-white/70 leading-tight">
-                                {isSelected && (activeStep ?? 0) >= 2
-                                  ? "Best match"
-                                  : (activeStep ?? 0) >= 1
-                                    ? "Available"
-                                    : "Searching..."}
-                              </p>
+                              >
+                                <div
+                                  className="absolute inset-0 rounded-full"
+                                  style={{
+                                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 70%)',
+                                  }}
+                                />
+                                <Users className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                              </div>
+                              {/* Informational Text - scaled down */}
+                              <motion.div
+                                className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
+                                style={{
+                                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
+                                  backdropFilter: 'blur(12px) saturate(180%)',
+                                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
+                                }}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: mechanicsVisible ? 1 : 0, y: 0 }}
+                                transition={{ delay: 0.4 + (idx * 0.1) }}
+                              >
+                                <p className="text-[9px] font-semibold text-white mb-0.5">
+                                  {isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 ? "Selected" : mechanic.shop}
+                                </p>
+                                <p className="text-[8px] text-white/70 leading-tight">
+                                  {isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
+                                    ? "Best match"
+                                    : (activeStep ?? 0) >= 2
+                                      ? "Available"
+                                      : "Searching..."}
+                                </p>
+                              </motion.div>
                             </motion.div>
-                          </motion.div>
-                        );
-                      })}
+                          );
+                        })}
+                      </AnimatePresence>
 
-                      {/* Animated Price Icons - Step 2 - from selected mechanic - scaled */}
-                      {(activeStep ?? 0) >= 2 && (() => {
+                      {/* Animated Price Icons - Step 2 Phase 3 - from selected mechanic to car - scaled */}
+                      {(activeStep ?? 0) >= 2 && step2Phase3Progress.get() > 0 && (() => {
                         // Selected mechanic is at index 0 - updated positions for 400px container
                         const selectedMechanic = mechanics[0];
                         const mechanicX = 280 + 24; // Mechanic center X (280px left + 24px half width)
@@ -1207,7 +1326,7 @@ const
                         return (
                           <PriceIcon
                             key={`price-icon-${selectedMechanic.id}`}
-                            progress={path2Progress}
+                            progress={step2Phase3Progress}
                             startX={mechanicX}
                             startY={mechanicY}
                             endX={carX}

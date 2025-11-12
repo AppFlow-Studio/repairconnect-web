@@ -60,15 +60,15 @@ export const Card: React.FC<CardProps> = ({
     >
       <div className={`flex h-full mt-5 gap-10`}>
         <div className={`w-full relative`}>
-          <h2 className={`text-xl text-start font-semibold text-gray-800 text-shadow-md mb-3`}>{title}</h2>
-          <p className={`text-sm text-gray/90 text-shadow-md leading-relaxed mb-4`}>{description}</p>
+          <h2 className={`text-xl text-start font-semibold text-gray-800 mb-3`}>{title}</h2>
+          <p className={`text-sm text-gray/90 leading-relaxed mb-4`}>{description}</p>
          
           <div className='flex flex-col gap-3 mt-4'>
             {
               features.map((feature, index) => (
                 <div key={index} className='flex items-center  gap-2 '>
                   <span className='text-base text-blue-400 '>•</span>
-                  <p className={`text-xs text-gray/90 text-shadow-md leading-relaxed`}>{feature}</p>
+                  <p className={`text-xs text-gray/90 leading-relaxed`}>{feature}</p>
                 </div>
               ))
             }

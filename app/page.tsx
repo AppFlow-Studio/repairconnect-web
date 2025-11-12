@@ -110,9 +110,9 @@ export default function Home() {
           minHeight: '100vh'
         }}
       >
-        <div className="relative w-full h-full"
+        <div className="relative w-full h-full h-screen"
           style={{
-            aspectRatio: "1553/1450"
+            
           }}
         >
           <Image
@@ -126,12 +126,12 @@ export default function Home() {
         <div
           className="absolute inset-0 w-full h-full backdrop-blur-[3px]"
           style={{
-            background: "linear-gradient(to bottom, rgba(30,30,32,0.1) 80%, transparent 120%)"
+            background: "linear-gradient(to bottom, rgba(30,30,32,0.2) 80%, transparent 120%)"
           }}
         />
 
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
-          <div className="flex self-center w-22 h-22 relative justify-center items-center">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
+          {/* <div className="flex self-center w-22 h-22 relative justify-center items-center">
             <svg style={{ display: 'none' }}>
               <filter id="displacementFilter">
                 <feTurbulence
@@ -167,11 +167,11 @@ export default function Home() {
             </div>
 
             <Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" width={100} height={100} className="object-cover z-20 h-22 w-22  mt-3" />
-          </div>
+          </div> */}
           <div className=" relative pt-8 flex flex-col items-center justify-center">
             <p
               className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] text-8xl leading-none font-semibold ">
-              Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent ">Waitlist</span>
+              Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent text-shadow ">Waitlist</span>
             </p>
             <p className="text-center text-sm lg:text-2xl leading-tight mb-3 text-[#E4E4E4] backdrop-blur-sm px-4 py-4 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem)] ">
               Receive all the latest news and updates,<br />as well as early access to the beta.
