@@ -5,7 +5,7 @@ import { Marquee } from "@/components/ui/marquee";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronRight, Wrench } from "lucide-react";
-import TransBar from "@/components/trans-bar";
+import TransBar, { TransBarTwo } from "@/components/trans-bar";
 import OurVision from "@/components/our-vision";
 import Flow from "@/components/Flow";
 import Coordination from "@/components/coordination";
@@ -61,31 +61,29 @@ export default function Home() {
   }, []);
 
   // Track scroll progress through Hero section
-  // Stop tracking when section end reaches viewport start (before TransBar)
+  // Account for aspect ratio - section height is determined by aspectRatio: "1553/1450"
+  // Track from when section enters viewport to when section end reaches viewport top (TransBar appears)
   const { scrollYProgress } = useScroll({
     target: heroSectionRef,
-    offset: ["start start", "end start"] // Stop when section end reaches viewport start
+    offset: ["start start", "end start"] // Track from start to when section end reaches viewport top
   });
 
-  // Transform scroll progress to position for the card
-  // Card moves down as user scrolls through hero section
-  const cardTop = useMotionValue('calc(100vh - 278px)');
-
-  // Update card position based on scroll progress
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (typeof window === 'undefined') return;
-    const vh = window.innerHeight;
-    const startTop = vh - 278;
-    const endTop = vh - 150;
-    const currentTop = startTop + (endTop - startTop) * latest;
-    cardTop.set(`${currentTop}px`);
-  });
+  // Transform scroll progress to create smooth scrolling for the card
+  // Card scrolls down smoothly as user scrolls through hero section
+  // When scroll progress reaches 1, card stops moving and stays fixed
+  // Use negative values to move down (positive y moves down in CSS)
+  const cardYOffset = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, 150], // Moves down 150px as you scroll through hero section
+    { clamp: true }
+  );
 
   // Opacity: keep card visible throughout
   const cardOpacity = useTransform(
     scrollYProgress,
-    [0, 0.9, 1],
-    [1, 1, 0.9], // Stay fully visible
+    [0, 1],
+    [1, 1], // Stay fully visible
     { clamp: true }
   );
 
@@ -107,15 +105,23 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden min-h-screen flex-1"
+        className="relative w-full overflow-hidden flex-1"
+        style={{
+          minHeight: '100vh'
+        }}
       >
-        <Image
-          src="/home11.png"
-          alt="Cityscape background"
-          width={1000}
-          height={1000}
-          className="w-full h-full object-cover"
-        />
+        <div className="relative w-full h-full"
+          style={{
+            aspectRatio: "1553/1450"
+          }}
+        >
+          <Image
+            src="/home14.png"
+            alt="Cityscape background"
+            fill
+            className="w-full h-full object-cover"
+          />
+        </div>
 
         <div
           className="absolute inset-0 w-full h-full backdrop-blur-[3px]"
@@ -124,7 +130,7 @@ export default function Home() {
           }}
         />
 
-        <div className="absolute top-1/7 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
           <div className="flex self-center w-22 h-22 relative justify-center items-center">
             <svg style={{ display: 'none' }}>
               <filter id="displacementFilter">
@@ -167,7 +173,7 @@ export default function Home() {
               className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] text-8xl leading-none font-semibold ">
               Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent ">Waitlist</span>
             </p>
-            <p className="text-center text-sm lg:text-3xl leading-tight mb-3 text-[#E4E4E4] ">
+            <p className="text-center text-sm lg:text-2xl leading-tight mb-3 text-[#E4E4E4] backdrop-blur-sm px-4 py-4 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem)] ">
               Receive all the latest news and updates,<br />as well as early access to the beta.
             </p>
 
@@ -235,8 +241,8 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 relative z-20"
-                  style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(1.1) blur(2px)" }}
+                  className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 hover:cursor-pointer relative z-20"
+                  style={{ backdropFilter: "brightness(1.1) blur(15px)" }}
                   disabled={submitted || !email}
                 >
                   {submitted ? "Submitted!" : "Join Waitlist"}
@@ -268,58 +274,22 @@ export default function Home() {
 
 
         <motion.div
-          className='absolute z-50 left-4 md:left-8 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl'
+          className='p-5 absolute left-8 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding max-w-[500px] z-30'
           style={{
-            top: cardTop,
-            opacity: cardOpacity
+            y: cardYOffset.get() * 10,
+            opacity: cardOpacity,
           }}
         >
-          <div className="p-5 lg:p-8 lg:pr-6 relative rounded-2xl shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding ">
-            <svg style={{ display: 'none' }}>
-              <filter id="displacementFilter">
-                <feTurbulence
-                  type="turbulence"
-                  baseFrequency="0.08"
-                  numOctaves="8"
-                  result="turbulence"
-                />
-                <feDisplacementMap
-                  in="SourceGraphic"
-                  in2="turbulence"
-                  scale="200"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                />
-              </filter>
-            </svg>
+          <div className="relative z-10 p-4  text-white rounded-2xl  ">
+            <h2 className='text-2xl lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
+            <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider'>
+              Book faster, pay once, get receipts forever.
+              Shops get predictable calendars. Everyone gets their time back.
+            </p>
 
-            <div
-              className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden"
-              style={{
-                filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                backdropFilter: 'brightness(1.1) blur(2px)',
-                border: '1px solid rgba(255, 255, 255, 0.7)',
-              }}
-            >
-              <div
-                className="absolute inset-0 rounded-3xl"
-                style={{
-                  boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                }}
-              />
-            </div>
-
-            <div className="relative z-10 p-5 lg:p-8 lg:pr-6 text-white rounded-2xl w-120 ">
-              <h2 className='text-2xl lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
-              <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider'>
-                Book faster, pay once, get receipts forever.
-                Shops get predictable calendars. Everyone gets their time back.
-              </p>
-
-              <p className="underline text-white inline-flex items-center gap-2">
-                Get to know us <ChevronRight className="w-4 h-4" />
-              </p>
-            </div>
+            <p className="underline text-white inline-flex items-center gap-2">
+              Get to know us <ChevronRight className="w-4 h-4" />
+            </p>
           </div>
         </motion.div>
 
@@ -335,30 +305,13 @@ export default function Home() {
 
 
       <OurVision />
+      <TransBarTwo />
       <Flow />
+      <div className="rotate-180"><TransBarTwo /></div>
       <Coordination />
 
       <section className="w-full  min-h-screen flex flex-col mt-4 items-center justify-center relative ">
-        {/* <LaserFlow
-          color="#FF4444"
-          horizontalBeamOffset={0.3}
-          verticalBeamOffset={0.0}
-          flowSpeed={0.35}
-          verticalSizing={33.8}
-          horizontalSizing={0.5}
-          fogIntensity={1}
-          fogScale={0.25}
-          wispSpeed={12.0}
-          wispIntensity={7.0}
-          flowStrength={0.3}
-          decay={1.2}
-          falloffStart={2.0}
-          fogFallSpeed={0.8}
-          wispDensity={1.2}
-          mouseTiltStrength={0}
-          className="w-full h-full border border-green-500"
-        /> */}
-        <div className="flex self-center w-42 h-42 relative"><Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" fill className="object-cover" /></div>
+
         <section className="w-[90%] mx-auto relative aspect-video  overflow-hidden rounded-2xl ring-4 ring-black/10">
           {/* Background Image */}
           <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
@@ -462,8 +415,8 @@ export default function Home() {
                     </div>
                     <button
                       type="submit"
-                      className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 relative z-20"
-                      style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(1.1) blur(2px)" }}
+                      className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
+                      style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(2) blur(2px)" }}
                       disabled={submitted || !email}
                     >
                       {submitted ? "Submitted!" : "Join Waitlist"}

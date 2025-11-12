@@ -2,8 +2,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
+import { motion } from 'motion/react'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 import LiquidGlass from '@nkzw/liquid-glass'
+import { ChevronRight } from 'lucide-react'
 const navItems = [
     {
         label: 'About',
@@ -22,8 +24,7 @@ function Navbar() {
     return (
         <div className='fixed lg:top-4 lg:left-1/2 lg:-translate-x-1/2 z-[112] w-full lg:max-w-fit mx-auto lg:rounded-[12px] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[background-color,border-color,box-shadow,backdrop-filter] lg:border border-white/20 bg-gradient-to-r from-[rgba(249,250,247,0.12)] to-[rgba(249,250,247,0.18)] lg:shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] backdrop-blur-[9px]'>
             <main className='flex gap-6 items-center px-5 py-3 lg:px-3 lg:py-2 w-full justify-between'>
-                <div className='flex self-center w-12 h-12 relative'><Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" fill className="object-cover" /></div>
-
+                {/* <div className='flex self-center w-12 h-12 relative'><Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" fill className="object-cover" /></div> */}
                 {
                     navItems.map((item) => (
                         <Link key={item.href} href={item.href} className='font-medium text-[15px] leading-[140%] tracking-[-0.15px] hover:opacity-80 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] font-af text-white'>
@@ -31,6 +32,45 @@ function Navbar() {
                         </Link>
                     ))
                 }
+                <motion.button
+                    className="relative px-5 py-2 rounded-lg font-medium text-sm text-white overflow-hidden group"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%)',
+                        boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                    }}
+                    whileHover={{
+                        scale: 1.05,
+                        boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 17
+                    }}
+                >
+                    {/* Shimmer effect */}
+                    <motion.div
+                        className="absolute inset-0"
+                        style={{
+                            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                        }}
+                        animate={{
+                            x: ['-100%', '200%'],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatDelay: 1,
+                            ease: 'linear',
+                        }}
+                    />
+                    {/* Button text */}
+                    <span className="relative z-10 font-af tracking-[-0.15px] inline-flex items-center gap-2">
+                        Join the Waitlist <ChevronRight className='w-4 h-4' />
+                    </span>
+                </motion.button>
+
             </main>
         </div>
     )

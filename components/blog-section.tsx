@@ -8,14 +8,14 @@ const blogPosts = [
     {
         id: 1,
         headline: "Book Car Repairs in NYC in 6 Taps",
-        author: "by Bilal Ahmed",
+        author: "by Bilal Ahmad",
         background: "/quote.png",
         backgroundType: "image" as const
     },
     {
         id: 2,
         headline: "Book Car Repairs in NYC in Under 2 Minutes",
-        author: "by Bilal Ahmed",
+        author: "by Bilal Ahmad",
         background: "/appointment.png", 
         backgroundType: "image" as const,
         icon: "🔧" // Wrench icon
@@ -23,7 +23,7 @@ const blogPosts = [
     {
         id: 3,
         headline: "Help Us Launch the Fair Way to Fix Your Car",
-        author: "by Bilal Ahmed",
+        author: "by Bilal Ahmad",
         background: "/book.png", 
         backgroundType: "image" as const
     }
@@ -71,28 +71,20 @@ export default function BlogSection() {
                             )}
 
                             {/* Liquid Glass Overlay */}
-                            <div className="absolute inset-0 flex items-end justify-center p-6 ">
+                            <div className="absolute inset-0 flex items-end justify-center p-8 ">
                                 <div className="relative w-full">
                                     {/* Liquid Glass Background Overlay */}
                                     <div
-                                        className="relative rounded-2xl overflow-hidden backdrop-blur-[15px] "
-                                        style={{
-                                            filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                                        }}
+                                        className="relative rounded-lg overflow-hidden backdrop-blur-[15px] "
                                     >
-                                        <div
-                                            className="absolute inset-0 rounded-2xl"
-                                            style={{
-                                                boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                                            }}
-                                        />
+                                       
 
                                         {/* Content */}
-                                        <div className="relative z-10 p-6 lg:p-8 text-center">
-                                            <h3 className="text-xl font-semibold text-white mb-3 leading-tight">
+                                        <div className="relative z-10 p-4 text-center">
+                                            <h3 className="text-white tracking-28 sm:tracking-32 font-af text-[15px] sm:text-[18px] font-medium leading-[130%] tracking-[-0.18px] text-center mb-2 sm:mb-4 line-clamp-2">
                                                 {post.headline}
                                             </h3>
-                                            <p className="text-sm text-white/90">
+                                            <p className="text-sm text-white/70">
                                                 {post.author}
                                             </p>
                                         </div>

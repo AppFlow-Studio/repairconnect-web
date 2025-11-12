@@ -82,7 +82,7 @@ export default function Coordination() {
       iconColor: 'text-purple-600',
       bgColor: 'bg-purple-100',
       emoji: '📅',
-      headline: 'Tomorrow 10:30 AM at Midtown Motors',
+      headline: 'Today 9:30 AM at John\'s Shop',
       sub: 'Bring wheel lock key if you have it.',
       description: "Smart scheduling that works around your life.|RepairConnect syncs with your calendar, sends reminders, and even suggests the best times based on your routine.|Booking made simple.",
       cta: 'Manage',
@@ -186,13 +186,13 @@ export default function Coordination() {
                 {items.map((_, idx) => (
                   <motion.div
                     key={idx}
-                    className={`w-1 rounded-full transition-colors duration-300 ${idx === activeIndex
+                    className={`w-px rounded-full transition-colors duration-300 ${idx === activeIndex
                       ? 'bg-neutral-900'
                       : 'bg-neutral-300'
                       }`}
                     initial={false}
                     animate={{
-                      height: idx === activeIndex ? '24px' : '12px',
+                      height: idx === activeIndex ? '1rem' : '0.5rem',
                       opacity: idx === activeIndex ? 1 : 0.5,
                     }}
                     transition={{
@@ -226,7 +226,7 @@ export default function Coordination() {
                               delay: idx * 0.15,
                               ease: [0.25, 0.1, 0.25, 1]
                             }}
-                            className="text-lg sm:text-xl text-neutral-700 leading-relaxed"
+                            className="text-lg text-neutral-700 leading-relaxed"
                           >
                             {sentence.trim()}
                           </motion.p>
@@ -244,15 +244,15 @@ export default function Coordination() {
                 <div className='w-full mb-4 flex items-center justify-center relative'>
                   {/* Blurred text behind for liquid glass effect */}
                   <div
-                    className="absolute text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight select-none"
+                    className="absolute text-6xl sm:text-7xl md:text-8xl  font-light tracking-tight select-none"
                     style={{
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.6) 50%, rgba(150,180,255,0.4) 100%)',
+                      // background: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.6) 50%, rgba(150,180,255,0.4) 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
-                      filter: 'blur(12px)',
-                      WebkitFilter: 'blur(12px)',
-                      opacity: 0.7,
+                      // filter: 'blur(12px)',
+                      // WebkitFilter: 'blur(12px)',
+                      // opacity: 0.7,
                     }}
                   >
                     {currentTime.toLocaleTimeString('en-US', {
@@ -263,22 +263,22 @@ export default function Coordination() {
                   </div>
                   {/* Main time text with liquid glass gradient */}
                   <div
-                    className="relative text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight select-none z-10"
+                    className="relative text-6xl sm:text-7xl md:text-8xl   tracking-tight select-none z-10"
                     style={{
-                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,245,255,0.95) 25%, rgba(220,235,255,0.85) 50%, rgba(200,225,255,0.75) 75%, rgba(180,210,255,0.65) 100%)',
+                      // background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,245,255,0.95) 25%, rgba(220,235,255,0.85) 50%, rgba(200,225,255,0.75) 75%, rgba(180,210,255,0.65) 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
-                      // textShadow: `
-                      //   0 0 40px rgba(200,220,255,0.6),
-                      //   0 0 80px rgba(180,210,255,0.4),
-                      //   0 0 120px rgba(150,180,255,0.2),
-                      //   0 2px 10px rgba(0, 0, 0, 0.15),
-                      //   0 0 2px rgba(255, 255, 255, 0.5)
-                      // `,
-                      WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.3)',
-                      filter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
-                      WebkitFilter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
+                      textShadow: `
+                        0 0 40px rgba(200,220,255,0.6),
+                        0 0 80px rgba(180,210,255,0.4),
+                        0 0 120px rgba(150,180,255,0.2),
+                        0 2px 10px rgba(0, 0, 0, 0.15),
+                        0 0 2px rgba(255, 255, 255, 0.5)
+                      `,
+                      WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.6)',
+                      // filter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
+                      // WebkitFilter: 'blur(0.5px) drop-shadow(0 0 25px rgba(200,220,255,0.5))',
                     }}
                   >
                     {currentTime.toLocaleTimeString('en-US', {
@@ -298,9 +298,9 @@ export default function Coordination() {
                     return (
                       <div
                         key={item.type}
-                        className="w-full rounded-xl relative shadow-sm px-4 py-3 hover:shadow-md transition-shadow"
+                        className="relative w-[80vw] max-[420px]:max-w-full max-w-[400px] lg:max-w-[315px] rounded-2xl px-3 py-2.5 sm:py-3 bg-white/60 backdrop-blur-[20px]  shadow-[0_1px_8px_0_rgba(0,0,0,0.05)]"
                       >
-                        <svg style={{ display: 'none' }}>
+                        {/* <svg style={{ display: 'none' }}>
                           <filter id="displacementFilter">
                             <feTurbulence
                               type="turbulence"
@@ -316,14 +316,13 @@ export default function Coordination() {
                               yChannelSelector="G"
                             />
                           </filter>
-                        </svg>
+                        </svg> */}
 
                         {/* Liquid Glass Input Background */}
-                        <div
-                          className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden backdrop-blur-[3px]"
+                        {/* <div
                           style={{
                             filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                            backdropFilter: 'brightness(2) blur(18x)',
+                            backdropFilter: 'brightness(2) blur(20x)',
                             border: '1px solid rgba(255, 255, 255, 0.7)',
                           }}
                         >
@@ -333,9 +332,9 @@ export default function Coordination() {
                               boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
                             }}
                           />
-                        </div>
+                        </div> */}
                         <div className="flex items-start gap-3 relative">
-                          <div className='w-10 h-10 rounded-2xl flex items-center justify-center relative self-center'>
+                          <div className='w-10 h-10 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
                             <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
                           {/* Icon with background */}
@@ -346,11 +345,11 @@ export default function Coordination() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-sm font-semibold text-neutral-900 leading-tight">
-                                {item.headline} {item.emoji}
+                              <h3 className="text-xs font-semibold text-neutral-900 leading-tight relative w-full">
+                                {item.headline} {item.emoji}  <span className="text-[9px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
                               </h3>
                             </div>
-                            <p className="text-xs text-neutral-800 leading-relaxed mb-1.5">
+                            <p className="text-[11px] text-neutral-800 leading-relaxed mb-1.5">
                               {item.sub}
                             </p>
                             {/* <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
