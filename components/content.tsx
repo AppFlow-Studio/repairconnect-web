@@ -62,7 +62,7 @@ const Nav = () => {
             {/* Overlay Text - Bottom Right */}
             <div className="absolute bottom-6 right-10 lg:bottom-8 lg:right-8 z-10">
                 <p className="text-white text-xs sm:text-sm">
-                    Design by <span className='underline text-neutral-500'>Appflow Studio</span>
+                    Design by <span className='underline text-neutral-300'>Appflow Studio</span>
                 </p>
             </div>
         </div>

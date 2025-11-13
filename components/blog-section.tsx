@@ -7,24 +7,24 @@ import { ChevronRight } from 'lucide-react'
 const blogPosts = [
     {
         id: 1,
-        headline: "Book Car Repairs in NYC in 6 Taps",
+        headline: "Book Car Repairs in NYC in Just 6 Taps",
         author: "by Bilal Ahmad",
         background: "/quote.png",
         backgroundType: "image" as const
     },
     {
         id: 2,
-        headline: "Book Car Repairs in NYC in Under 2 Minutes",
+        headline: "Book Car Repairs in NYC in Just 2 Minutes",
         author: "by Bilal Ahmad",
-        background: "/appointment.png", 
+        background: "/appointment.png",
         backgroundType: "image" as const,
         icon: "🔧" // Wrench icon
     },
     {
         id: 3,
-        headline: "Help Us Launch the Fair Way to Fix Your Car",
+        headline: "Join Us Launching the Fair Way to Fix Cars",
         author: "by Bilal Ahmad",
-        background: "/book.png", 
+        background: "/book.png",
         backgroundType: "image" as const
     }
 ]
@@ -48,7 +48,7 @@ export default function BlogSection() {
                 </div>
 
                 {/* Blog Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 xl:grid-cols-3 md:grid-cols-2 gap-6 lg:gap-8">
                     {blogPosts.map((post) => (
                         <article
                             key={post.id}
@@ -77,7 +77,7 @@ export default function BlogSection() {
                                     <div
                                         className="relative rounded-lg overflow-hidden backdrop-blur-[15px] "
                                     >
-                                       
+
 
                                         {/* Content */}
                                         <div className="relative z-10 p-4 text-center">

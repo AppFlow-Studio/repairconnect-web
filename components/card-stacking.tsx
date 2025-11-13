@@ -48,15 +48,21 @@ export const Card: React.FC<CardProps> = ({
         duration: 0.5,
         ease: [0.25, 0.1, 0.25, 1]
       }}
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        left: '50%',
-        x: '-50%',
-        width: '100%',
-        pointerEvents: isActive ? 'auto' : 'none',
-      }}
-      className={`flex flex-col h-fit px-12 origin-bottom w-full rounded-2xl relative  mt-auto`}
+      className={`flex flex-col h-fit lg:px-12 origin-bottom rounded-2xl mt-auto
+        absolute
+        left-1/2
+        -translate-x-1/2
+        w-full
+        pointer-events-none
+        lg:pointer-events-auto
+        lg:bottom-0
+        lg:top-auto
+        lg:translate-y-0
+        top-0
+        lg:left-1/2
+        lg:-translate-x-1/2
+        ${isActive ? "pointer-events-auto" : "pointer-events-none"}
+      `}
     >
       <div className={`flex h-full mt-5 gap-10`}>
         <div className={`w-full relative`}>

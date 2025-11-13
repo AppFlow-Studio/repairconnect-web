@@ -38,6 +38,7 @@ const endtoend = [
 
 ]
 export default function Home() {
+  
   const [isDark, setIsDark] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -105,14 +106,14 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden flex-1"
+        className="relative w-full overflow-hidden flex-1 lg:h-screen h-[80vh]"
         style={{
-          minHeight: '100vh'
+          // minHeight: '100vh'
         }}
       >
-        <div className="relative w-full h-full h-screen"
+        <div className="relative w-full lg:h-screen h-[80vh]"
           style={{
-            
+
           }}
         >
           <Image
@@ -131,46 +132,9 @@ export default function Home() {
         />
 
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
-          {/* <div className="flex self-center w-22 h-22 relative justify-center items-center">
-            <svg style={{ display: 'none' }}>
-              <filter id="displacementFilter">
-                <feTurbulence
-                  type="turbulence"
-                  baseFrequency="0.08"
-                  numOctaves="8"
-                  result="turbulence"
-                />
-                <feDisplacementMap
-                  in="SourceGraphic"
-                  in2="turbulence"
-                  scale="200"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                />
-              </filter>
-            </svg>
-
-            <div
-              className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden"
-              style={{
-                filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                backdropFilter: 'brightness(1.1) blur(2px)',
-                border: '1px solid rgba(255, 255, 255, 0.7)',
-              }}
-            >
-              <div
-                className="absolute inset-0 rounded-3xl"
-                style={{
-                  boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                }}
-              />
-            </div>
-
-            <Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" width={100} height={100} className="object-cover z-20 h-22 w-22  mt-3" />
-          </div> */}
           <div className=" relative pt-8 flex flex-col items-center justify-center">
             <p
-              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] text-8xl leading-none font-semibold ">
+              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] lg:text-8xl text-6xl leading-none font-semibold ">
               Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent text-shadow ">Waitlist</span>
             </p>
             <p className="text-center text-sm lg:text-2xl leading-tight mb-3 text-[#E4E4E4] backdrop-blur-sm px-4 py-4 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem)] ">
@@ -250,9 +214,9 @@ export default function Home() {
               </div>
             </form>
 
-            <div className="border-b py-4 h-3 p-2 w-[45%] relative self-center my-4" />
+            <div className="border-b py-4 h-3 p-2 w-[30%] relative self-center my-4" />
             {/* <p className="text-sm lg:text-base leading-relaxed text-[#E4E4E4] mt-6">Powered By</p> */}
-            <Marquee className="w-[45%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-2 flex flex-row">
+            <Marquee className="w-[30%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-2 flex flex-row">
               {
                 text.map((item) => (
                   <p key={item} className="text-xs leading-relaxed text-[#E4E4E4]">{item}</p>
@@ -274,14 +238,14 @@ export default function Home() {
 
 
         <motion.div
-          className='p-5 absolute left-8 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding max-w-[500px] z-30'
+          className='p-5 absolute left-8 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] max-w-[300px] z-30'
           style={{
             y: cardYOffset.get() * 10,
             opacity: cardOpacity,
           }}
         >
           <div className="relative z-10 p-4  text-white rounded-2xl  ">
-            <h2 className='text-2xl lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
+            <h2 className='text-xl lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
             <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider'>
               Book faster, pay once, get receipts forever.
               Shops get predictable calendars. Everyone gets their time back.
@@ -310,7 +274,7 @@ export default function Home() {
       <div className="rotate-180"><TransBarTwo /></div>
       <Coordination />
 
-      <section className="w-full  min-h-screen flex flex-col mt-4 items-center justify-center relative ">
+      <section className="w-full  xl:min-h-screen flex flex-col mt-4 items-center justify-center relative ">
 
         <section className="w-[90%] mx-auto relative aspect-video  overflow-hidden rounded-2xl ring-4 ring-black/10">
           {/* Background Image */}
@@ -333,21 +297,21 @@ export default function Home() {
 
           <div className="flex flex-col gap-10 items-start">
             {/* Main Content Box - Top Left */}
-            <div className="relative z-10 pt-2 px-8 max-w-4xl">
+            <div className="relative z-10 pt-2 px-8 ">
               <div className="p-6 lg:p-14 rounded-2xl ">
                 {/* Main Headline */}
-                <p className="text-3xl lg:text-5xl text-white mb-4 leading-tight"
+                <p className="text-3xl xl:text-5xl text-white mb-4 leading-tight xl:max-w-4xl max-w-lg"
                   style={{ fontFamily: "var(--font-Roboto_Slab)" }}
                 >
                   RepairConnect lets you manage repairs end to end
                 </p>
 
                 {/* Sub-headline */}
-                <p className="text-base lg:text-lg text-white/90 mb-6 leading-relaxed">
+                <p className="text-base lg:text-lg text-white/90 mb-6 leading-relaxed xl:max-w-4xl max-w-2xl">
                   RepairConnect helps manage <TypingAnimation words={endtoend} loop />
                 </p>
 
-                <div className="flex flex-row items-center w-full justify-start gap-4">
+                <div className="flex flex-row items-center w-full justify-start gap-4 xl:max-w-4xl max-w-2xl">
                   {/* Join Waitlist Button */}
                   <div className="relative w-82 h-full flex gap-4">
                     {/* SVG Filter Definition */}
@@ -388,7 +352,7 @@ export default function Home() {
                     <input
                       type="email"
                       placeholder="Enter your email"
-                      className="px-5 py-3 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full text-lg placeholder-gray-100 flex-1"
+                      className="px-5 py-3 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full xl:text-lg text-base placeholder-gray-100 flex-1"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -415,7 +379,7 @@ export default function Home() {
                     </div>
                     <button
                       type="submit"
-                      className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
+                      className="xl:px-8 px-4 py-3 rounded-2xl text-white font-semibold text-sm  shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
                       style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(2) blur(2px)" }}
                       disabled={submitted || !email}
                     >
@@ -427,7 +391,7 @@ export default function Home() {
             </div>
 
             {/* Info Box - Bottom Left */}
-            <div className=" z-10 max-w-xl p-14 absolute bottom-1/5 -left-10">
+            <div className=" z-10 max-w-xl p-14 absolute xl:bottom-1/5 bottom-0 -left-10">
               <div className="relative p-5 lg:p-10 ml-8 rounded-2xl   ">
 
                 {/* Content */}

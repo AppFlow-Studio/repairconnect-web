@@ -158,9 +158,34 @@ export default function Coordination() {
         }}
       >
         {/* Sticky container that stays in view while scrolling */}
+        <div className='w-full lg:hidden flex items-center justify-center'>
+          <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
+            <div className="space-y-6 flex flex-col">
+              <TextAnimation
+                text="You need clarity before you drive over."
+                direction="left"
+                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+              />
+              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
+              <TextAnimation
+                text="You need confidence when you hand over the keys."
+                direction="left"
+                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+              />
+              <TextAnimation
+                text="You need coordination."
+                direction="left"
+                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+              />
+              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
+              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
+            </div>
+
+          </div>
+        </div>
         <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center'>
-          <div className='w-[70%] h-full flex items-center justify-center px-8'>
-            <div className="w-full flex items-start flex-col justify-end h-[70%] px-8 gap-y-8 ">
+          <div className='w-[70%] h-full lg:flex hidden items-center justify-center px-8'>
+            <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
               <div className="space-y-6 flex flex-col">
                 <TextAnimation
                   text="You need clarity before you drive over."
@@ -238,7 +263,8 @@ export default function Coordination() {
               </div>
             </div>
           </div>
-          <div className="flex w-[40%] justify-center lg:justify-end items-center">
+
+          <div className="flex lg:w-[40%] w-[70%] mx-auto flex-col justify-center lg:justify-end items-center lg:mt-0 mt-8">
             <Iphone className=' relative w-full h-full' src="/liquidglassphone.png">
               <div className="p-4  w-full h-full">
                 <div className='w-full mb-4 flex items-center justify-center relative'>
@@ -298,41 +324,9 @@ export default function Coordination() {
                     return (
                       <div
                         key={item.type}
-                        className="relative w-[80vw] max-[420px]:max-w-full max-w-[400px] lg:max-w-[315px] rounded-2xl px-3 py-2.5 sm:py-3 bg-white/60 backdrop-blur-[20px]  shadow-[0_1px_8px_0_rgba(0,0,0,0.05)]"
+                        className="relative xl:w-[80vw] max-[420px] max-w-full lg:max-w-[315px] rounded-2xl px-3 py-2.5 sm:py-3 bg-white/60 backdrop-blur-[20px]  shadow-[0_1px_8px_0_rgba(0,0,0,0.05)]"
                       >
-                        {/* <svg style={{ display: 'none' }}>
-                          <filter id="displacementFilter">
-                            <feTurbulence
-                              type="turbulence"
-                              baseFrequency="0.08"
-                              numOctaves="8"
-                              result="turbulence"
-                            />
-                            <feDisplacementMap
-                              in="SourceGraphic"
-                              in2="turbulence"
-                              scale="200"
-                              xChannelSelector="R"
-                              yChannelSelector="G"
-                            />
-                          </filter>
-                        </svg> */}
 
-                        {/* Liquid Glass Input Background */}
-                        {/* <div
-                          style={{
-                            filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                            backdropFilter: 'brightness(2) blur(20x)',
-                            border: '1px solid rgba(255, 255, 255, 0.7)',
-                          }}
-                        >
-                          <div
-                            className="absolute inset-0 rounded-2xl"
-                            style={{
-                              boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                            }}
-                          />
-                        </div> */}
                         <div className="flex items-start gap-3 relative">
                           <div className='w-10 h-10 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
                             <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
@@ -345,11 +339,11 @@ export default function Coordination() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-xs font-semibold text-neutral-900 leading-tight relative w-full">
-                                {item.headline} {item.emoji}  <span className="text-[9px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
+                              <h3 className="xl:text-xs lg:text-[10px] font-semibold text-neutral-900 leading-tight relative w-full">
+                                {item.headline} {item.emoji}  <span className="xl:text-[9px] lg:text-[7px text-xs  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
                               </h3>
                             </div>
-                            <p className="text-[11px] text-neutral-800 leading-relaxed mb-1.5">
+                            <p className="xl:text-[11px] lg:text-[9px] text-sm text-neutral-800 leading-relaxed mb-1.5">
                               {item.sub}
                             </p>
                             {/* <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
@@ -363,6 +357,63 @@ export default function Coordination() {
                 </AnimatedList>
               </div>
             </Iphone>
+           <div className='lg:hidden flex items-start justify-start flex-col mt-4 h-48 relative w-full'>
+              {/* Vertical Rectangle Indicator */}
+              <div className="flex flex-row items-end gap-3 h-full flex-1 justify-end -bottom-3 left-0 absolute">
+                {items.map((_, idx) => (
+                  <motion.div
+                    key={idx}
+                    className={`w-px rounded-full transition-colors duration-300 ${idx === activeIndex
+                      ? 'bg-neutral-900'
+                      : 'bg-neutral-300'
+                      }`}
+                    initial={false}
+                    animate={{
+                      height: idx === activeIndex ? '1rem' : '0.5rem',
+                      opacity: idx === activeIndex ? 1 : 0.5,
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.25, 0.1, 0.25, 1]
+                    }}
+                  />
+                ))}
+              </div>
+  
+              {/* Description Text */}
+              <div className=' w-full'>
+                <AnimatePresence mode="wait">
+                  {items[activeIndex] && (
+                    <motion.div
+                      key={activeIndex}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="flex-1 "
+                    >
+                      <div className="space-y-4 leading-tight ">
+                        {items[activeIndex].description.split('|').map((sentence, idx) => (
+                          <motion.p
+                            key={`${activeIndex}-${idx}`}
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.6,
+                              delay: idx * 0.15,
+                              ease: [0.25, 0.1, 0.25, 1]
+                            }}
+                            className="text-lg text-neutral-700 leading-relaxed"
+                          >
+                            {sentence.trim()}
+                          </motion.p>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+           </div>
           </div>
         </div>
       </div>

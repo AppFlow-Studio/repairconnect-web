@@ -729,7 +729,6 @@ const
     ];
 
 
-    console.log('step2Phase2Progress', step2Phase2Progress.get());
 
     return (
       <div className="flex flex-col items-center justify-center w-screen " ref={containerRef}>
@@ -756,13 +755,13 @@ const
               </div>
             </div>
 
-            <div className="flex flex-row gap-12 items-start justify-center w-full max-w-[1600px] mx-auto mt-16">
+            <div className="flex lg:flex-row flex-col gap-12 items-start justify-center w-full max-w-[1600px] mx-auto mt-16">
               {/* Left Side - Cards */}
-              <div className="flex-1 min-w-0 w-[60%] h-full">
+              <div className="flex-1 min-w-0 lg:w-[60%] md:w-[600px] mx-auto w-full h-full lg:order-first lg:px-0 px-2">
                 <div className="relative w-full flex items-center justify-center ">
                   <div className="w-full flex flex-col items-start justify-center min-h-[400px] ">
                     {/* Vertical Step Indicator - Top of Box */}
-                    <div className="flex flex-row items-start justify-center gap-2 absolute top-1/3 left-12 mb-2 px-2 rotate-180 rotate-y-180">
+                    <div className="flex flex-row items-start justify-center gap-2 absolute xl:top-1/3 top-0 lg:left-12 mb-2 lg:px-2 rotate-180 rotate-y-180">
                       {[1, 2, 3, 4].map((stepNum) => (
                         <motion.div
                           key={stepNum}
@@ -808,7 +807,7 @@ const
               </div>
 
               {/* Right Side - Horizontal Scrolling Node Visualization in Boxed Window */}
-              <div className="flex-shrink-0 w-[600px] relative overflow-visible z-30">
+              <div className="flex-shrink-0 sm:w-[600px] w-full relative overflow-visible z-30 lg:order-last order-first mx-auto">
                 <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-xl p-2" style={{ backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
 
                   <div className="relative w-full h-[400px] mx-auto overflow-hidden bg-white/30 rounded-lg">
