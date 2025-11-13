@@ -26,7 +26,6 @@ export function TransBarTwo() {
             <div className="w-full h-[6px]" style={{ background: 'rgb(251, 251, 251)' }}></div>
             <div className="w-full h-[6px]" style={{ background: 'rgb(250, 250, 250)' }}></div>
             <div className="w-full h-[6px]" style={{ background: 'rgb(249, 250, 251)' }}></div>
-            <div className="w-full h-[4px]" style={{ background: 'rgba(249, 250, 251, 0.8)' }}></div>
             {/* <div className="w-full h-[2px]" style={{ background: '#051937' }}></div> */}
         </div>
     )

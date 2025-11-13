@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, MotionValue } from "motion/react";
-import { Folder, HeartHandshakeIcon, SparklesIcon, LucideIcon, Calendar, CheckCircle2, Clock, Wrench, DollarSign, CheckCircle, Activity, Server, Zap, Car, User, Brain, Users } from "lucide-react";
+import { Folder, HeartHandshakeIcon, SparklesIcon, LucideIcon, Calendar, CheckCircle2, Clock, Wrench, DollarSign, CheckCircle, Activity, Server, Zap, Car, User, Brain, Users, UserRoundCog } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ReactLenis } from "lenis/react";
 import { Sparkles } from "./sparkles";
@@ -374,10 +374,11 @@ const
       { clamp: true }
     );
     // Step 4: 75-100% of scroll - expanded range for smoother animation
+    // Give Step 4 more scroll space so the line draws smoothly
     const path4Progress = useTransform(
       easedScrollProgress,
-      [0.75, 0.95, 1],
-      [0, 0.95, 1],
+      [0.75, 0.98, 1],
+      [0, 0.99, 1],
       { clamp: true }
     );
 
@@ -397,19 +398,19 @@ const
     // Use path2Progress to determine overall step 2 progress
     const mechanicPathOpacity1 = useTransform(path2Progress, (p) => {
       // Phase 1 (0-33%): Show line
-      if (p < 0.1) return 1 
+      if (p < 0.1) return 1
       // Phase 2 (33-66%): Fade out after selection starts
       if (p < 0.2) return Math.max(0, 1 - ((p - 0.33) / 0.17) * 1); // Fade from 1 to 0
       // Phase 3+: Hidden
       return 0;
     });
     const mechanicPathOpacity2 = useTransform(path2Progress, (p) => {
-       // Phase 1 (0-33%): Show line
-       if (p < 0.1) return 1 
-       // Phase 2 (33-66%): Fade out after selection starts
-       if (p < 0.2) return Math.max(0, 1 - ((p - 0.33) / 0.17) * 1); // Fade from 1 to 0
-       // Phase 3+: Hidden
-       return 0;
+      // Phase 1 (0-33%): Show line
+      if (p < 0.1) return 1
+      // Phase 2 (33-66%): Fade out after selection starts
+      if (p < 0.2) return Math.max(0, 1 - ((p - 0.33) / 0.17) * 1); // Fade from 1 to 0
+      // Phase 3+: Hidden
+      return 0;
     });
     // Step 2 Phase 3: Price path (removed - price icon handles its own animation)
     const path2DashOffset = useTransform(path2Progress, (p) => {
@@ -417,7 +418,13 @@ const
       return 0;
     });
     const path3DashOffset = useTransform(path3Progress, (p) => 1000 - (p * 1000));
-    const path4DashOffset = useTransform(path4Progress, (p) => 1500 - (p * 1500)); // Longer path: car → mechanic → calendar
+    // Step 4 path: car (124, 200) → mechanic (304, 164) → calendar (480, 200)
+    // Path length is approximately 1500px for the full path
+    const path4DashOffset = useTransform(path4Progress, (p) => {
+      // Start with full dash offset (line hidden), animate to 0 (line fully visible)
+      // This creates a smooth drawing effect as user scrolls
+      return 1500 - (p * 1500);
+    });
 
     // Step 4 checkmark animations - appear when path reaches calendar (around 85% complete)
     const checkmarkOpacity = useTransform(path4Progress, (p) => p > 0.85 ? 1 : 0);
@@ -679,7 +686,7 @@ const
       },
       {
         step: 2,
-        title: "Direct Pricing & Price Comparison",
+        title: "Direct Pricing",
         description: "See real-time prices from multiple shops instantly—no phone calls needed. Compare options side-by-side and choose the best value for your repair.",
         icon: DollarSign,
         color: "green",
@@ -847,7 +854,7 @@ const
                           strokeDashoffset={returnSignalDashOffset}
                           filter="url(#glow)"
                           style={{ opacity: phase3Opacity }}
-                          transition={{ duration: 0.3 }}
+                          transition={{ duration: 0.1 }}
                         />
                       )}
 
@@ -924,7 +931,7 @@ const
                           filter="url(#glow)"
                           opacity={1}
                           style={{ zIndex: 10 }}
-                          transition={{ duration: 0.3 }}
+                          transition={{ duration: 0.1, ease: "linear" }}
                         />
                       )}
                     </svg>
@@ -1008,7 +1015,7 @@ const
                               style={{
                                 scale: useTransform(priceProgressForCar, (p) => {
                                   if (p < 0.85) return 1;
-                                  if (p < 0.95) return 1 + (p - 0.85) / 0.1 * 0.5; // Expand to 1.5
+                                  // if (p < 0.95) return 1 + (p - 0.85) / 0.1 * 0.5; // Expand to 1.5
                                   // Create ripple effect
                                   const ripplePhase = (p - 0.95) * 10;
                                   return 1.5 + Math.sin(ripplePhase * Math.PI) * 0.3;
@@ -1037,7 +1044,7 @@ const
                             transition={{ delay: 0.3 }}
                           >
                             <p className="text-[10px] font-semibold text-white mb-0.5">Your Vehicle</p>
-                            <p className="text-[9px] text-white/70 leading-tight">
+                            <p className="text-[9px] text-white/70 leading-tight w-24">
                               {(() => {
                                 const step = activeStep ?? 0;
                                 if (step === 1) {
@@ -1282,7 +1289,7 @@ const
                                     background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 70%)',
                                   }}
                                 />
-                                <Users className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                                <UserRoundCog className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
                               </div>
                               {/* Informational Text - scaled down */}
                               <motion.div
@@ -1315,7 +1322,7 @@ const
                       </AnimatePresence>
 
                       {/* Animated Price Icons - Step 2 Phase 3 - from selected mechanic to car - scaled */}
-                      {(activeStep ?? 0) >= 2 && step2Phase3Progress.get() > 0 && (() => {
+                      {/* {(activeStep ?? 0) >= 2 && step2Phase3Progress.get() > 0 && (() => {
                         // Selected mechanic is at index 0 - updated positions for 400px container
                         const selectedMechanic = mechanics[0];
                         const mechanicX = 280 + 24; // Mechanic center X (280px left + 24px half width)
@@ -1333,7 +1340,7 @@ const
                             endY={carY}
                           />
                         );
-                      })()}
+                      })()} */}
 
                       {/* Calendar Node - appears in step 3 - positioned at right side */}
                       <AnimatePresence>
@@ -1465,7 +1472,7 @@ const
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   >
-                    Fig. {activeStep ?? 1} {activeStep === 1 ? "AI Diagnostics & Service Discovery" : activeStep === 2 ? "Direct Pricing & Price Comparison" : activeStep === 3 ? "Calendar Sync" : "Booking Confirmed"}
+                    Fig. {activeStep ?? 1} {activeStep === 1 ? "AI Diagnostics & Service Discovery" : activeStep === 2 ? "Direct Pricing " : activeStep === 3 ? "Calendar Sync" : "Booking Confirmed"}
                   </motion.p>
                 </div>
               </div>

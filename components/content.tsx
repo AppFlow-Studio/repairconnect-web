@@ -43,7 +43,7 @@ const Section2 = () => {
 
 const Nav = () => {
     return (
-        <div className='flex shrink-0 gap-20 relative w-full h-screen '>
+        <div className='flex shrink-0 gap-20 relative w-full h-[700px] '>
 
             <Image src='/footerimg2.png' alt='RepairConnect Footer img' fill className='object-cover ' />
             <div

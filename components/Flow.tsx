@@ -8,7 +8,7 @@ import { Calendar, Clock, DollarSign, Wrench } from "lucide-react";
 export default function Flow() {
     return (
         <section
-            className="relative w-full max-w-8xl mx-auto h-full min-h-screen flex flex-col p-8 items-center justify-center px-8 py-12 bg-gray-50/80"
+            className="relative w-full max-w-8xl mx-auto h-full min-h-screen flex flex-col p-8 items-center justify-center px-8 py-12 bg-gray-100"
             // style={{
             //     background: "radial-gradient(circle, #d9e2ef, #9faabe, #69768e, #374561, #051937)"
             // }}
