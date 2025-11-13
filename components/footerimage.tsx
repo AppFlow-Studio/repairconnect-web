@@ -32,15 +32,15 @@ export default function FooterImage() {
     return (
         <div
 
-            className='relative h-[700px]'
+            className='relative sm:h-[700px] h-[400px]'
 
             style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
 
         >
 
-            <div className='relative h-[calc(100vh+700px)] -top-[100vh]'>
+            <div className='relative sm:h-[calc(100vh+700px)] h-[calc(100vh+400px)] -top-[100vh]'>
 
-                <div className='h-[700px] sticky top-[calc(100vh-700px)]'>
+                <div className='sm:h-[700px] h-[400px] sticky top-[calc(100vh-700px)]'>
 
                     <Content />
 

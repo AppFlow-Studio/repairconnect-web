@@ -45,7 +45,7 @@ const Nav = () => {
     return (
         <div className='flex shrink-0 gap-20 relative w-full h-[700px] '>
 
-            <Image src='/footerimg2.png' alt='RepairConnect Footer img' fill className='object-cover ' />
+            <Image src='/footerimg2.png' alt='RepairConnect Footer img' fill className='object-cover' />
             <div
                 className="absolute inset-0 w-full h-full backdrop-blur-[1px]"
                 style={{
@@ -53,14 +53,14 @@ const Nav = () => {
                 }}
             />
             {/* Overlay Text - Bottom Left */}
-            <div className="absolute bottom-6 left-10 lg:bottom-8 lg:left-8 z-10">
+            <div className="absolute bottom-6 sm:left-10 left-1 lg:bottom-8 lg:left-8 z-10">
                 <p className="text-white text-xs sm:text-sm">
                     © Repair Connect of New York 2025
                 </p>
             </div>
 
             {/* Overlay Text - Bottom Right */}
-            <div className="absolute bottom-6 right-10 lg:bottom-8 lg:right-8 z-10">
+            <div className="absolute bottom-6 sm:right-10 right-1 lg:bottom-8 lg:right-8 z-10">
                 <p className="text-white text-xs sm:text-sm">
                     Design by <span className='underline text-neutral-300'>Appflow Studio</span>
                 </p>

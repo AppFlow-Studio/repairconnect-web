@@ -9,8 +9,8 @@ import { Sparkles } from "./ui/sparkles";
 export default function OurVision() {
 
     return (
-        <section className="relative w-full min-h-screen bg-white flex flex-row items-center justify-between px-8 max-w-5xl mx-auto">
-            <div className="relative w-[50%] h-full mask-intersect [mask-composite:intersect] [mask-image:linear-gradient(to_top,transparent,black_8rem),linear-gradient(to_bottom,transparent,black_6rem),linear-gradient(to_left,transparent,black_3rem),linear-gradient(to_right,transparent,black_3rem)] border items-center justify-center flex">
+        <section className="relative w-full sm:min-h-screen min-h-[60vh] bg-white flex sm:flex-row flex-col items-center justify-between sm:px-8 max-w-5xl mx-auto">
+            <div className="relative sm:w-[50%] w-full h-full mask-intersect [mask-composite:intersect] [mask-image:linear-gradient(to_top,transparent,black_8rem),linear-gradient(to_bottom,transparent,black_6rem),linear-gradient(to_left,transparent,black_3rem),linear-gradient(to_right,transparent,black_3rem)] border items-center justify-center flex">
                 <World />
                 <Sparkles
                     density={800}
@@ -23,7 +23,7 @@ export default function OurVision() {
                 />
             </div>
 
-            <div className="relative w-[40%] items-center flex flex-col justify-between space-y-20">
+            <div className="relative sm:w-[40%] w-full sm:px-0 px-4 items-center flex flex-col justify-between space-y-20">
                 <div className="flex flex-col space-y-10">
                     <p
 

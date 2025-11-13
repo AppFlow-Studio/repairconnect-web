@@ -105,7 +105,7 @@ const DataPacket = ({
         scale: scale,
       }}
     >
-      <div className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-blue-500/95 via-cyan-500/95 to-blue-600/95 backdrop-blur-md border border-blue-400/60 shadow-xl text-[9px] font-mono font-semibold text-white whitespace-nowrap relative overflow-hidden">
+      <div className="px-2 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-gradient-to-br from-blue-500/95 via-cyan-500/95 to-blue-600/95 backdrop-blur-md border border-blue-400/60 shadow-xl text-[7px] sm:text-[9px] font-mono font-semibold text-white whitespace-nowrap relative overflow-hidden">
         {/* Inner glow effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-lg" />
         <span className="relative z-10">{label}</span>
@@ -169,10 +169,10 @@ const DiagnosticIcon = ({
         rotate: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
       }}
     >
-      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 backdrop-blur-xl border-2 border-purple-400/60 shadow-xl flex items-center justify-center relative overflow-hidden">
+      <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 backdrop-blur-xl border sm:border-2 border-purple-400/60 shadow-xl flex items-center justify-center relative overflow-hidden">
         {/* Inner glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-full" />
-        <CheckCircle2 className="w-4 h-4 text-white relative z-10 drop-shadow-lg" />
+        <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-white relative z-10 drop-shadow-lg" />
         {/* Pulse ring */}
         <motion.div
           className="absolute inset-0 rounded-full border-2 border-purple-300/50"
@@ -742,14 +742,22 @@ const
             minHeight: '1200vh' // Increased significantly to slow down animations, especially for steps 2-4
           }}
         >
+          <div className="text-start w-full sm:hidden flex flex-row space-x-8 sm:px-12 ">
+            <div className="flex flex-col space-y-8">
+              <p className=" text-gray-700 sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 
+              <p className="sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight text-gray-800">
+                No phone-tag, just a booked bay.
+              </p>
+            </div>
+          </div>
           {/* Sticky container that stays in view while scrolling */}
           <div className="sticky top-0 flex flex-col items-center justify-center  min-h-screen  w-full max-w-8xl">
-            <div className="text-start w-full flex flex-row space-x-8 px-12">
+            <div className="text-start w-full sm:flex hidden flex-row space-x-8 sm:px-12 ">
               <div className="flex flex-col space-y-8">
-                <p className=" text-gray-700 text-3xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
+                <p className=" text-gray-700 sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 
-                <p className="text-3xl font-[--font-lora] leading-tight tracking-tight text-gray-800">
+                <p className="sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight text-gray-800">
                   No phone-tag, just a booked bay.
                 </p>
               </div>
@@ -807,10 +815,10 @@ const
               </div>
 
               {/* Right Side - Horizontal Scrolling Node Visualization in Boxed Window */}
-              <div className="flex-shrink-0 sm:w-[600px] w-full relative overflow-visible z-30 lg:order-last order-first mx-auto">
+              <div className="flex-shrink-0 sm:w-[600px] w-full relative overflow-visible z-30 lg:order-last order-first mx-auto sm:mt-0 mt-4">
                 <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-xl p-2" style={{ backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
 
-                  <div className="relative w-full h-[400px] mx-auto overflow-hidden bg-white/30 rounded-lg">
+                  <div className="relative w-full h-[250px] sm:h-[400px] mx-auto overflow-hidden bg-white/30 rounded-lg">
                     {/* SVG Container for paths */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
                       <defs>
@@ -833,7 +841,8 @@ const
                           d="M 124 200 L 480 200"
                           fill="none"
                           stroke="#3B82F6"
-                          strokeWidth="2"
+                          strokeWidth="1.5"
+                          className="sm:stroke-[2]"
                           strokeDasharray="800"
                           strokeDashoffset={phase1DashOffset}
                           filter="url(#glow)"
@@ -848,7 +857,8 @@ const
                           d="M 480 200 L 124 200"
                           fill="none"
                           stroke="#8B5CF6"
-                          strokeWidth="3"
+                          strokeWidth="2"
+                          className="sm:stroke-[3]"
                           strokeDasharray="800"
                           strokeDashoffset={returnSignalDashOffset}
                           filter="url(#glow)"
@@ -882,7 +892,8 @@ const
                                 d={pathD}
                                 fill="none"
                                 stroke="url(#pathGradient)"
-                                strokeWidth="2"
+                                strokeWidth="1.5"
+                                className="sm:stroke-[2]"
                                 strokeDasharray="1000"
                                 strokeDashoffset={step2Phase1DashOffset}
                                 filter="url(#glow)"
@@ -906,7 +917,8 @@ const
                             d="M 304 164 Q 380 150 480 200"
                             fill="none"
                             stroke="#8B5CF6"
-                            strokeWidth="2"
+                            strokeWidth="1.5"
+                            className="sm:stroke-[2]"
                             strokeDasharray="1000"
                             strokeDashoffset={path3DashOffset}
                             filter="url(#glow)"
@@ -922,7 +934,8 @@ const
                           d="M 124 200 L 304 164 L 480 200"
                           fill="none"
                           stroke="#10B981"
-                          strokeWidth="5"
+                          strokeWidth="3"
+                          className="sm:stroke-[5]"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeDasharray="1500"
@@ -936,10 +949,10 @@ const
                     </svg>
 
                     {/* Nodes Container - scaled for smaller box */}
-                    <div className="relative w-full h-full " style={{ zIndex: 2 }}>
+                    <div className="relative w-full h-full scale-[0.625] sm:scale-100 origin-top-left" style={{ zIndex: 2 }}>
                       {/* Central Car/User Node - positioned to fit 400px container */}
                       <motion.div
-                        className="absolute left-[60px] top-1/2 -translate-y-1/2"
+                        className="absolute left-[30px] sm:left-[60px] top-1/2 -translate-y-1/2"
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5, type: "spring" }}
@@ -955,8 +968,8 @@ const
                           {/* Liquid Glass Node - scaled down */}
                           <motion.div
                             className={cn(
-                              "w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-500",
-                              priceArrived && "ring-4 ring-green-400/50"
+                              "w-10 h-10 sm:w-16 sm:h-16 rounded-full flex items-center justify-center relative overflow-hidden transition-all duration-500",
+                              priceArrived && "ring-2 sm:ring-4 ring-green-400/50"
                             )}
                             style={{
                               background: priceArrived
@@ -1026,11 +1039,11 @@ const
                                 }),
                               }}
                             />
-                            <Car className="w-8 h-8 text-white relative z-10 drop-shadow-lg" />
+                            <Car className="w-5 h-5 sm:w-8 sm:h-8 text-white relative z-10 drop-shadow-lg" />
                           </motion.div>
                           {/* Informational Text - scaled down */}
                           <motion.div
-                            className="mt-3 px-3 py-1.5 rounded-xl text-center"
+                            className="mt-1.5 sm:mt-3 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-center"
                             style={{
                               background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                               backdropFilter: 'blur(12px) saturate(180%)',
@@ -1042,8 +1055,8 @@ const
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
                           >
-                            <p className="text-[10px] font-semibold text-white mb-0.5">Your Vehicle</p>
-                            <p className="text-[9px] text-white/70 leading-tight w-24">
+                            <p className="text-[8px] sm:text-[10px] font-semibold text-white mb-0.5">Your Vehicle</p>
+                            <p className="text-[7px] sm:text-[9px] text-white/70 leading-tight w-16 sm:w-24">
                               {(() => {
                                 const step = activeStep ?? 0;
                                 if (step === 1) {
@@ -1095,7 +1108,7 @@ const
                       <AnimatePresence>
                         {(activeStep ?? 0) === 1 && shouldShowAiBrain.get() && (
                           <motion.div
-                            className="absolute left-[480px] top-1/2 -translate-y-1/2 flex flex-col items-center"
+                            className="absolute left-[240px] sm:left-[480px] top-1/2 -translate-y-1/2 flex flex-col items-center"
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{
                               scale: 1,
@@ -1112,7 +1125,7 @@ const
                             >
                               {/* Liquid Glass AI Brain Node */}
                               <motion.div
-                                className="w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                                className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
                                 style={{
                                   background: `linear-gradient(135deg, rgba(168, 85, 247, ${aiBrainGlow.get()}) 0%, rgba(236, 72, 153, ${aiBrainGlow.get() + 0.05}) 100%)`,
                                   backdropFilter: 'blur(20px) saturate(180%)',
@@ -1139,11 +1152,11 @@ const
                                     background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 70%)',
                                   }}
                                 />
-                                <Brain className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                                <Brain className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
                               </motion.div>
                               {/* Informational Text */}
                               <motion.div
-                                className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
+                                className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
                                 style={{
                                   background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                                   backdropFilter: 'blur(12px) saturate(180%)',
@@ -1158,10 +1171,10 @@ const
                                 }}
                                 transition={{ delay: 0.5 }}
                               >
-                                <p className="text-[9px] font-semibold text-white mb-0.5">
+                                <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">
                                   {phase3Progress.get() > 0 ? "Signal Sent" : phase2Progress.get() > 0.5 ? "Diagnosis Complete" : "AI Diagnostics"}
                                 </p>
-                                <p className="text-[8px] text-white/70 leading-tight">
+                                <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
                                   {phase3Progress.get() > 0.5
                                     ? "Returning to vehicle..."
                                     : phase2Progress.get() > 0.5
@@ -1237,8 +1250,10 @@ const
                       <AnimatePresence>
                         {mechanics.map((mechanic, idx) => {
                           // Position mechanics: idx 0 (top-left), idx 1 (middle), idx 2 (top-right)
-                          const x = 280 + (idx === 2 ? 120 : 0); // 280 for idx 0&1, 400 for idx 2
-                          const y = idx === 1 ? 260 : 140; // Middle one lower, others higher
+                          // Use responsive positioning - scale factor 0.625 for mobile
+                          const x = 280 + (idx === 2 ? 120 : 0); // Desktop positions
+                          const y = idx === 1 ? 260 : 140; // Desktop positions
+                          // Mobile positions will be handled via CSS transform scale on container
                           const isSelected = idx === 0;
                           // Fade non-selected mechanics in Step 2 Phase 2 (selection phase)
                           const shouldFade = (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > -0.4 && !isSelected;
@@ -1261,8 +1276,8 @@ const
                               {/* Liquid Glass Node - scaled down */}
                               <div
                                 className={cn(
-                                  "w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden transition-all",
-                                  isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 && "ring-2 ring-green-400/50"
+                                  "w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden transition-all",
+                                  isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 && "ring-1 sm:ring-2 ring-green-400/50"
                                 )}
                                 style={{
                                   background: isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
@@ -1288,11 +1303,11 @@ const
                                     background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 70%)',
                                   }}
                                 />
-                                <UserRoundCog className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                                <UserRoundCog className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
                               </div>
                               {/* Informational Text - scaled down */}
                               <motion.div
-                                className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
+                                className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
                                 style={{
                                   background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                                   backdropFilter: 'blur(12px) saturate(180%)',
@@ -1304,10 +1319,10 @@ const
                                 animate={{ opacity: mechanicsVisible ? 1 : 0, y: 0 }}
                                 transition={{ delay: 0.4 + (idx * 0.1) }}
                               >
-                                <p className="text-[9px] font-semibold text-white mb-0.5">
+                                <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">
                                   {isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 ? "Selected" : mechanic.shop}
                                 </p>
-                                <p className="text-[8px] text-white/70 leading-tight">
+                                <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
                                   {isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3
                                     ? "Best match"
                                     : (activeStep ?? 0) >= 2
@@ -1345,7 +1360,7 @@ const
                       <AnimatePresence>
                         {(activeStep ?? 0) >= 3 && (
                           <motion.div
-                            className="absolute left-[480px] top-[200px] flex flex-col items-center -translate-x-1/2 -translate-y-1/2"
+                            className="absolute left-[240px] sm:left-[480px] top-[125px] sm:top-[200px] flex flex-col items-center -translate-x-1/2 -translate-y-1/2"
                             initial={{ scale: 0, opacity: 0, rotate: -180 }}
                             animate={{ scale: 1, opacity: 1, rotate: 0 }}
                             exit={{ scale: 0, opacity: 0 }}
@@ -1353,7 +1368,7 @@ const
                           >
                             {/* Liquid Glass Node - scaled down */}
                             <div
-                              className="w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                              className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
                               style={{
                                 background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.35) 100%)',
                                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -1372,11 +1387,11 @@ const
                                   background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 70%)',
                                 }}
                               />
-                              <Calendar className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                              <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
                             </div>
                             {/* Informational Text - scaled down */}
                             <motion.div
-                              className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
+                              className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
                               style={{
                                 background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                                 backdropFilter: 'blur(12px) saturate(180%)',
@@ -1388,8 +1403,8 @@ const
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.7 }}
                             >
-                              <p className="text-[9px] font-semibold text-white mb-0.5">Calendar Sync</p>
-                              <p className="text-[8px] text-white/70 leading-tight">
+                              <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">Calendar Sync</p>
+                              <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
                                 {currentStatusMessage || contentData.time || "Syncing..."}
                               </p>
                             </motion.div>
@@ -1403,8 +1418,8 @@ const
                           <motion.div
                             className="absolute flex flex-col items-center"
                             style={{
-                              left: '480px', // Calendar center X position
-                              top: '200px', // Calendar center Y position
+                              left: typeof window !== 'undefined' && window.innerWidth < 640 ? '240px' : '480px', // Calendar center X position
+                              top: typeof window !== 'undefined' && window.innerWidth < 640 ? '125px' : '200px', // Calendar center Y position
                               x: '-50%',
                               y: '-50%',
                               opacity: checkmarkOpacity,
@@ -1414,7 +1429,7 @@ const
                           >
                             {/* Liquid Glass Checkmark Node - scaled down */}
                             <div
-                              className="w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                              className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
                               style={{
                                 background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.4) 0%, rgba(16, 185, 129, 0.45) 100%)',
                                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -1433,11 +1448,11 @@ const
                                   background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 70%)',
                                 }}
                               />
-                              <CheckCircle className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
+                              <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
                             </div>
                             {/* Informational Text - scaled down */}
                             <motion.div
-                              className="mt-2 px-2 py-1 rounded-lg text-center max-w-[100px]"
+                              className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
                               style={{
                                 background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                                 backdropFilter: 'blur(12px) saturate(180%)',
@@ -1450,8 +1465,8 @@ const
                               animate={{ y: 0 }}
                               transition={{ delay: 0.2 }}
                             >
-                              <p className="text-[9px] font-semibold text-white mb-0.5">Confirmed</p>
-                              <p className="text-[8px] text-white/70 leading-tight">
+                              <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">Confirmed</p>
+                              <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
                                 {currentStatusMessage || "Booked!"}
                               </p>
                             </motion.div>
@@ -1464,9 +1479,9 @@ const
                   </div>
                 </div>
                 {/* Figure Caption - Bottom Right */}
-                <div className="absolute -bottom-6 right-4 z-20">
+                <div className="absolute -bottom-4 sm:-bottom-6 right-2 sm:right-4 z-20">
                   <motion.p
-                    className="text-xs font-medium text-gray-600"
+                    className="text-[10px] sm:text-xs font-medium text-gray-600"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}

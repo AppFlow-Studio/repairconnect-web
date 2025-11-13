@@ -38,7 +38,7 @@ const endtoend = [
 
 ]
 export default function Home() {
-  
+
   const [isDark, setIsDark] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -106,12 +106,12 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden flex-1 lg:h-screen h-[80vh]"
+        className="relative w-full overflow-hidden flex-1 lg:h-screen sm:h-[80vh] h-screen"
         style={{
           // minHeight: '100vh'
         }}
       >
-        <div className="relative w-full lg:h-screen h-[80vh]"
+        <div className="relative w-full lg:h-screen sm:h-[80vh] h-screen"
           style={{
 
           }}
@@ -134,7 +134,7 @@ export default function Home() {
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
           <div className=" relative pt-8 flex flex-col items-center justify-center">
             <p
-              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] lg:text-8xl text-6xl leading-none font-semibold ">
+              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] lg:text-8xl sm:text-6xl text-4xl leading-none font-semibold ">
               Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent text-shadow ">Waitlist</span>
             </p>
             <p className="text-center text-sm lg:text-2xl leading-tight mb-3 text-[#E4E4E4] backdrop-blur-sm px-4 py-4 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem)] ">
@@ -142,7 +142,7 @@ export default function Home() {
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-row items-center justify-center mt-6 gap-4 w-full">
-              <div className="relative w-82 h-full flex gap-4">
+              <div className="relative sm:w-82 w-fit h-full flex gap-4">
                 <svg style={{ display: 'none' }}>
                   <filter id="displacementFilter">
                     <feTurbulence
@@ -179,7 +179,7 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="px-5 py-3 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full text-lg placeholder-gray-100 flex-1"
+                  className="sm:px-5 px-4 sm:py-3 py-2 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full  sm:text-lg text-sm placeholder-gray-100 flex-1"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -205,7 +205,7 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className="px-8 py-3 rounded-2xl text-white font-semibold text-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 hover:cursor-pointer relative z-20"
+                  className="sm:px-8 px-4 sm:py-3 py-2 rounded-2xl text-white font-semibold sm:text-lg text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 hover:cursor-pointer relative z-20"
                   style={{ backdropFilter: "brightness(1.1) blur(15px)" }}
                   disabled={submitted || !email}
                 >
@@ -214,12 +214,12 @@ export default function Home() {
               </div>
             </form>
 
-            <div className="border-b py-4 h-3 p-2 w-[30%] relative self-center my-4" />
+            <div className="border-b py-4 h-3 p-2 sm:w-[30%] w-[15%] relative self-center my-4" />
             {/* <p className="text-sm lg:text-base leading-relaxed text-[#E4E4E4] mt-6">Powered By</p> */}
-            <Marquee className="w-[30%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-2 flex flex-row">
+            <Marquee className="sm:w-[30%] w-[20%] backdrop-blur-sm rounded-lg py-3 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_6rem),linear-gradient(to_left,transparent,black_6rem)] space-x-2 flex flex-row">
               {
-                text.map((item) => (
-                  <p key={item} className="text-xs leading-relaxed text-[#E4E4E4]">{item}</p>
+                text.map((item, i) => (
+                  <p key={i} className="text-xs leading-relaxed text-[#E4E4E4]">{item}</p>
                 ))
               }
             </Marquee>
@@ -238,15 +238,15 @@ export default function Home() {
 
 
         <motion.div
-          className='p-5 absolute left-8 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] max-w-[300px] z-30'
+          className='p-5 absolute sm:left-8 left-1/2 -translate-x-1/2 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
           style={{
             y: cardYOffset.get() * 10,
             opacity: cardOpacity,
           }}
         >
           <div className="relative z-10 p-4  text-white rounded-2xl  ">
-            <h2 className='text-xl lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
-            <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider'>
+            <h2 className='sm:text-xl text-lg lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
+            <p className='sm:text-sm text-xs lg:text-base leading-relaxed mb-3 tracking-wider'>
               Book faster, pay once, get receipts forever.
               Shops get predictable calendars. Everyone gets their time back.
             </p>
@@ -257,7 +257,7 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <div className="absolute bottom-8 right-8 z-10 p-5 lg:p-8 lg:pr-6 text-white ">
+        <div className="absolute bottom-8 right-8 z-10 p-5 lg:p-8 lg:pr-6 text-white sm:block hidden">
           <div className="w-full flex justify-end pr-6"><Wrench className="w-8 h-8 mb-4 rotate-280 self-end flex" /></div>
           <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider '>
             Agentic auto service is on the
@@ -274,9 +274,9 @@ export default function Home() {
       <div className="rotate-180"><TransBarTwo /></div>
       <Coordination />
 
-      <section className="w-full  xl:min-h-screen flex flex-col mt-4 items-center justify-center relative ">
+      <section className="w-full  xl:min-h-screen flex h-fit flex-col mt-4 items-center justify-center relative ">
 
-        <section className="w-[90%] mx-auto relative aspect-video  overflow-hidden rounded-2xl ring-4 ring-black/10">
+        <section className="w-[90%] mx-auto relative sm:aspect-video  overflow-hidden rounded-2xl ring-4 ring-black/10">
           {/* Background Image */}
           <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
             <Image
@@ -295,25 +295,25 @@ export default function Home() {
           />
 
 
-          <div className="flex flex-col gap-10 items-start">
+          <div className="flex flex-col gap-4 sm:gap-10 items-start w-full">
             {/* Main Content Box - Top Left */}
-            <div className="relative z-10 pt-2 px-8 ">
-              <div className="p-6 lg:p-14 rounded-2xl ">
+            <div className="relative z-10 pt-2 sm:pt-0 sm:px-8 px-4 w-full">
+              <div className="sm:p-6 p-4 lg:p-14 rounded-xl sm:rounded-2xl">
                 {/* Main Headline */}
-                <p className="text-3xl xl:text-5xl text-white mb-4 leading-tight xl:max-w-4xl max-w-lg"
+                <p className="sm:text-3xl text-xl xl:text-5xl text-white mb-2 sm:mb-4 leading-tight xl:max-w-4xl max-w-lg"
                   style={{ fontFamily: "var(--font-Roboto_Slab)" }}
                 >
                   RepairConnect lets you manage repairs end to end
                 </p>
 
                 {/* Sub-headline */}
-                <p className="text-base lg:text-lg text-white/90 mb-6 leading-relaxed xl:max-w-4xl max-w-2xl">
+                <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-4 sm:mb-6 leading-relaxed xl:max-w-4xl max-w-2xl">
                   RepairConnect helps manage <TypingAnimation words={endtoend} loop />
                 </p>
 
-                <div className="flex flex-row items-center w-full justify-start gap-4 xl:max-w-4xl max-w-2xl">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full justify-start gap-3 sm:gap-4 xl:max-w-4xl max-w-2xl">
                   {/* Join Waitlist Button */}
-                  <div className="relative w-82 h-full flex gap-4">
+                  <div className="relative w-full sm:w-82 h-full flex gap-4">
                     {/* SVG Filter Definition */}
                     <svg style={{ display: 'none' }}>
                       <filter id="displacementFilter">
@@ -335,7 +335,7 @@ export default function Home() {
 
                     {/* Liquid Glass Input Background */}
                     <div
-                      className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden"
+                      className="absolute inset-0 w-full h-full rounded-xl sm:rounded-2xl overflow-hidden"
                       style={{
                         filter: 'drop-shadow(-8px -10px 46px #0000005f)',
                         backdropFilter: 'brightness(1.1) blur(2px)',
@@ -343,7 +343,7 @@ export default function Home() {
                       }}
                     >
                       <div
-                        className="absolute inset-0 rounded-2xl"
+                        className="absolute inset-0 rounded-xl sm:rounded-2xl"
                         style={{
                           boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
                         }}
@@ -352,7 +352,7 @@ export default function Home() {
                     <input
                       type="email"
                       placeholder="Enter your email"
-                      className="px-5 py-3 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full xl:text-lg text-base placeholder-gray-100 flex-1"
+                      className="px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full xl:text-lg text-sm sm:text-base placeholder-gray-100 flex-1"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -361,9 +361,9 @@ export default function Home() {
                     />
                   </div>
                   {/* Liquid Glass Button Wrapper */}
-                  <div className="relative w-fit z-20 h-full flex items-center ml-2">
+                  <div className="relative w-full sm:w-fit z-20 h-full flex items-center sm:ml-2">
                     <div
-                      className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden"
+                      className="absolute inset-0 w-full h-full rounded-xl sm:rounded-2xl overflow-hidden"
                       style={{
                         filter: 'drop-shadow(-8px -10px 50px #0000005f)',
                         backdropFilter: 'brightness(1.1) blur(2px)',
@@ -371,7 +371,7 @@ export default function Home() {
                       }}
                     >
                       <div
-                        className="absolute inset-0 rounded-2xl"
+                        className="absolute inset-0 rounded-xl sm:rounded-2xl"
                         style={{
                           boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
                         }}
@@ -379,7 +379,7 @@ export default function Home() {
                     </div>
                     <button
                       type="submit"
-                      className="xl:px-8 px-4 py-3 rounded-2xl text-white font-semibold text-sm  shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
+                      className="w-full sm:w-auto xl:px-8 px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-white font-semibold text-xs sm:text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
                       style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(2) blur(2px)" }}
                       disabled={submitted || !email}
                     >
@@ -391,13 +391,13 @@ export default function Home() {
             </div>
 
             {/* Info Box - Bottom Left */}
-            <div className=" z-10 max-w-xl p-14 absolute xl:bottom-1/5 bottom-0 -left-10">
-              <div className="relative p-5 lg:p-10 ml-8 rounded-2xl   ">
+            <div className="z-10 max-w-xl sm:p-14 p-4 sm:absolute relative xl:bottom-1/5 sm:bottom-0 bottom-auto left-0 sm:-left-10">
+              <div className="relative p-3 sm:p-5 lg:p-10 sm:ml-8 ml-0 rounded-xl sm:rounded-2xl">
 
                 {/* Content */}
-                <div className="relative z-10 flex items-center gap-3">
-                  <Wrench className="w-5 h-5 text-white shrink-0" />
-                  <p className="text-sm lg:text-base text-white font-medium leading-relaxed">
+                <div className="relative z-10 flex items-center gap-2 sm:gap-3">
+                  <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
+                  <p className="text-xs sm:text-sm lg:text-base text-white font-medium leading-relaxed">
                     Everyone needs coordination not everyone has it
                   </p>
                 </div>

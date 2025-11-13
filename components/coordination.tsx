@@ -164,18 +164,18 @@ export default function Coordination() {
               <TextAnimation
                 text="You need clarity before you drive over."
                 direction="left"
-                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
               />
               {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
               <TextAnimation
                 text="You need confidence when you hand over the keys."
                 direction="left"
-                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
               />
               <TextAnimation
                 text="You need coordination."
                 direction="left"
-                classname="text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
               />
               {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
               {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
@@ -264,13 +264,13 @@ export default function Coordination() {
             </div>
           </div>
 
-          <div className="flex lg:w-[40%] w-[70%] mx-auto flex-col justify-center lg:justify-end items-center lg:mt-0 mt-8">
-            <Iphone className=' relative w-full h-full' src="/liquidglassphone.png">
-              <div className="p-4  w-full h-full">
+          <div className="flex lg:w-[40%] sm:w-[70%] w-[90%] mx-auto flex-col justify-center lg:justify-end items-center lg:mt-0 mt-8">
+            <Iphone className='relative w-full h-full' src="/liquidglassphone.png">
+              <div className="p-4  w-full h-fit">
                 <div className='w-full mb-4 flex items-center justify-center relative'>
                   {/* Blurred text behind for liquid glass effect */}
                   <div
-                    className="absolute text-6xl sm:text-7xl md:text-8xl  font-light tracking-tight select-none"
+                    className="absolute text-6xl sm:text-7xl md:text-8xl  font-light tracking-tight select-none  [mask-composite:intersect] [mask-image:linear-gradient(to_top,transparent,black_8rem),linear-gradient(to_bottom,transparent,black_6rem),linear-gradient(to_left,transparent,black_3rem),linear-gradient(to_right,transparent,black_3rem)]"
                     style={{
                       // background: 'linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(200,220,255,0.6) 50%, rgba(150,180,255,0.4) 100%)',
                       WebkitBackgroundClip: 'text',
@@ -289,7 +289,7 @@ export default function Coordination() {
                   </div>
                   {/* Main time text with liquid glass gradient */}
                   <div
-                    className="relative text-6xl sm:text-7xl md:text-8xl   tracking-tight select-none z-10"
+                    className="relative text-8xl sm:text-7xl md:text-8xl px-2   tracking-tight select-none z-10 [mask-composite:intersect] [mask-image:linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_right,transparent,black_1rem)]"
                     style={{
                       // background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,245,255,0.95) 25%, rgba(220,235,255,0.85) 50%, rgba(200,225,255,0.75) 75%, rgba(180,210,255,0.65) 100%)',
                       WebkitBackgroundClip: 'text',
@@ -319,7 +319,7 @@ export default function Coordination() {
                   onActiveIndexChange={setActiveIndex}
                   currentIndex={activeIndex}
                 >
-                  {items.map((item) => {
+                  {items.map((item,i) => {
                     const IconComponent = item.icon
                     return (
                       <div
@@ -328,7 +328,7 @@ export default function Coordination() {
                       >
 
                         <div className="flex items-start gap-3 relative">
-                          <div className='w-10 h-10 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
+                          <div className='sm:w-10 w-8 sm:h-10 h-8 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
                             <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
                           {/* Icon with background */}
@@ -339,11 +339,11 @@ export default function Coordination() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="xl:text-xs lg:text-[10px] font-semibold text-neutral-900 leading-tight relative w-full">
-                                {item.headline} {item.emoji}  <span className="xl:text-[9px] lg:text-[7px text-xs  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
+                              <h3 className="xl:text-xs lg:text-[10px] sm:text-base text-[10px] font-semibold text-neutral-900 leading-tight relative w-full">
+                                {item.headline} <span className={`${i == 4 ? 'sm:block hidden' : ''}`}>{item.emoji}</span>  <span className="xl:text-[9px] lg:text-[7px] sm:text-xs text-[7px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
                               </h3>
                             </div>
-                            <p className="xl:text-[11px] lg:text-[9px] text-sm text-neutral-800 leading-relaxed mb-1.5">
+                            <p className="xl:text-[11px] lg:text-[9px] sm:text-sm text-[9px] text-neutral-800 leading-relaxed mb-1.5">
                               {item.sub}
                             </p>
                             {/* <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
@@ -357,7 +357,7 @@ export default function Coordination() {
                 </AnimatedList>
               </div>
             </Iphone>
-           <div className='lg:hidden flex items-start justify-start flex-col mt-4 h-48 relative w-full'>
+           <div className='lg:hidden sm:flex hidden items-start justify-start flex-col mt-4 h-48 relative w-full'>
               {/* Vertical Rectangle Indicator */}
               <div className="flex flex-row items-end gap-3 h-full flex-1 justify-end -bottom-3 left-0 absolute">
                 {items.map((_, idx) => (
@@ -381,7 +381,7 @@ export default function Coordination() {
               </div>
   
               {/* Description Text */}
-              <div className=' w-full'>
+              <div className=' w-full sm:flex hidden'>
                 <AnimatePresence mode="wait">
                   {items[activeIndex] && (
                     <motion.div
