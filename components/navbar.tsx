@@ -24,7 +24,7 @@ function Navbar() {
     return (
         <div className='fixed lg:top-4 lg:left-1/2 lg:-translate-x-1/2 z-[112] w-full lg:max-w-fit mx-auto lg:rounded-[12px] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[background-color,border-color,box-shadow,backdrop-filter] lg:border border-white/20 bg-gradient-to-r from-[rgba(249,250,247,0.12)] to-[rgba(249,250,247,0.18)] lg:shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] backdrop-blur-[9px]'>
             <main className='flex gap-6 items-center px-5 py-3 lg:px-3 lg:py-2 w-full justify-between'>
-                {/* <div className='flex self-center w-12 h-12 relative'><Image src="/repairconnectglasslogo.png" alt="RepairConnect Hero" fill className="object-cover" /></div> */}
+                <div className='flex self-center w-12 h-12 relative'><Image src="/logo.png" alt="RepairConnect Hero" fill className="object-cover" /></div>
                 {
                     navItems.map((item) => (
                         <Link key={item.href} href={item.href} className='font-medium text-[15px] leading-[140%] tracking-[-0.15px] hover:opacity-80 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] font-af text-white'>
