@@ -43,6 +43,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isChevronHovered, setIsChevronHovered] = useState(false);
   const heroSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -238,22 +239,110 @@ export default function Home() {
 
 
         <motion.div
-          className='p-5 absolute sm:left-8 left-1/2 -translate-x-1/2 sm:translate-x-0  bottom-12 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
+          className='p-3 absolute sm:left-8 left-1/2 -translate-x-1/2 sm:translate-x-0  bottom-12 rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
           style={{
             y: cardYOffset.get() * 10,
             opacity: cardOpacity,
           }}
         >
-          <div className="relative z-10 p-4  text-white rounded-2xl  ">
-            <h2 className='sm:text-xl text-lg xl:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
-            <p className='sm:text-sm text-xs xl:text-base leading-relaxed mb-3 tracking-wider'>
+          <div className="relative z-10 p-4  text-white rounded-2xl flex flex-col ">
+            <h2 className='font-medium font-mondwest lg:text-4xl sm:text-xl leading-[120%] md:leading-10 tracking-[-0.44px] sm:tracking-[-0.56px] xl:tracking-[-0.8px] text-white max-w-[25ch] text-left mb-2 font-serif'>AI That runs car care autonomously </h2>
+            <p className='sm:text-sm text-xs xl:text-base leading-relaxed my-4 tracking-wider'>
               Book faster, pay once, get receipts forever.
-              Shops get predictable calendars. Everyone gets their time back.
+              Shops get predictable calendars. Get your time back.
             </p>
 
-            <p className="underline text-white inline-flex items-center gap-2">
-              Get to know us <ChevronRight className="w-4 h-4" />
-            </p>
+            <div className="relative flex gap-x-3">
+              <p className="underline text-white inline-flex items-center gap-2 group">
+                Get to know us
+              </p>
+              <div
+                className="flex items-center justify-center w-6 h-8  py-1 rounded-full border border-white/24 relative overflow-hidden cursor-pointer group/chevron "
+                style={{
+                  background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%)',
+                  boxShadow: 'rgba(0, 0, 0, 0.04) 0px 1px 1px 0px',
+                }}
+                onMouseEnter={() => setIsChevronHovered(true)}
+                onMouseLeave={() => setIsChevronHovered(false)}
+              >
+                {/* Fade gradients on edges */}
+                <div className="absolute inset-0 pointer-events-none z-10 flex justify-between">
+                  <motion.div
+                    className="w-3 h-full bg-gradient-to-r from-white/20 to-transparent"
+                    animate={{
+                      opacity: isChevronHovered ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                  />
+                  <motion.div
+                    className="w-3 h-full bg-gradient-to-l from-white/20 to-transparent"
+                    animate={{
+                      opacity: isChevronHovered ? 1 : 0,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                  />
+                </div>
+
+                {/* Inner container with overflow hidden */}
+                <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
+                  {/* Centered icon when not hovered */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    animate={!isChevronHovered ? {
+                      opacity: 1,
+                      scale: 1,
+                    } : {
+                      opacity: 0,
+                      scale: 0.8,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.div>
+
+                  {/* Marquee icons when hovered */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center "
+                    animate={isChevronHovered ? {
+                      x: [-24, 0],
+                      opacity: 1,
+                    } : {
+                      x: 0,
+                      opacity: 0,
+                    }}
+                    transition={{
+                      x: {
+                        duration: 0.8,
+                        repeat: isChevronHovered ? Infinity : 0,
+                        ease: "linear",
+                      },
+                      opacity: {
+                        duration: 0.3,
+                        ease: "easeIn",
+                      },
+                    }}
+                    style={{
+                      width: "200px",
+                      display: "flex",
+                      gap: "8px",
+                    }}
+                  >
+                    {[...Array(6)].map((_, i) => (
+                      <ChevronRight key={i} className="w-4 h-4 shrink-0 opacity-70" />
+                    ))}
+                  </motion.div>
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
 

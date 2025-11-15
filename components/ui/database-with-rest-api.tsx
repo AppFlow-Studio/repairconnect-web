@@ -556,7 +556,7 @@ const
         confettiTriggeredRef.current = true;
 
         // Celebration confetti from both sides (like confetti-side.tsx)
-        const end = Date.now() + 3 * 1000; // 3 seconds
+        const end = Date.now() + 0.5 * 1000; // 3 seconds
         const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
 
         const frame = () => {
@@ -1361,7 +1361,7 @@ const
                           // Mobile positions will be handled via CSS transform scale on container
                           const isSelected = idx === 0;
                           // Fade non-selected mechanics in Step 2 Phase 2 (selection phase)
-                          const shouldFade = (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > -0.4 && !isSelected;
+                          const shouldFade = (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0 && !isSelected;
 
                           return (
                             <motion.div
