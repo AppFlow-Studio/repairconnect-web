@@ -395,9 +395,9 @@ export function World() {
     ];
 
     return (
-        <div className="flex flex-row items-center justify-center py-20 sm:h-screen md:h-auto h-[44vh] dark:bg-black bg-white relative w-full">
-            <div className="w-full relative overflow-hidden h-full md:h-[32rem] px-4">
-                <div className="absolute w-full sm:-bottom-10 sm:h-[30vh] h-[25vh]  md:h-full z-10 ">
+        <div className="flex flex-row items-center justify-center py-20 sm:h-screen md:h-[50vh] h-[44vh] dark:bg-black bg-white relative w-full">
+            <div className="w-full relative overflow-hidden h-full md:h-[32rem] lg:px-4 px-0">
+                <div className="absolute w-full lg:-bottom-10 md:bottom-14  sm:h-[50vh] h-[25vh]  lg:h-full z-10 ">
                     <WorldGlobe data={sampleArcs} globeConfig={globeConfig} />
                     
                 </div>

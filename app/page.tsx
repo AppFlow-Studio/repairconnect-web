@@ -106,12 +106,12 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden flex-1 lg:h-screen sm:h-[80vh] h-screen"
+        className="relative w-full overflow-hidden flex-1 lg:h-screen  h-screen"
         style={{
           // minHeight: '100vh'
         }}
       >
-        <div className="relative w-full lg:h-screen sm:h-[80vh] h-screen"
+        <div className="relative w-full lg:h-screen h-screen"
           style={{
 
           }}
@@ -134,7 +134,7 @@ export default function Home() {
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full px-4">
           <div className=" relative pt-8 flex flex-col items-center justify-center">
             <p
-              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] lg:text-8xl sm:text-6xl text-4xl leading-none font-semibold ">
+              className="pointer-events-none w-fit text-transparent bg-linear-to-r bg-clip-text  from-[#f9f9f9] to-[#0d72ff] xl:text-8xl sm:text-6xl text-4xl leading-none font-semibold ">
               Join the <span className="bg-linear-to-t px-1 from-[#f9f9f9] to-[#0d72ff] bg-clip-text text-transparent text-shadow ">Waitlist</span>
             </p>
             <p className="text-center text-sm lg:text-2xl leading-tight mb-3 text-[#E4E4E4] backdrop-blur-sm px-4 py-4 [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_1rem),linear-gradient(to_left,transparent,black_1rem),linear-gradient(to_top,transparent,black_1rem),linear-gradient(to_bottom,transparent,black_1rem)] ">
@@ -238,15 +238,15 @@ export default function Home() {
 
 
         <motion.div
-          className='p-5 absolute sm:left-8 left-1/2 -translate-x-1/2 bottom-8 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
+          className='p-5 absolute sm:left-8 left-1/2 -translate-x-1/2 sm:translate-x-0  bottom-12 h-fit rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-gradient-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
           style={{
             y: cardYOffset.get() * 10,
             opacity: cardOpacity,
           }}
         >
           <div className="relative z-10 p-4  text-white rounded-2xl  ">
-            <h2 className='sm:text-xl text-lg lg:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
-            <p className='sm:text-sm text-xs lg:text-base leading-relaxed mb-3 tracking-wider'>
+            <h2 className='sm:text-xl text-lg xl:text-3xl font-bold mb-4 leading-tight tracking-wider'>AI That runs car care autonomously </h2>
+            <p className='sm:text-sm text-xs xl:text-base leading-relaxed mb-3 tracking-wider'>
               Book faster, pay once, get receipts forever.
               Shops get predictable calendars. Everyone gets their time back.
             </p>
@@ -257,9 +257,9 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <div className="absolute bottom-8 right-8 z-10 p-5 lg:p-8 lg:pr-6 text-white sm:block hidden">
+        <div className="absolute bottom-8 right-8 z-10 p-5 xl:p-8 xl:pr-6 text-white sm:block hidden">
           <div className="w-full flex justify-end pr-6"><Wrench className="w-8 h-8 mb-4 rotate-280 self-end flex" /></div>
-          <p className='text-sm lg:text-base leading-relaxed mb-3 tracking-wider '>
+          <p className='text-sm xl:text-base leading-relaxed mb-3 tracking-wider '>
             Agentic auto service is on the
             horizon, <br />and we’re deploying it bay by bay.
           </p>
@@ -274,9 +274,9 @@ export default function Home() {
       <div className="rotate-180"><TransBarTwo /></div>
       <Coordination />
 
-      <section className="w-full  xl:min-h-screen flex h-fit flex-col mt-4 items-center justify-center relative ">
+      <section className="w-full  md:min-h-screen flex h-fit flex-col mt-4 items-center justify-center relative ">
 
-        <section className="w-[90%] mx-auto relative sm:aspect-video  overflow-hidden rounded-2xl ring-4 ring-black/10">
+        <section className="w-[90%] mx-auto relative lg:aspect-video lg:h-auto h-[80%]  aspect-square overflow-hidden rounded-2xl ring-4 ring-black/10">
           {/* Background Image */}
           <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
             <Image

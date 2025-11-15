@@ -269,37 +269,25 @@ const
       offset: ["start start", "end start"]
     });
 
-    // Create eased scroll progress for smoother, slower animations
-    // This applies easing to make animations progress more gradually
-    // Additional easing for steps 2-4 to make them even smoother
+    // Create eased scroll progress for smoother animations
+    // Using lighter easing for faster, more responsive animations
     const easedScrollProgress = useTransform(scrollYProgress, (p) => {
-      // Ease-in-out cubic function for smooth, slower progression
+      // Lighter easing for faster progression
       if (p <= 0) return 0;
       if (p >= 1) return 1;
 
-      // Apply stronger easing for steps 2-4 (after 25% scroll)
-      if (p >= 0.25) {
-        // Normalize to 0-1 for steps 2-4
-        const steps2to4Progress = (p - 0.25) / 0.75;
-        // Apply stronger easing (quintic ease-in-out for very smooth progression)
-        const eased = steps2to4Progress < 0.5
-          ? 16 * steps2to4Progress * steps2to4Progress * steps2to4Progress * steps2to4Progress * steps2to4Progress
-          : 1 - Math.pow(-2 * steps2to4Progress + 2, 5) / 2;
-        return 0.25 + eased * 0.75;
-      }
-
-      // Step 1 uses standard cubic easing
+      // Use simpler quadratic easing for all steps (faster than cubic/quintic)
       return p < 0.5
-        ? 4 * p * p * p
-        : 1 - Math.pow(-2 * p + 2, 3) / 2;
+        ? 2 * p * p
+        : 1 - Math.pow(-2 * p + 2, 2) / 2;
     });
 
     // Calculate path progress for each step - using eased progress for smoother animations
     // Step 1: 0-25% of scroll - split into 3 phases
     const path1Progress = useTransform(
       easedScrollProgress,
-      [0, 0.2, 0.25],
-      [0, 0.95, 1],
+      [0, 0.22, 0.25],
+      [0, 0.98, 1],
       { clamp: true }
     );
 
@@ -340,11 +328,11 @@ const
       // Increase glow during processing
       return 0.3 + (p * 0.7);
     });
-    // Step 2: 25-50% of scroll - expanded range for smoother animation
+    // Step 2: 25-50% of scroll - tighter range for faster animation
     const path2Progress = useTransform(
       easedScrollProgress,
-      [0.25, 0.48, 0.5],
-      [0, 0.95, 1],
+      [0.25, 0.47, 0.5],
+      [0, 0.98, 1],
       { clamp: true }
     );
 
@@ -366,18 +354,17 @@ const
       return (p - 0.66) / 0.34; // 0-1 for final third
     });
 
-    // Step 3: 50-75% of scroll - expanded range for smoother animation
+    // Step 3: 50-75% of scroll - tighter range for faster animation
     const path3Progress = useTransform(
       easedScrollProgress,
-      [0.5, 0.73, 0.75],
-      [0, 0.95, 1],
+      [0.5, 0.72, 0.75],
+      [0, 0.98, 1],
       { clamp: true }
     );
-    // Step 4: 75-100% of scroll - expanded range for smoother animation
-    // Give Step 4 more scroll space so the line draws smoothly
+    // Step 4: 75-100% of scroll - tighter range for faster animation
     const path4Progress = useTransform(
       easedScrollProgress,
-      [0.75, 0.98, 1],
+      [0.75, 0.97, 1],
       [0, 0.99, 1],
       { clamp: true }
     );
@@ -738,11 +725,11 @@ const
             className
           )}
           style={{
-            height: `${stepCount * 300}vh`, // Each step gets 300vh of scroll space - more space for steps 2-4
-            minHeight: '1200vh' // Increased significantly to slow down animations, especially for steps 2-4
+            height: `${stepCount * 200}vh`, // Each step gets 200vh of scroll space - faster animations
+            minHeight: '800vh' // Reduced for faster scroll and animation speed
           }}
         >
-          <div className="text-start w-full sm:hidden flex flex-row space-x-8 sm:px-12 ">
+          <div className="text-start w-full lg:hidden flex flex-row space-x-8 sm:px-12 ">
             <div className="flex flex-col space-y-8">
               <p className=" text-gray-700 sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 
@@ -753,7 +740,7 @@ const
           </div>
           {/* Sticky container that stays in view while scrolling */}
           <div className="sticky top-0 flex flex-col items-center justify-center  min-h-screen  w-full max-w-8xl">
-            <div className="text-start w-full sm:flex hidden flex-row space-x-8 sm:px-12 ">
+            <div className="text-start w-full lg:flex hidden flex-row space-x-8 sm:px-12 ">
               <div className="flex flex-col space-y-8">
                 <p className=" text-gray-700 sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 
@@ -763,7 +750,7 @@ const
               </div>
             </div>
 
-            <div className="flex lg:flex-row flex-col gap-12 items-start justify-center w-full max-w-[1600px] mx-auto mt-16">
+            <div className="flex lg:flex-row flex-col lg:gap-12 gap-8 items-start justify-center w-full max-w-[1600px] mx-auto mt-16">
               {/* Left Side - Cards */}
               <div className="flex-1 min-w-0 lg:w-[60%] md:w-[600px] mx-auto w-full h-full lg:order-first lg:px-0 px-2">
                 <div className="relative w-full flex items-center justify-center ">
@@ -815,10 +802,10 @@ const
               </div>
 
               {/* Right Side - Horizontal Scrolling Node Visualization in Boxed Window */}
-              <div className="flex-shrink-0 sm:w-[600px] w-full relative overflow-visible z-30 lg:order-last order-first mx-auto sm:mt-0 mt-4">
+              <div className="flex-shrink-0 sm:w-[600px] w-full relative overflow-visible z-30 lg:order-last order-first mx-auto lg:mt-0 mt-4">
                 <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-xl p-2" style={{ backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
 
-                  <div className="relative w-full h-[250px] sm:h-[400px] mx-auto overflow-hidden bg-white/30 rounded-lg">
+                  <div className="relative w-full h-[250px] sm:h-[360px] lg:h-[400px] mx-auto overflow-hidden bg-white/30 rounded-lg">
                     {/* SVG Container for paths */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
                       <defs>

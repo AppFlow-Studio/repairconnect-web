@@ -157,7 +157,6 @@ export default function Coordination() {
           height: `${itemCount * 100}vh` // Each item gets 100vh of scroll space
         }}
       >
-        {/* Sticky container that stays in view while scrolling */}
         <div className='w-full lg:hidden flex items-center justify-center'>
           <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
             <div className="space-y-6 flex flex-col">
@@ -183,8 +182,9 @@ export default function Coordination() {
 
           </div>
         </div>
+        {/* Sticky container that stays in view while scrolling */}
         <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center'>
-          <div className='w-[70%] h-full lg:flex hidden items-center justify-center px-8'>
+          <div className='lg:w-[70%] w-[50%] h-full lg:flex hidden items-center justify-center px-8'>
             <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
               <div className="space-y-6 flex flex-col">
                 <TextAnimation
@@ -264,8 +264,8 @@ export default function Coordination() {
             </div>
           </div>
 
-          <div className="flex lg:w-[40%] sm:w-[70%] w-[90%] mx-auto flex-col justify-center lg:justify-end items-center lg:mt-0 mt-8">
-            <Iphone className='relative w-full h-full' src="/liquidglassphone.png">
+          <div className="flex lg:w-[40%] sm:w-full w-[90%] mx-auto md:flex-row flex-col justify-center lg:justify-end items-center lg:mt-0 mt-14">
+            <Iphone className='relative lg:w-full h-full md:w-[45%] w-full' src="/liquidglassphone.png">
               <div className="p-4  w-full h-fit">
                 <div className='w-full mb-4 flex items-center justify-center relative'>
                   {/* Blurred text behind for liquid glass effect */}
@@ -319,7 +319,7 @@ export default function Coordination() {
                   onActiveIndexChange={setActiveIndex}
                   currentIndex={activeIndex}
                 >
-                  {items.map((item,i) => {
+                  {items.map((item, i) => {
                     const IconComponent = item.icon
                     return (
                       <div
@@ -328,7 +328,7 @@ export default function Coordination() {
                       >
 
                         <div className="flex items-start gap-3 relative">
-                          <div className='sm:w-10 w-8 sm:h-10 h-8 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
+                          <div className='lg:w-10 w-8 lg:h-10 h-8 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
                             <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
                           {/* Icon with background */}
@@ -339,11 +339,11 @@ export default function Coordination() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="xl:text-xs lg:text-[10px] sm:text-base text-[10px] font-semibold text-neutral-900 leading-tight relative w-full">
-                                {item.headline} <span className={`${i == 4 ? 'sm:block hidden' : ''}`}>{item.emoji}</span>  <span className="xl:text-[9px] lg:text-[7px] sm:text-xs text-[7px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
+                              <h3 className="xl:text-xs lg:text-[10px] text-[11px] font-semibold text-neutral-900 leading-tight relative w-full">
+                                {item.headline} <span className={`${i == 4 ? 'sm:block hidden' : ''}`}>{item.emoji}</span>  <span className="xl:text-[9px] lg:text-[7px] text-[7px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
                               </h3>
                             </div>
-                            <p className="xl:text-[11px] lg:text-[9px] sm:text-sm text-[9px] text-neutral-800 leading-relaxed mb-1.5">
+                            <p className="xl:text-[11px] lg:text-[9px] text-[9px] text-neutral-800 leading-relaxed mb-1.5">
                               {item.sub}
                             </p>
                             {/* <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
@@ -357,9 +357,9 @@ export default function Coordination() {
                 </AnimatedList>
               </div>
             </Iphone>
-           <div className='lg:hidden sm:flex hidden items-start justify-start flex-col mt-4 h-48 relative w-full'>
+            <div className='lg:hidden sm:flex hidden items-start justify-start flex-col mt-4 h-62 relative w-full md:order-first order-last md:w-[45%] w-full'>
               {/* Vertical Rectangle Indicator */}
-              <div className="flex flex-row items-end gap-3 h-full flex-1 justify-end -bottom-3 left-0 absolute">
+              <div className="flex flex-row items-end gap-3 h-full flex-1 justify-end -bottom-12 left-0 absolute">
                 {items.map((_, idx) => (
                   <motion.div
                     key={idx}
@@ -379,7 +379,7 @@ export default function Coordination() {
                   />
                 ))}
               </div>
-  
+
               {/* Description Text */}
               <div className=' w-full sm:flex hidden'>
                 <AnimatePresence mode="wait">
@@ -413,7 +413,7 @@ export default function Coordination() {
                   )}
                 </AnimatePresence>
               </div>
-           </div>
+            </div>
           </div>
         </div>
       </div>
