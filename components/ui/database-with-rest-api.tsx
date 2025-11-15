@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { ReactLenis } from "lenis/react";
 import { Sparkles } from "./sparkles";
 import { Card } from "../card-stacking";
+import confetti from "canvas-confetti";
 interface Mechanic {
   id: string;
   name: string;
@@ -128,19 +129,23 @@ const DataPacket = ({
 
 // Diagnostic Icon Component - animated icon traveling back from AI to Car with diagnosis
 const DiagnosticIcon = ({
+  activeStep,
   progress,
   startX,
   startY,
   endX,
   endY
 }: {
+  activeStep: number;
   progress: MotionValue<number>;
   startX: number;
   startY: number;
   endX: number;
   endY: number;
 }) => {
+
   const diagnosticProgress = useTransform(progress, (p: number) => {
+    // console.log("diagnosticProgress", p);
     if (p < 0.1) return 0;
     return (p - 0.1) / 0.9;
   });
@@ -148,8 +153,10 @@ const DiagnosticIcon = ({
   // Calculate position along straight line (back to car)
   const x = useTransform(diagnosticProgress, (t) => startX + (endX - startX) * t);
   const y = useTransform(diagnosticProgress, (t) => startY + (endY - startY) * t);
-  const opacity = useTransform(diagnosticProgress, (p) => p > 0 && p < 1 ? 1 : 0);
-
+  const opacity = useTransform(diagnosticProgress, (p) => {
+    if (activeStep >= 1) return 1;
+    return p > 0 && p < 1 ? 1 : 0;
+  });
   return (
     <motion.div
       className="absolute pointer-events-none"
@@ -169,9 +176,9 @@ const DiagnosticIcon = ({
         rotate: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
       }}
     >
-      <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 backdrop-blur-xl border sm:border-2 border-purple-400/60 shadow-xl flex items-center justify-center relative overflow-hidden">
+      <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-linear-to-br from-purple-500 via-pink-500 to-purple-600 backdrop-blur-xl border sm:border-2 border-purple-400/60 shadow-xl flex items-center justify-center relative overflow-hidden">
         {/* Inner glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-full" />
+        <div className="absolute inset-0 bg-linear-to-br from-white/30 to-transparent rounded-full" />
         <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-white relative z-10 drop-shadow-lg" />
         {/* Pulse ring */}
         <motion.div
@@ -255,6 +262,8 @@ const
     lightColor,
   }: DatabaseWithRestApiProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const confettiTriggeredRef = useRef(false);
+
     const mechanics: Mechanic[] = [
       { id: "1", name: "Mike", shop: "Mike's Auto", price: 150, rating: 4.8 },
       { id: "2", name: "Sarah", shop: "Quick Fix Garage", price: 175, rating: 4.9 },
@@ -287,7 +296,7 @@ const
     const path1Progress = useTransform(
       easedScrollProgress,
       [0, 0.22, 0.25],
-      [0, 0.98, 1],
+      [0, 0.99, 1],
       { clamp: true }
     );
 
@@ -306,7 +315,10 @@ const
     });
     const phase3Progress = useTransform(path1Progress, (p) => {
       if (p < 0.66) return 0;
-      return (p - 0.66) / 0.34; // 0-1 for final third
+      // Use a slightly smaller divisor to ensure it reaches 1.0 even if path1Progress is slightly less than 1.0
+      // This accounts for potential rounding or scroll precision issues
+      const progress = (p - 0.66) / 0.33; // Use 0.33 instead of 0.34 to ensure completion
+      return Math.min(1, Math.max(0, progress)); // Clamp to ensure 0-1 range
     });
 
     // Opacity transforms for conditional rendering
@@ -373,7 +385,13 @@ const
     // Step 1 Phase 1: Data stream from car to AI Brain (longer path now)
     const phase1DashOffset = useTransform(phase1Progress, (p) => 800 - (p * 800));
     // Step 2 Phase 1: Query lines from Car to mechanics (mechanic search)
-    const step2Phase1DashOffset = useTransform(step2Phase1Progress, (p) => 1000 - (p * 1000));
+    // Delay line drawing so mechanics appear first, then lines draw (start at 0.25 progress)
+    const step2Phase1DashOffset = useTransform(step2Phase1Progress, (p) => {
+      if (p < 0.25) return 1000; // Keep line hidden until mechanics are visible
+      // Map remaining progress (0.25-1.0) to (0-1) for line drawing
+      const lineProgress = (p - 0.25) / 0.75;
+      return 1000 - (lineProgress * 1000);
+    });
 
     // Create opacity transforms for each mechanic's path
     // All mechanics visible in Phase 1, only selected in Phase 2+
@@ -413,16 +431,72 @@ const
       return 1500 - (p * 1500);
     });
 
-    // Step 4 checkmark animations - appear when path reaches calendar (around 85% complete)
-    const checkmarkOpacity = useTransform(path4Progress, (p) => p > 0.85 ? 1 : 0);
-    const checkmarkScale = useTransform(path4Progress, (p) => {
-      if (p < 0.85) return 0;
-      if (p < 0.92) return (p - 0.85) / 0.07 * 1.5; // Scale from 0 to 1.5
-      return 1 + (p - 0.92) / 0.08 * 0.3; // Bounce back to 1
+    // Step 4: Calendar to Checkmark transition transforms
+    // Transition starts when path4Progress reaches 0.7 (70% of step 4)
+    const calendarToCheckTransition = useTransform(path4Progress, (p) => {
+      if (p < 0.7) return 0; // Calendar state
+      if (p >= 1) return 1; // Fully checkmark state
+      return (p - 0.7) / 0.3; // Smooth transition from 0.7 to 1.0
     });
-    const checkmarkRotate = useTransform(path4Progress, (p) => {
-      if (p < 0.85) return -180;
-      return -180 + ((p - 0.85) / 0.15) * 180; // Rotate from -180 to 0
+
+    // Icon scale animation during transition (slight pulse effect)
+    const calendarCheckScale = useTransform(calendarToCheckTransition, (t) => {
+      if (t < 0.3) return 1; // Normal size
+      if (t < 0.7) return 1 + Math.sin((t - 0.3) * Math.PI / 0.4) * 0.2; // Pulse during transition
+      return 1; // Back to normal
+    });
+
+    // Rotation during transition
+    const calendarCheckRotate = useTransform(calendarToCheckTransition, (t) => {
+      return t * 360; // Rotate 360 degrees during transition
+    });
+
+    // Background gradient transition from purple to green
+    const calendarCheckBackground = useTransform(calendarToCheckTransition, (t) => {
+      const r1 = Math.round(139 + (34 - 139) * t);
+      const g1 = Math.round(92 + (197 - 92) * t);
+      const b1 = Math.round(246 + (94 - 246) * t);
+      const a1 = 0.3 + (0.4 - 0.3) * t;
+
+      const r2 = Math.round(99 + (16 - 99) * t);
+      const g2 = Math.round(102 + (185 - 102) * t);
+      const b2 = Math.round(241 + (129 - 241) * t);
+      const a2 = 0.35 + (0.45 - 0.35) * t;
+
+      return `linear-gradient(135deg, rgba(${r1}, ${g1}, ${b1}, ${a1}) 0%, rgba(${r2}, ${g2}, ${b2}, ${a2}) 100%)`;
+    });
+
+    // Border color transition
+    const calendarCheckBorder = useTransform(calendarToCheckTransition, (t) => {
+      if (t < 0.5) {
+        return '1px solid rgba(255, 255, 255, 0.3)';
+      }
+      const greenOpacity = 0.3 + (0.5 - 0.3) * ((t - 0.5) * 2);
+      return `1px solid rgba(34, 197, 94, ${greenOpacity})`;
+    });
+
+    // Box shadow transition
+    const calendarCheckShadow = useTransform(calendarToCheckTransition, (t) => {
+      if (t < 0.5) {
+        return `0 8px 32px rgba(139, 92, 246, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.1)`;
+      }
+      const greenOpacity = 0.4 + (0.5 - 0.4) * ((t - 0.5) * 2);
+      return `0 8px 32px rgba(34, 197, 94, ${greenOpacity}),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1)`;
+    });
+
+    // Icon opacity for smooth transition
+    const calendarIconOpacity = useTransform(calendarToCheckTransition, (t) => {
+      if (t < 0.5) return 1 - (t * 2); // Fade out calendar
+      return 0;
+    });
+
+    const checkIconOpacity = useTransform(calendarToCheckTransition, (t) => {
+      if (t < 0.5) return 0;
+      return (t - 0.5) * 2; // Fade in checkmark
     });
 
     // Car icon celebration animation - triggers when price icon reaches car
@@ -457,10 +531,59 @@ const
     const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4 | null>(null);
     const activeStepRef = useRef<1 | 2 | 3 | 4 | null>(null);
     const [mechanicsVisible, setMechanicsVisible] = useState(false);
+    const [isCheckmarkMode, setIsCheckmarkMode] = useState(false);
 
-    // Track when mechanics should be visible - they appear in Step 2 Phase 1
+    // Track when mechanics should be visible - they appear in Step 2 Phase 1 (earlier for faster fade-in)
     useMotionValueEvent(step2Phase1Progress, "change", (latest) => {
-      setMechanicsVisible(latest > 0.1 && (activeStep ?? 0) >= 2);
+      setMechanicsVisible(latest > 0 && (activeStep ?? 0) >= 2);
+    });
+
+    // Track calendar to checkmark transition
+    useMotionValueEvent(calendarToCheckTransition, "change", (latest) => {
+      setIsCheckmarkMode(latest >= 0.5);
+    });
+
+    // Trigger confetti celebration when all steps are complete
+    useMotionValueEvent(path4Progress, "change", (latest) => {
+      // Reset trigger if user scrolls back before completion
+      if (latest < 0.9) {
+        confettiTriggeredRef.current = false;
+        return;
+      }
+
+      // Trigger confetti when step 4 reaches 95% completion (booking confirmed)
+      if (latest >= 0.95 && !confettiTriggeredRef.current && (activeStep ?? 0) === 4) {
+        confettiTriggeredRef.current = true;
+
+        // Celebration confetti from both sides (like confetti-side.tsx)
+        const end = Date.now() + 3 * 1000; // 3 seconds
+        const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+        const frame = () => {
+          if (Date.now() > end) return;
+
+          confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            startVelocity: 60,
+            origin: { x: 0, y: 0.5 },
+            colors: colors,
+          });
+          confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            startVelocity: 60,
+            origin: { x: 1, y: 0.5 },
+            colors: colors,
+          });
+
+          requestAnimationFrame(frame);
+        };
+
+        frame();
+      }
     });
 
     // Use useMotionValueEvent instead of useEffect to prevent infinite loops
@@ -1057,12 +1180,7 @@ const
                                   }
                                   return "Starting point";
                                 } else if (step === 2) {
-                                  // Step 2: Pricing
-                                  if (step2Phase3Progress.get() > 0 && step2Phase3Progress.get() < 1) {
-                                    return "Receiving price quote...";
-                                  } else if (step2Phase3Progress.get() >= 1) {
-                                    return "Price received";
-                                  } else if (step2Phase2Progress.get() > 0.3) {
+                                  if (step2Phase2Progress.get() > 0.3) {
                                     return "Mechanic selected";
                                   } else {
                                     return "Searching for mechanics...";
@@ -1095,7 +1213,7 @@ const
                       <AnimatePresence>
                         {(activeStep ?? 0) === 1 && shouldShowAiBrain.get() && (
                           <motion.div
-                            className="absolute left-[240px] sm:left-[480px] top-1/2 -translate-y-1/2 flex flex-col items-center"
+                            className="absolute left-[240px] sm:left-[450px] top-1/2 -translate-y-1/2 flex flex-col items-center justify-center "
                             initial={{ scale: 0, opacity: 0 }}
                             animate={{
                               scale: 1,
@@ -1105,14 +1223,14 @@ const
                             transition={{ duration: 0.3 }}
                           >
                             <motion.div
-                              className="relative group cursor-pointer"
+                              className="relative group cursor-pointer self-center flex items-center justify-center flex-col "
                               style={{
                                 scale: phase2Progress.get() > 0 ? aiBrainPulseScale : 1,
                               }}
                             >
                               {/* Liquid Glass AI Brain Node */}
                               <motion.div
-                                className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
+                                className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden self-center "
                                 style={{
                                   background: `linear-gradient(135deg, rgba(168, 85, 247, ${aiBrainGlow.get()}) 0%, rgba(236, 72, 153, ${aiBrainGlow.get() + 0.05}) 100%)`,
                                   backdropFilter: 'blur(20px) saturate(180%)',
@@ -1143,7 +1261,7 @@ const
                               </motion.div>
                               {/* Informational Text */}
                               <motion.div
-                                className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
+                                className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px] border"
                                 style={{
                                   background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
                                   backdropFilter: 'blur(12px) saturate(180%)',
@@ -1162,13 +1280,11 @@ const
                                   {phase3Progress.get() > 0 ? "Signal Sent" : phase2Progress.get() > 0.5 ? "Diagnosis Complete" : "AI Diagnostics"}
                                 </p>
                                 <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
-                                  {phase3Progress.get() > 0.5
-                                    ? "Returning to vehicle..."
-                                    : phase2Progress.get() > 0.5
-                                      ? "Catalyst System Issue"
-                                      : phase1Progress.get() > 0.5
-                                        ? "Processing data..."
-                                        : "Receiving data..."}
+                                  {phase2Progress.get() > 0.5
+                                    ? "Catalyst System Issue"
+                                    : phase1Progress.get() > 0.5
+                                      ? "Processing data..."
+                                      : "Receiving data..."}
                                 </p>
                               </motion.div>
                             </motion.div>
@@ -1176,16 +1292,18 @@ const
                         )}
                       </AnimatePresence>
 
-                      {/* Animated Diagnostic Icon - Phase 3: traveling from AI position back to Car with diagnosis */}
-                      {(activeStep ?? 0) >= 1 && phase3Progress.get() > 0 && phase3Progress.get() < 1 && (
+                      {/* Animated Diagnostic Icon - Phase 2: traveling from AI position back to Car with diagnosis */}
+                      {((activeStep ?? 0) >= 1 && phase2Progress.get() > 0 && phase2Progress.get() <= 1) && (
                         <DiagnosticIcon
-                          progress={phase3Progress}
+                          activeStep={activeStep ?? 0}
+                          progress={phase2Progress}
                           startX={480}
                           startY={200}
                           endX={124}
                           endY={200}
                         />
                       )}
+
 
                       {/* Animated Data Packets - Phase 1: flowing from Car to AI Brain (far right) in arc fashion - spread out more */}
                       {(activeStep ?? 0) >= 1 && phase1Progress.get() > 0 && phase1Progress.get() < 1 && (
@@ -1258,7 +1376,7 @@ const
                               exit={{ scale: 0, opacity: 0 }}
                               whileHover={{ scale: shouldFade ? 0.4 : 1.15 }}
                               whileTap={{ scale: 0.9 }}
-                              transition={{ duration: 0.4, delay: idx * 0.1 }}
+                              transition={{ duration: 0.3, delay: idx * 0.05 }}
                             >
                               {/* Liquid Glass Node - scaled down */}
                               <div
@@ -1304,7 +1422,7 @@ const
                                 }}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: mechanicsVisible ? 1 : 0, y: 0 }}
-                                transition={{ delay: 0.4 + (idx * 0.1) }}
+                                transition={{ delay: 0.2 + (idx * 0.05) }}
                               >
                                 <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">
                                   {isSelected && (activeStep ?? 0) >= 2 && step2Phase2Progress.get() > 0.3 ? "Selected" : mechanic.shop}
@@ -1343,7 +1461,7 @@ const
                         );
                       })()} */}
 
-                      {/* Calendar Node - appears in step 3 - positioned at right side */}
+                      {/* Calendar Node - appears in step 3, transitions to Checkmark in step 4 */}
                       <AnimatePresence>
                         {(activeStep ?? 0) >= 3 && (
                           <motion.div
@@ -1353,29 +1471,51 @@ const
                             exit={{ scale: 0, opacity: 0 }}
                             transition={{ duration: 0.5, type: "spring" }}
                           >
-                            {/* Liquid Glass Node - scaled down */}
-                            <div
+                            {/* Liquid Glass Node - transitions from Calendar (purple) to Checkmark (green) */}
+                            <motion.div
                               className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
                               style={{
-                                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.35) 100%)',
-                                backdropFilter: 'blur(20px) saturate(180%)',
-                                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                                border: '1px solid rgba(255, 255, 255, 0.3)',
-                                boxShadow: `
-                                0 8px 32px rgba(139, 92, 246, 0.4),
-                                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                                inset 0 -1px 0 rgba(0, 0, 0, 0.1)
-                              `,
+                                scale: calendarCheckScale,
+                                rotate: calendarCheckRotate,
                               }}
                             >
+                              {/* Background color transition from purple to green */}
+                              <motion.div
+                                className="absolute inset-0 rounded-full border border-red-500"
+                                style={{
+                                  background: calendarCheckBackground,
+                                  // backdropFilter: 'blur(20px) saturate(180%)',
+                                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                                  border: calendarCheckBorder,
+                                  boxShadow: calendarCheckShadow,
+                                }}
+                              />
                               <div
                                 className="absolute inset-0 rounded-full"
                                 style={{
                                   background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 70%)',
                                 }}
                               />
-                              <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
-                            </div>
+                              {/* Icon transition: Calendar to CheckCircle with smooth crossfade */}
+                              <div className="relative w-full h-full flex items-center justify-center rounded-full  overflow-hidden">
+                                <motion.div
+                                  className="absolute"
+                                  style={{
+                                    opacity: calendarIconOpacity,
+                                  }}
+                                >
+                                  <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
+                                </motion.div>
+                                <motion.div
+                                  className="absolute"
+                                  style={{
+                                    opacity: checkIconOpacity,
+                                  }}
+                                >
+                                  <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
+                                </motion.div>
+                              </div>
+                            </motion.div>
                             {/* Informational Text - scaled down */}
                             <motion.div
                               className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
@@ -1390,71 +1530,14 @@ const
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.7 }}
                             >
-                              <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">Calendar Sync</p>
-                              <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
-                                {currentStatusMessage || contentData.time || "Syncing..."}
+                              <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">
+                                {isCheckmarkMode ? "Confirmed" : "Calendar Sync"}
                               </p>
-                            </motion.div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      {/* Checkmark - appears in step 4 - positioned at calendar */}
-                      <AnimatePresence>
-                        {(activeStep ?? 0) >= 4 && (
-                          <motion.div
-                            className="absolute flex flex-col items-center"
-                            style={{
-                              left: typeof window !== 'undefined' && window.innerWidth < 640 ? '240px' : '480px', // Calendar center X position
-                              top: typeof window !== 'undefined' && window.innerWidth < 640 ? '125px' : '200px', // Calendar center Y position
-                              x: '-50%',
-                              y: '-50%',
-                              opacity: checkmarkOpacity,
-                              scale: checkmarkScale,
-                              rotate: checkmarkRotate,
-                            }}
-                          >
-                            {/* Liquid Glass Checkmark Node - scaled down */}
-                            <div
-                              className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative overflow-hidden"
-                              style={{
-                                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.4) 0%, rgba(16, 185, 129, 0.45) 100%)',
-                                backdropFilter: 'blur(20px) saturate(180%)',
-                                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                                border: '1px solid rgba(34, 197, 94, 0.5)',
-                                boxShadow: `
-                                0 8px 32px rgba(34, 197, 94, 0.5),
-                                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                                inset 0 -1px 0 rgba(0, 0, 0, 0.1)
-                              `,
-                              }}
-                            >
-                              <div
-                                className="absolute inset-0 rounded-full"
-                                style={{
-                                  background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 70%)',
-                                }}
-                              />
-                              <CheckCircle className="w-4 h-4 sm:w-6 sm:h-6 text-white relative z-10 drop-shadow-lg" />
-                            </div>
-                            {/* Informational Text - scaled down */}
-                            <motion.div
-                              className="mt-1.5 sm:mt-2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg text-center max-w-[60px] sm:max-w-[100px]"
-                              style={{
-                                background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%)',
-                                backdropFilter: 'blur(12px) saturate(180%)',
-                                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-                                border: '1px solid rgba(255, 255, 255, 0.15)',
-                                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
-                                opacity: checkmarkOpacity,
-                              }}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ y: 0 }}
-                              transition={{ delay: 0.2 }}
-                            >
-                              <p className="text-[7px] sm:text-[9px] font-semibold text-white mb-0.5">Confirmed</p>
                               <p className="text-[6px] sm:text-[8px] text-white/70 leading-tight">
-                                {currentStatusMessage || "Booked!"}
+                                {isCheckmarkMode
+                                  ? (currentStatusMessage || "Booked!")
+                                  : (currentStatusMessage || contentData.time || "Syncing...")
+                                }
                               </p>
                             </motion.div>
                           </motion.div>
@@ -1479,20 +1562,9 @@ const
               </div>
             </div>
 
-            {/* Sparkles */}
-            {/* <div className="absolute -bottom-50 left-0 right-0 w-full h-1/2 ">
-            <div className='relative h-1/2 w-full overflow-hidden mask-[radial-gradient(50%_50%,white,transparent)] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#369eff,transparent_90%)] before:opacity-100  after:absolute after:border-2 after:-left-1/2 after:top-1/3 after:aspect-[1/1.8] after:w-[200%] after:rounded-[50%] after:border-b after:border-[#7876c566] after:bg-zinc-200'>
-              <div className='absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px] '></div>
-              <Sparkles
-                density={400}
-                size={1.4}
-                direction='top'
-                className='absolute inset-x-0 top-0 h-full w-full mask-[radial-gradient(50%_50%,white,transparent_85%)]'
-              />
-            </div>
-            </div> */}
           </div>
         </div>
+
       </div>
     );
   };

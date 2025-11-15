@@ -40,6 +40,9 @@ const Balthazars = Balthazar({
 export const metadata: Metadata = {
   title: "Otopair",
   description: "",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
