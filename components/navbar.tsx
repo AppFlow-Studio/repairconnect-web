@@ -2,10 +2,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 import LiquidGlass from '@nkzw/liquid-glass'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 const navItems = [
     {
@@ -24,6 +24,7 @@ const navItems = [
 function Navbar() {
     const pathname = usePathname()
     const [scrolled, setScrolled] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const isHome = pathname === "/"
 
     useEffect(() => {
@@ -40,57 +41,261 @@ function Navbar() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [isHome])
     return (
-        <div className='fixed lg:top-4 lg:left-1/2 lg:-translate-x-1/2 z-[112] w-full lg:max-w-fit mx-auto lg:rounded-[12px] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[background-color,border-color,box-shadow,backdrop-filter] lg:border border-white/20 bg-gradient-to-r from-[rgba(249,250,247,0.12)] to-[rgba(249,250,247,0.18)] lg:shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] backdrop-blur-[9px]'>
-            <main className='flex gap-6 items-center px-5 py-3 lg:px-3 lg:py-2 w-full justify-between'>
-                <div className='flex self-center sm:w-12 w-10 sm:h-12 h-10 relative'><Image src="/logo.png" alt="RepairConnect Hero" fill className="object-cover" /></div>
-                {
-                    navItems.map((item) => (
-                        <Link key={item.href} href={item.href} className={`font-medium sm:text-[15px] text-[12px] leading-[140%] tracking-[-0.15px] hover:opacity-80 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] font-af ${!scrolled ? 'text-white' : 'text-black'} transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]`}>
-                            {item.label}
-                        </Link>
-                    ))
-                }
-                <motion.button
-                    className="relative px-5 py-2 rounded-lg font-medium  sm:text-sm text-xs text-white overflow-hidden group"
-                    style={{
-                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%)',
-                        boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
-                    }}
-                    whileHover={{
-                        scale: 1.05,
-                        boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 17
-                    }}
-                >
-                    {/* Shimmer effect */}
-                    <motion.div
-                        className="absolute inset-0"
-                        style={{
-                            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
-                        }}
-                        animate={{
-                            x: ['-100%', '200%'],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatDelay: 1,
-                            ease: 'linear',
-                        }}
-                    />
-                    {/* Button text */}
-                    <span className="relative z-10 font-af tracking-[-0.15px] inline-flex items-center gap-2">
-                        Join the Waitlist <ChevronRight className='w-4 h-4' />
-                    </span>
-                </motion.button>
+        <>
+            <div className='fixed lg:top-4 lg:left-1/2 lg:-translate-x-1/2 z-[112] w-full lg:max-w-fit mx-auto lg:rounded-[12px] transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] will-change-[background-color,border-color,box-shadow,backdrop-filter] lg:border border-white/20 bg-gradient-to-r from-[rgba(249,250,247,0.12)] to-[rgba(249,250,247,0.18)] lg:shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] backdrop-blur-[9px]'>
+                <main className='flex gap-6 items-center px-5 py-3 lg:px-3 lg:py-2 w-full justify-between'>
+                    <div className='flex self-center sm:w-12 w-10 sm:h-12 h-10 relative'><Image src="/logo.png" alt="Otopair Hero" fill className="object-cover" /></div>
 
-            </main>
-        </div>
+                    {/* Desktop Navigation - hidden on mobile */}
+                    <div className='hidden lg:flex gap-6 items-center'>
+                        {
+                            navItems.map((item) => (
+                                <Link key={item.href} href={item.href} className={`font-medium sm:text-[15px] text-[12px] leading-[140%] tracking-[-0.15px] hover:opacity-80 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] font-af ${!scrolled ? 'text-white' : 'text-black'} transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]`}>
+                                    {item.label}
+                                </Link>
+                            ))
+                        }
+                    </div>
+
+                    <div className='flex flex-row items-center gap-2'>
+                        {/* Desktop Button - hidden on mobile */}
+                        <motion.button
+                            className="block relative px-5 py-2 rounded-lg font-medium sm:text-sm text-xs text-white overflow-hidden group"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%)',
+                                boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                            }}
+                            whileHover={{
+                                scale: 1.05,
+                                boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 17
+                            }}
+                        >
+                            {/* Shimmer effect */}
+                            <motion.div
+                                className="absolute inset-0"
+                                style={{
+                                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                                }}
+                                animate={{
+                                    x: ['-100%', '200%'],
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    repeatDelay: 1,
+                                    ease: 'linear',
+                                }}
+                            />
+                            {/* Button text */}
+                            <span className="relative z-10 tracking-[-0.15px] inline-flex sm:text-base text-xs items-center gap-2">
+                                Join Waitlist <ChevronRight className='w-4 h-4' />
+                            </span>
+                        </motion.button>
+
+                        {/* Mobile Hamburger Button */}
+                        <button
+                            onClick={() => setMobileMenuOpen(true)}
+                            className="lg:hidden p-2 rounded-lg transition-all duration-200 hover:bg-white/10"
+                            aria-label="Open menu"
+                        >
+                            <Menu className={`w-6 h-6 transition-colors ${!scrolled ? 'text-white' : 'text-black'}`} />
+                        </button>
+                    </div>
+                </main>
+            </div>
+
+            {/* Mobile Full Screen Menu */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <>
+                        {/* Full Screen Menu */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 h-full w-full bg-white z-[114] lg:hidden flex flex-col"
+                        >
+                            {/* Header - Top Bar */}
+                            <div className="flex items-center justify-between p-5">
+                                {/* Logo at top left */}
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3, delay: 0.1 }}
+                                    className='flex w-10 h-10 relative'
+                                >
+                                    <Image src="/logo.png" alt="Otopair Logo" fill className="object-cover" />
+                                </motion.div>
+                               <div 
+                               className='flex flex-row items-center gap-2'>
+                                    <motion.button
+                                        className="block relative px-5 py-2 rounded-lg font-medium sm:text-sm text-xs text-white overflow-hidden group"
+                                        style={{
+                                            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%)',
+                                            boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                                        }}
+                                        whileHover={{
+                                            scale: 1.05,
+                                            boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                                        }}
+                                        whileTap={{ scale: 0.98 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 400,
+                                            damping: 17
+                                        }}
+                                    >
+                                        {/* Shimmer effect */}
+                                        <motion.div
+                                            className="absolute inset-0"
+                                            style={{
+                                                background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                                            }}
+                                            animate={{
+                                                x: ['-100%', '200%'],
+                                            }}
+                                            transition={{
+                                                duration: 2,
+                                                repeat: Infinity,
+                                                repeatDelay: 1,
+                                                ease: 'linear',
+                                            }}
+                                        />
+                                        {/* Button text */}
+                                        <span className="relative z-10 tracking-[-0.15px] inline-flex sm:text-base text-xs items-center gap-2">
+                                            Join Waitlist <ChevronRight className='w-4 h-4' />
+                                        </span>
+                                    </motion.button>
+                                    {/* Close Button - Top Right */}
+                                    <motion.button
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.3, delay: 0.1 }}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="p-2 rounded-lg transition-all duration-200 hover:bg-gray-100"
+                                        aria-label="Close menu"
+                                    >
+                                        <X className="w-6 h-6 text-gray-700" />
+                                    </motion.button>
+                               </div>
+                            </div>
+
+                            {/* Centered Navigation Items */}
+                            <nav className="flex-1 flex flex-col items-center justify-center gap-6 px-6">
+                                {navItems.map((item, index) => (
+                                    <motion.div
+                                        key={item.href}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{
+                                            duration: 0.5,
+                                            delay: 0.2 + (index * 0.1),
+                                            ease: [0.25, 0.1, 0.25, 1]
+                                        }}
+                                    >
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="text-4xl font-serif text-gray-900 hover:text-gray-700 transition-colors duration-200"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </nav>
+
+                            {/* Bottom Section - Company Info & Logo */}
+                            <div className="p-6 flex flex-col items-center gap-6">
+                                {/* Logo */}
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: 0.5,
+                                        ease: [0.25, 0.1, 0.25, 1]
+                                    }}
+                                    className='flex w-16 h-16 relative'
+                                >
+                                    <Image src="/logo.png" alt="Otopair Logo" fill className="object-cover" />
+                                </motion.div>
+
+                                {/* Company Info */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: 0.6,
+                                        ease: [0.25, 0.1, 0.25, 1]
+                                    }}
+                                    className="text-center"
+                                >
+                                    <p className="text-sm text-gray-600 mb-2">Otopair</p>
+                                    <p className="text-xs text-gray-500">The future of car repair coordination</p>
+                                </motion.div>
+
+                                {/* Social Links */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: 0.7,
+                                        ease: [0.25, 0.1, 0.25, 1]
+                                    }}
+                                    className="flex items-center gap-3"
+                                >
+                                    <a
+                                        href="https://www.linkedin.com/company/repair-connect/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                        aria-label="LinkedIn"
+                                    >
+                                        <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                                        </svg>
+                                    </a>
+                                    <a
+                                        href="https://twitter.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                        aria-label="Twitter"
+                                    >
+                                        <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                        </svg>
+                                    </a>
+                                </motion.div>
+
+                                {/* Copyright */}
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: 0.8,
+                                        ease: [0.25, 0.1, 0.25, 1]
+                                    }}
+                                    className="text-xs text-gray-400 text-center"
+                                >
+                                    © Otopair {new Date().getFullYear()}
+                                </motion.p>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+        </>
     )
 }
 

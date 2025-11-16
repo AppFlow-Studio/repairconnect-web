@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { ArrowRight, Linkedin, Twitter, Wrench, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import FooterTransBar from './footer-trans-bar'
+import { ChevronMarqueeButton } from './ui/chevron-marquee-button'
 const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
@@ -23,16 +24,16 @@ export default function Footer() {
     return (
         <footer className="w-full border-t border-neutral-200 bg-white">
             {/* Header Section */}
-            <div className="flex flex-col items-center justify-center px-6 lg:px-8 py-20">
+            <div className="flex flex-col items-center justify-center px-6 lg:px-8 py-20 ">
                 <div className="flex items-center flex-col gap-3 mb-4">
                     <Wrench className="w-6 h-6 text-black" />
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-black text-center">
                         We're building bookings that<br /> don't need phone-tag
                     </h2>
                 </div>
-                <p className="text-sm sm:text-base text-neutral-600 mb-8 text-center">
-                    If that sounds interesting to you, <span className='text-black underline'>come work with us</span>{' '}
-                    <ChevronRight className="inline w-4 h-4" />
+                <p className="text-sm sm:text-base text-neutral-600 mb-8 text-center flex sm:flex-row flex-col items-center justify-center gap-2 sm:mt-0 mt-8">
+                    If that sounds interesting to you, <span className='text-black underline flex items-center gap-2'>come work with us <ChevronMarqueeButton className='' /></span>{' '}
+                   
                 </p>
             </div>
 
@@ -45,7 +46,7 @@ export default function Footer() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="text-sm text-neutral-900 hover:text-neutral-600 transition-colors"
+                                className="sm:text-sm text-xs text-neutral-900 hover:text-neutral-600 transition-colors"
                             >
                                 {link.label}
                             </Link>
@@ -76,7 +77,7 @@ export default function Footer() {
 
                         {/* Social Media Icons */}
                         <div className="flex items-center gap-2">
-                            <a
+                            {/* <a
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -84,9 +85,9 @@ export default function Footer() {
                                 aria-label="Twitter"
                             >
                                 <Twitter className="w-4 h-4 text-white" />
-                            </a>
+                            </a> */}
                             <a
-                                href="https://linkedin.com"
+                                href="https://www.linkedin.com/company/repair-connect/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center hover:bg-neutral-800 transition-colors"

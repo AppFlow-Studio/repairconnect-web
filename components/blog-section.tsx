@@ -3,6 +3,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
+import { ChevronMarqueeButton } from './ui/chevron-marquee-button'
+import FadeInCard from './fade-in-card'
 
 const blogPosts = [
     {
@@ -35,22 +37,22 @@ export default function BlogSection() {
             <div className="max-w-7xl mx-auto">
                 {/* Header Section */}
                 <div className="mb-12">
-                    <h2 className="text-4xl font-serif text-black mb-4">
+                    <h2 className="sm:text-4xl text-2xl font-serif text-black mb-4">
                         Driving the Future of Car Care
                     </h2>
                     <a
                         href="/articles"
-                        className="inline-flex items-center gap-2 text-black underline hover:opacity-80 transition-opacity"
+                        className="inline-flex items-center gap-2 underline-offset-3 text-black underline hover:opacity-80 transition-opacity text-xs sm:text-sm"
                     >
                         Read more articles
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronMarqueeButton className='' />
                     </a>
                 </div>
 
                 {/* Blog Cards Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 md:grid-cols-2 gap-6 lg:gap-8">
                     {blogPosts.map((post) => (
-                        <article
+                        <FadeInCard
                             key={post.id}
                             className="relative rounded-2xl overflow-hidden aspect-square group cursor-pointer"
                         >
@@ -71,7 +73,7 @@ export default function BlogSection() {
                             )}
 
                             {/* Liquid Glass Overlay */}
-                            <div className="absolute inset-0 flex items-end justify-center p-8 ">
+                            <div className="absolute inset-0 flex items-end justify-center sm:p-8 p-2">
                                 <div className="relative w-full">
                                     {/* Liquid Glass Background Overlay */}
                                     <div
@@ -91,7 +93,7 @@ export default function BlogSection() {
                                     </div>
                                 </div>
                             </div>
-                        </article>
+                        </FadeInCard>
                     ))}
                 </div>
             </div>

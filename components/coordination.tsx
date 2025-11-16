@@ -40,7 +40,7 @@ export default function Coordination() {
       emoji: '🎁',
       headline: 'You just earned 120 points',
       sub: "You're 380 away from a free tire rotation.",
-      description: "RepairConnect rewards every service.|Get points for every booking, review, and referral.|Free maintenance is just a few appointments away.",
+      description: "Otopair rewards every service.|Get points for every booking, review, and referral.|Free maintenance is just a few appointments away.",
       cta: 'View rewards',
       type: 'loyalty'
     },
@@ -51,7 +51,7 @@ export default function Coordination() {
       emoji: '🛢️',
       headline: 'Oil change coming up',
       sub: "You're ~200 miles out. Grab a 30-min slot.",
-      description: "No more guessing when service is due.|RepairConnect tracks your mileage and alerts you proactively.|Book instantly with certified mechanics who know your vehicle.",
+      description: "No more guessing when service is due.|Otopair tracks your mileage and alerts you proactively.|Book instantly with certified mechanics who know your vehicle.",
       cta: 'Book now',
       type: 'oil-change'
     },
@@ -73,7 +73,7 @@ export default function Coordination() {
       emoji: '⚠️',
       headline: 'Check-engine light detected',
       sub: 'We decoded the issue. See nearby openings today.',
-      description: "RepairConnect's AI-powered diagnostics read your codes instantly.|No more mystery lights.|Get matched with specialists who can fix it today, with transparent pricing upfront.",
+      description: "Otopair's AI-powered diagnostics read your codes instantly.|No more mystery lights.|Get matched with specialists who can fix it today, with transparent pricing upfront.",
       cta: 'See live slots',
       type: 'check-engine'
     },
@@ -84,32 +84,10 @@ export default function Coordination() {
       emoji: '📅',
       headline: 'Today 9:30 AM at John\'s Shop',
       sub: 'Bring wheel lock key if you have it.',
-      description: "Smart scheduling that works around your life.|RepairConnect syncs with your calendar, sends reminders, and even suggests the best times based on your routine.|Booking made simple.",
+      description: "Smart scheduling that works around your life.|Otopair syncs with your calendar, sends reminders, and even suggests the best times based on your routine.|Booking made simple.",
       cta: 'Manage',
       type: 'appointment'
     },
-    // {
-    //   icon: Package,
-    //   iconColor: 'text-teal-600',
-    //   bgColor: 'bg-teal-100',
-    //   emoji: '📦',
-    //   headline: 'Parts just landed',
-    //   sub: 'We opened extra slots this week.',
-    //   description: "Our network of shops works together.|When parts arrive anywhere, we open slots across the network.|Get faster service with RepairConnect's coordinated system.",
-    //   cta: 'Pick a time',
-    //   type: 'parts'
-    // },
-    // {
-    //   icon: TrendingDown,
-    //   iconColor: 'text-emerald-600',
-    //   bgColor: 'bg-emerald-100',
-    //   emoji: '💰',
-    //   headline: 'Same-day slots dropped in price',
-    //   sub: 'Two shops nearby lowered brake service today only.',
-    //   description: "Dynamic pricing means you save.|RepairConnect shows you real-time deals from vetted mechanics.|Compare prices, read reviews, and book with confidence—all in one place.",
-    //   cta: 'Compare',
-    //   type: 'price-drop'
-    // },
     {
       icon: CreditCard,
       iconColor: 'text-red-600',
@@ -117,7 +95,7 @@ export default function Coordination() {
       emoji: '💳',
       headline: 'Balance due before pickup',
       sub: 'Pay in the app to finalize and unlock release.',
-      description: "One app for everything.|Pay securely, get instant receipts, track your service history, and never handle cash at the shop again.|RepairConnect is the new standard.",
+      description: "One app for everything.|Pay securely, get instant receipts, track your service history, and never handle cash at the shop again.|Otopair is the new standard.",
       cta: 'Pay now',
       type: 'payment'
     },
@@ -148,10 +126,10 @@ export default function Coordination() {
   }, [scrollBasedIndex, itemCount])
 
   return (
-    <section className="w-full px-6 lg:px-12 py-12 grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto">
+    <section className="w-full px-6 lg:px-12 py-12 grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto sticky top-0">
       <div
         ref={notificationsRef}
-        className='w-full relative min-h-[200vh]'
+        className='w-full relative'
         id='notifications'
         style={{
           height: `${itemCount * 100}vh` // Each item gets 100vh of scroll space
@@ -165,7 +143,6 @@ export default function Coordination() {
                 direction="left"
                 classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
               />
-              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif `}>You need clarity before you drive over.</h2> */}
               <TextAnimation
                 text="You need confidence when you hand over the keys."
                 direction="left"
@@ -176,8 +153,6 @@ export default function Coordination() {
                 direction="left"
                 classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
               />
-              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need confidence when you hand over the keys.</h2> */}
-              {/* <h2 className={` text-3xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif`}>You need coordination.</h2> */}
             </div>
 
           </div>
@@ -327,9 +302,9 @@ export default function Coordination() {
                         className="relative xl:w-[80vw] max-[420px] max-w-full lg:max-w-[315px] rounded-2xl px-3 py-2.5 sm:py-3 bg-white/60 backdrop-blur-[20px]  shadow-[0_1px_8px_0_rgba(0,0,0,0.05)]"
                       >
 
-                        <div className="flex items-start gap-3 relative">
+                        <div className="flex items-start sm:gap-3 gap-2 relative">
                           <div className='lg:w-10 w-8 lg:h-10 h-8 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
-                            <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
+                            <Image src={'/Repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
                           {/* Icon with background */}
                           {/* <div className={`${item.bgColor} rounded-full p-2 aspect-square shrink-0`}>
@@ -339,7 +314,7 @@ export default function Coordination() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="xl:text-xs lg:text-[10px] text-[11px] font-semibold text-neutral-900 leading-tight relative w-full">
+                              <h3 className="xl:text-xs lg:text-[10px] text-[10px] font-semibold text-neutral-900 leading-tight relative w-full">
                                 {item.headline} <span className={`${i == 4 ? 'sm:block hidden' : ''}`}>{item.emoji}</span>  <span className="xl:text-[9px] lg:text-[7px] text-[7px]  text-neutral-500 absolute top-1/2 -translate-y-1/2 right-0">Just now</span>
                               </h3>
                             </div>

@@ -9,8 +9,8 @@ export default function BoxedHero() {
                 {/* Background Image */}
                 <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
                     <Image
-                        src="/repairconnect-home.jpeg"
-                        alt="RepairConnect Hero"
+                        src="/Otopair-home.jpeg"
+                        alt="Otopair Hero"
                         fill
                         className="object-cover"
                         priority
@@ -33,12 +33,12 @@ export default function BoxedHero() {
                             <p className="text-3xl lg:text-5xl text-white mb-4 leading-tight"
                                 style={{ fontFamily: "var(--font-Roboto_Slab)" }}
                             >
-                                RepairConnect lets you manage repairs end to end
+                                Otopair lets you manage repairs end to end
                             </p>
 
                             {/* Sub-headline */}
                             <p className="text-base lg:text-lg text-white/90 mb-6 leading-relaxed">
-                                RepairConnect can help you with things like bookings, scheduling, and coordinating with mechanics to make car care seamless.
+                                Otopair can help you with things like bookings, scheduling, and coordinating with mechanics to make car care seamless.
                             </p>
 
                             <div className="flex flex-row items-center w-full justify-start gap-4">

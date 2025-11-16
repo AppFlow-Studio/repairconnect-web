@@ -19,27 +19,36 @@ export default function OurVision() {
                     direction='top'
                     opacitySpeed={2}
                     color='#32A7FF'
-                    className='absolute inset-x-0 bottom-0 h-full w-full '
+                    className='absolute inset-x-0 bottom-0 h-full w-full sm:block hidden'
+                />
+                <Sparkles
+                    density={300}
+                    speed={1.2}
+                    size={1.2}
+                    direction='top'
+                    opacitySpeed={2}
+                    color='#32A7FF'
+                    className='absolute inset-x-0 bottom-0 h-full w-full sm:hidden block'
                 />
             </div>
 
-            <div className="relative sm:w-[40%] w-full sm:px-0 px-4 items-center flex flex-col justify-between space-y-20">
-                <div className="flex flex-col space-y-10">
+            <div className="relative sm:w-[40%] w-[90%] sm:px-0 px-4 items-center flex flex-col justify-between sm:space-y-20 space-y-8">
+                <div className="flex flex-col sm:space-y-10 space-y-4">
                     <p
 
-                        className="font-af font-medium text-base tracking-[-0.15px] leading-[140%] text-neutral-600"
+                        className="font-af font-medium sm:text-base text-sm tracking-[-0.15px] leading-[140%] text-neutral-600"
                     >
                         We envision a world where car care runs itself. Anyone with a vehicle can see real prices, real availability, and real reviews, then book the right mechanic in minutes.
                     </p>
                     <p
 
-                        className="font-af font-medium text-base tracking-[-0.15px] leading-[140%] text-neutral-600"
+                        className="font-af font-medium sm:text-base text-sm tracking-[-0.15px] leading-[140%] text-neutral-600"
                     >
                         A world where someone wakes up to a weird engine light, gets a notification, and gets a confirmed repair slot in real time.
                     </p>
                 </div>
                 <TextAnimate animation="blurIn" as="h1"
-                    className="font-af font-medium text-3xl font-serif tracking-[-0.15px] leading-[140%] text-neutral-700"
+                    className="font-af font-medium sm:text-3xl text-2xl font-serif tracking-[-0.15px] leading-[140%] text-neutral-700"
                 // style={{ fontFamily: "var(--font-Roboto_Slab)" }}
                 >
                     Where booking a mechanic is as easy as ordering delivery.

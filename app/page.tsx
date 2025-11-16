@@ -4,7 +4,7 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { Marquee } from "@/components/ui/marquee";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { ChevronRight, Wrench } from "lucide-react";
+import { Wrench } from "lucide-react";
 import TransBar, { TransBarTwo } from "@/components/trans-bar";
 import OurVision from "@/components/our-vision";
 import Flow from "@/components/Flow";
@@ -12,6 +12,8 @@ import Coordination from "@/components/coordination";
 import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent } from "motion/react";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import BlogSection from "@/components/blog-section";
+import CoordinationPlax from "@/components/coordination-plax";
+import { ChevronMarqueeButton } from "@/components/ui/chevron-marquee-button";
 
 const text = [
   "Booking a mechanic is now as easy as ordering takeout",
@@ -35,7 +37,6 @@ const endtoend = [
   'receipts',
   'scheduling',
   'coordinating'
-
 ]
 export default function Home() {
 
@@ -43,7 +44,6 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [isChevronHovered, setIsChevronHovered] = useState(false);
   const heroSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -180,12 +180,12 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="sm:px-5 px-4 sm:py-3 py-2 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full  sm:text-lg text-sm placeholder-gray-100 flex-1"
+                  className="sm:px-5 px-4 sm:py-3 py-2 rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full  sm:text-lg text-base placeholder-gray-100 flex-1"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={submitted}
-                  style={{ background: "transparent" }}
+                  style={{ background: "transparent", fontSize: "16px" }}
                 />
               </div>
               <div className="relative w-fit z-20 h-full flex items-center ml-2">
@@ -246,102 +246,17 @@ export default function Home() {
           }}
         >
           <div className="relative z-10 p-4  text-white rounded-2xl flex flex-col ">
-            <h2 className='font-medium font-mondwest lg:text-4xl sm:text-xl leading-[120%] md:leading-10 tracking-[-0.44px] sm:tracking-[-0.56px] xl:tracking-[-0.8px] text-white max-w-[25ch] text-left mb-2 font-serif'>AI That runs car care autonomously </h2>
+            <h2 className='font-medium font-mondwest lg:text-4xl sm:text-xl  text-2xl leading-[120%] md:leading-10 tracking-[-0.44px] sm:tracking-[-0.56px] xl:tracking-[-0.8px] text-white max-w-[25ch] text-left mb-2 font-serif'>AI That runs car care autonomously </h2>
             <p className='sm:text-sm text-xs xl:text-base leading-relaxed my-4 tracking-wider'>
               Book faster, pay once, get receipts forever.
               Shops get predictable calendars. Get your time back.
             </p>
 
             <div className="relative flex gap-x-3">
-              <p className="underline text-white inline-flex items-center gap-2 group">
+              <p className="underline text-white sm:text-sm text-xs inline-flex items-center gap-2 underline-offset-4 group">
                 Get to know us
               </p>
-              <div
-                className="flex items-center justify-center w-6 h-8  py-1 rounded-full border border-white/24 relative overflow-hidden cursor-pointer group/chevron "
-                style={{
-                  background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%)',
-                  boxShadow: 'rgba(0, 0, 0, 0.04) 0px 1px 1px 0px',
-                }}
-                onMouseEnter={() => setIsChevronHovered(true)}
-                onMouseLeave={() => setIsChevronHovered(false)}
-              >
-                {/* Fade gradients on edges */}
-                <div className="absolute inset-0 pointer-events-none z-10 flex justify-between">
-                  <motion.div
-                    className="w-3 h-full bg-gradient-to-r from-white/20 to-transparent"
-                    animate={{
-                      opacity: isChevronHovered ? 1 : 0,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
-                  />
-                  <motion.div
-                    className="w-3 h-full bg-gradient-to-l from-white/20 to-transparent"
-                    animate={{
-                      opacity: isChevronHovered ? 1 : 0,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
-                  />
-                </div>
-
-                {/* Inner container with overflow hidden */}
-                <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
-                  {/* Centered icon when not hovered */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    animate={!isChevronHovered ? {
-                      opacity: 1,
-                      scale: 1,
-                    } : {
-                      opacity: 0,
-                      scale: 0.8,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </motion.div>
-
-                  {/* Marquee icons when hovered */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center "
-                    animate={isChevronHovered ? {
-                      x: [-24, 0],
-                      opacity: 1,
-                    } : {
-                      x: 0,
-                      opacity: 0,
-                    }}
-                    transition={{
-                      x: {
-                        duration: 0.8,
-                        repeat: isChevronHovered ? Infinity : 0,
-                        ease: "linear",
-                      },
-                      opacity: {
-                        duration: 0.3,
-                        ease: "easeIn",
-                      },
-                    }}
-                    style={{
-                      width: "200px",
-                      display: "flex",
-                      gap: "8px",
-                    }}
-                  >
-                    {[...Array(6)].map((_, i) => (
-                      <ChevronRight key={i} className="w-4 h-4 shrink-0 opacity-70" />
-                    ))}
-                  </motion.div>
-                </div>
-              </div>
+              <ChevronMarqueeButton />
             </div>
           </div>
         </motion.div>
@@ -361,144 +276,8 @@ export default function Home() {
       <TransBarTwo />
       <Flow />
       <div className="rotate-180"><TransBarTwo /></div>
-      <Coordination />
-
-      <section className="w-full  md:min-h-screen flex h-fit flex-col mt-4 items-center justify-center relative ">
-
-        <section className="w-[90%] mx-auto relative lg:aspect-video lg:h-auto h-[80%]  aspect-square overflow-hidden rounded-2xl ring-4 ring-black/10">
-          {/* Background Image */}
-          <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
-            <Image
-              src="/repairconnect-home2.jpg"
-              alt="RepairConnect Hero"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              background: "linear-gradient(to bottom, rgba(30,30,32,0.3) 80%, transparent 120%)"
-            }}
-          />
-
-
-          <div className="flex flex-col gap-4 sm:gap-10 items-start w-full">
-            {/* Main Content Box - Top Left */}
-            <div className="relative z-10 pt-2 sm:pt-0 sm:px-8 px-4 w-full">
-              <div className="sm:p-6 p-4 lg:p-14 rounded-xl sm:rounded-2xl">
-                {/* Main Headline */}
-                <p className="sm:text-3xl text-xl xl:text-5xl text-white mb-2 sm:mb-4 leading-tight xl:max-w-4xl max-w-lg"
-                  style={{ fontFamily: "var(--font-Roboto_Slab)" }}
-                >
-                  RepairConnect lets you manage repairs end to end
-                </p>
-
-                {/* Sub-headline */}
-                <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-4 sm:mb-6 leading-relaxed xl:max-w-4xl max-w-2xl">
-                  RepairConnect helps manage <TypingAnimation words={endtoend} loop />
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full justify-start gap-3 sm:gap-4 xl:max-w-4xl max-w-2xl">
-                  {/* Join Waitlist Button */}
-                  <div className="relative w-full sm:w-82 h-full flex gap-4">
-                    {/* SVG Filter Definition */}
-                    <svg style={{ display: 'none' }}>
-                      <filter id="displacementFilter">
-                        <feTurbulence
-                          type="turbulence"
-                          baseFrequency="0.08"
-                          numOctaves="8"
-                          result="turbulence"
-                        />
-                        <feDisplacementMap
-                          in="SourceGraphic"
-                          in2="turbulence"
-                          scale="200"
-                          xChannelSelector="R"
-                          yChannelSelector="G"
-                        />
-                      </filter>
-                    </svg>
-
-                    {/* Liquid Glass Input Background */}
-                    <div
-                      className="absolute inset-0 w-full h-full rounded-xl sm:rounded-2xl overflow-hidden"
-                      style={{
-                        filter: 'drop-shadow(-8px -10px 46px #0000005f)',
-                        backdropFilter: 'brightness(1.1) blur(2px)',
-                        border: '1px solid rgba(255, 255, 255, 0.7)',
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 rounded-xl sm:rounded-2xl"
-                        style={{
-                          boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                        }}
-                      />
-                    </div>
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl relative z-20 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-50 w-full xl:text-lg text-sm sm:text-base placeholder-gray-100 flex-1"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={submitted}
-                      style={{ background: "transparent" }}
-                    />
-                  </div>
-                  {/* Liquid Glass Button Wrapper */}
-                  <div className="relative w-full sm:w-fit z-20 h-full flex items-center sm:ml-2">
-                    <div
-                      className="absolute inset-0 w-full h-full rounded-xl sm:rounded-2xl overflow-hidden"
-                      style={{
-                        filter: 'drop-shadow(-8px -10px 50px #0000005f)',
-                        backdropFilter: 'brightness(1.1) blur(2px)',
-                        border: '1px solid rgba(255, 255, 255, 0.5)',
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 rounded-xl sm:rounded-2xl"
-                        style={{
-                          boxShadow: 'inset 6px 6px 0px -6px rgba(255, 255, 255, 0.7), inset 0 0 8px 1px rgba(255, 255, 255, 0.7)',
-                        }}
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full sm:w-auto xl:px-8 px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-white font-semibold text-xs sm:text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-blue-900 hover:bg-blue-950 relative z-20"
-                      style={{ background: "rgba(37, 99, 235, 0.7)", backdropFilter: "brightness(2) blur(2px)" }}
-                      disabled={submitted || !email}
-                    >
-                      {submitted ? "Submitted!" : "Join Waitlist"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Info Box - Bottom Left */}
-            <div className="z-10 max-w-xl sm:p-14 p-4 sm:absolute relative xl:bottom-1/5 sm:bottom-0 bottom-auto left-0 sm:-left-10">
-              <div className="relative p-3 sm:p-5 lg:p-10 sm:ml-8 ml-0 rounded-xl sm:rounded-2xl">
-
-                {/* Content */}
-                <div className="relative z-10 flex items-center gap-2 sm:gap-3">
-                  <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
-                  <p className="text-xs sm:text-sm lg:text-base text-white font-medium leading-relaxed">
-                    Everyone needs coordination not everyone has it
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </section>
-
-
+      <CoordinationPlax />
       <BlogSection />
-
 
     </main >
   );
