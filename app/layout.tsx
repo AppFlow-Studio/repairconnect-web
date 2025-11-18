@@ -65,6 +65,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
+  openGraph: {
+    images: [
+      {
+        url: "/Repairconnectglasslogo.png",
+      },
+    ],
+  },
 };
 
 const Jersey20s = Jersey_20({
