@@ -31,9 +31,13 @@ export default function Flow() {
             <div className="rounded-xl w-full items-center justify-center sm:hidden block space-y-8">
                 <div className="text-start w-full lg:hidden flex flex-row space-x-8 sm:px-12 ">
                     <div className="flex flex-col space-y-8">
-                        <p className=" text-gray-700 sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight">Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
+                        <p className=" text-gray-700 sm:text-3xl text-xl leading-tight tracking-tight"
+                            style={{ fontFamily: "var(--font-Jersey_20)" }}
+                        >Otopair reads your request, finds the right shop,<br />syncs calendars, and confirms payment in one flow.</p>
 
-                        <p className="sm:text-3xl text-xl font-[--font-lora] leading-tight tracking-tight text-gray-800">
+                        <p className="sm:text-3xl text-xl leading-tight tracking-tight text-gray-800"
+                            style={{ fontFamily: "var(--font-Jersey_20)" }}
+                        >
                             No phone-tag, just a booked bay.
                         </p>
                     </div>

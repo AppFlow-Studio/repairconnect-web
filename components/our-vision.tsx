@@ -48,8 +48,8 @@ export default function OurVision() {
                     </p>
                 </div>
                 <TextAnimate animation="blurIn" as="h1"
-                    className="font-af font-medium sm:text-3xl text-2xl font-serif tracking-[-0.15px] leading-[140%] text-neutral-700"
-                // style={{ fontFamily: "var(--font-Roboto_Slab)" }}
+                    className="font-af font-medium sm:text-3xl text-2xl tracking-[-0.15px] leading-[140%] text-neutral-700"
+                    style={{ fontFamily: "var(--font-Jersey_20)" }}
                 >
                     Where booking a mechanic is as easy as ordering delivery.
                 </TextAnimate>

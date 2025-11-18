@@ -141,17 +141,17 @@ export default function Coordination() {
               <TextAnimation
                 text="You need clarity before you drive over."
                 direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 "
               />
               <TextAnimation
                 text="You need confidence when you hand over the keys."
                 direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900"
               />
               <TextAnimation
                 text="You need coordination."
                 direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 font-serif"
+                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900"
               />
             </div>
 

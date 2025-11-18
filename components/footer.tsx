@@ -27,7 +27,9 @@ export default function Footer() {
             <div className="flex flex-col items-center justify-center px-6 lg:px-8 py-20 ">
                 <div className="flex items-center flex-col gap-3 mb-4">
                     <Wrench className="w-6 h-6 text-black" />
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-black text-center">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl text-black text-center"
+                        style={{ fontFamily: "var(--font-Jersey_20)" }}
+                    >
                         We're building bookings that<br /> don't need phone-tag
                     </h2>
                 </div>

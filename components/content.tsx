@@ -53,14 +53,14 @@ const Nav = () => {
                 }}
             />
             {/* Overlay Text - Bottom Left */}
-            <div className="absolute sm:bottom-6 sm:left-10 left-1/2 bottom-3 -translate-x-1/2 lg:bottom-8 lg:left-8 z-10 w-full sm:w-auto sm:text-start text-center">
+            <div className="absolute sm:bottom-6 sm:left-10 left-1/2 bottom-3 -translate-x-1/2 sm:translate-x-0 lg:bottom-8 lg:left-8 z-10 w-full sm:w-auto sm:text-start text-center">
                 <p className="text-white text-base sm:text-sm w-full text-center">
                     © Repair Connect of New York 2025
                 </p>
             </div>
 
             {/* Overlay Text - Bottom Right */}
-            <div className="absolute sm:bottom-6 sm:right-10 left-1/2 bottom-11 -translate-x-1/2 lg:bottom-8 lg:right-8 w-fit">
+            <div className="absolute sm:bottom-6  sm:right-6 right-1/2 bottom-11 translate-x-1/2 lg:bottom-8  w-fit sm:translate-x-0">
                 <p className="text-white text-xs sm:text-sm">
                     Design by <span className='underline sm:text-neutral-300 text-neutral-200'>Appflow Studio</span>
                 </p>

@@ -89,6 +89,8 @@ const TextAnimation = ({
         `inline-block dark:text-white text-black `,
         classname
       )}
+      style={{ fontFamily: "var(--font-Jersey_20)" }}
+
     >
       {lineAnime ? (
         <motion.span className={`inline-block`} variants={modifiedVariants}>

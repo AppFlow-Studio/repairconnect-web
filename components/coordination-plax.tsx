@@ -56,8 +56,8 @@ export default function CoordinationPlax() {
                             <div className="relative z-10 pt-2 sm:pt-0 sm:px-8 px-4 w-full">
                                 <div className="sm:p-6 p-4 lg:p-14 rounded-xl sm:rounded-2xl">
                                     {/* Main Headline */}
-                                    <p className="sm:text-3xl text-2xl xl:text-5xl text-white mb-2 sm:mb-4 leading-tight xl:max-w-4xl max-w-lg"
-                                        style={{ fontFamily: "var(--font-Roboto_Slab)" }}
+                                    <p className="sm:text-3xl text-2xl xl:text-5xl text-white mb-2 sm:mb-4 leading-12 xl:max-w-xl max-w-lg"
+                                        style={{ fontFamily: "var(--font-Jersey_20)" }}
                                     >
                                         Otopair lets you manage repairs end to end
                                     </p>
@@ -161,7 +161,7 @@ export default function CoordinationPlax() {
                             </div>
 
                             {/* Apple-like Notification - Mobile Only */}
-                            <FadeInCard
+                            {/* <FadeInCard
                                 className="absolute bottom-6 left-4 sm:left-0  right-4 z-30"
                             // initial={{ opacity: 0, y: 20 }} 
                             // animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,6 @@ export default function CoordinationPlax() {
                             >
                                 <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 p-4 max-w-sm mx-auto">
                                     <div className="flex items-center gap-3">
-                                        {/* Logo Icon */}
                                         <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-200/50 to-blue-300/50 flex items-center justify-center shrink-0 shadow-lg overflow-hidden">
                                             <Image
                                                 src="/logo.png"
@@ -179,7 +178,6 @@ export default function CoordinationPlax() {
                                             />
                                         </div>
 
-                                        {/* Content */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
                                                 <h3 className="text-sm font-semibold text-gray-900 leading-tight">
@@ -193,7 +191,7 @@ export default function CoordinationPlax() {
                                         </div>
                                     </div>
                                 </div>
-                            </FadeInCard>
+                            </FadeInCard> */}
                         </div>
                     </section>
                 </section>

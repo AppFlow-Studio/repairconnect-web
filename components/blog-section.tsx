@@ -37,7 +37,9 @@ export default function BlogSection() {
             <div className="max-w-7xl mx-auto">
                 {/* Header Section */}
                 <div className="mb-12">
-                    <h2 className="sm:text-4xl text-2xl font-serif text-black mb-4">
+                    <h2 className="sm:text-4xl text-2xl text-black mb-4"
+                        style={{ fontFamily: "var(--font-Jersey_20)" }}
+                    >
                         Driving the Future of Car Care
                     </h2>
                     <a
