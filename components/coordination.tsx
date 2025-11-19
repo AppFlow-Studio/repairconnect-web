@@ -304,7 +304,7 @@ export default function Coordination() {
 
                         <div className="flex items-start sm:gap-3 gap-2 relative">
                           <div className='lg:w-10 w-8 lg:h-10 h-8 rounded-lg flex items-center justify-center relative self-center bg-white/60 border border-white/60'>
-                            <Image src={'/Repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
+                            <Image src={'/repairconnectglasslogo.png'} alt={item.headline} fill className='object-cover h-full w-full rounded-2xl  ' />
                           </div>
                           {/* Icon with background */}
                           {/* <div className={`${item.bgColor} rounded-full p-2 aspect-square shrink-0`}>

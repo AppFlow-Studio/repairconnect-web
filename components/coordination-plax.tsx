@@ -36,7 +36,7 @@ export default function CoordinationPlax() {
                         {/* Background Image */}
                         <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden ">
                             <Image
-                                src="/Repairconnect-home2.jpg"
+                                src="/repairconnect-home2.jpg"
                                 alt="Otopair Hero"
                                 fill
                                 className="object-cover"

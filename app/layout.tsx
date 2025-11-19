@@ -5,27 +5,27 @@ import Navbar from "@/components/navbar";
 import FooterImage from "@/components/footerimage";
 import Footer from "@/components/footer";
 import ReactLenis from "lenis/react";
-    // app/layout.tsx (or pages/_app.js)
+// app/layout.tsx (or pages/_app.js)
 import Okta from 'next/font/local';
 
-    // app/layout.tsx (or pages/_app.js)
-    const OktaRegular = Okta({
-      src: '../public/fonts/OktaItalic.otf', // Adjust path as needed
-      variable: '--font-Okta', // Optional: for CSS variables
-      // You can add more font variations if needed:
-      // src: [
-      //   {
-      //     path: '../public/fonts/MyFont-Regular.otf',
-      //     weight: '400',
-      //     style: 'normal',
-      //   },
-      //   {
-      //     path: '../public/fonts/MyFont-Bold.otf',
-      //     weight: '700',
-      //     style: 'normal',
-      //   },
-      // ],
-    });
+// app/layout.tsx (or pages/_app.js)
+const OktaRegular = Okta({
+  src: '../public/fonts/OktaItalic.otf', // Adjust path as needed
+  variable: '--font-Okta', // Optional: for CSS variables
+  // You can add more font variations if needed:
+  // src: [
+  //   {
+  //     path: '../public/fonts/MyFont-Regular.otf',
+  //     weight: '400',
+  //     style: 'normal',
+  //   },
+  //   {
+  //     path: '../public/fonts/MyFont-Bold.otf',
+  //     weight: '700',
+  //     style: 'normal',
+  //   },
+  // ],
+});
 
 const Inters = Inter({
   variable: "--font-inter",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "/Repairconnectglasslogo.png",
+        url: "/repairconnectglasslogo.png",
       },
     ],
   },
