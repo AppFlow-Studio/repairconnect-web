@@ -160,7 +160,7 @@ function Navbar() {
                             className="fixed inset-0 h-full w-full bg-white z-[114] lg:hidden flex flex-col"
                         >
                             {/* Header - Top Bar */}
-                            <div className="flex items-center justify-between p-5">
+                            <div className="flex items-center justify-between px-5 py-3 sm:px-6 sm:py-4">
                                 {/* Logo at top left */}
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.8 }}
@@ -244,7 +244,10 @@ function Navbar() {
                                         <Link
                                             href={item.href}
                                             onClick={() => setMobileMenuOpen(false)}
-                                            className="text-4xl font-serif text-gray-900 hover:text-gray-700 transition-colors duration-200"
+                                            className="text-7xl font-serif text-gray-900 hover:text-gray-700 transition-colors duration-200"
+                                            style={{
+                                                fontFamily: "var(--font-Jersey_20)",
+                                            }}
                                         >
                                             {item.label}
                                         </Link>

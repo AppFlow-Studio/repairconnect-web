@@ -125,12 +125,12 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden flex-1 lg:h-screen  h-screen"
+        className="relative w-full overflow-hidden flex-1 xl:h-screen h-screen sm:h-[900px]"
         style={{
           // minHeight: '100vh'
         }}
       >
-        <div className="relative w-full lg:h-screen h-screen"
+        <div className="relative w-full xl:h-screen h-screen sm:h-[900px]"
           style={{
 
           }}
@@ -167,7 +167,7 @@ export default function Home() {
               </p>
             </div>
 
-            <p className="text-center text-base lg:text-xl leading-relaxed mb-6 text-white/90 px-4 max-w-2xl font-light tracking-wide py-4">
+            <p className="text-center text-sm sm:text-base lg:text-xl leading-relaxed mb-6 text-white/90 px-4 w-full sm:max-w-2xl max-w-md font-light tracking-wide  py-4">
               Welcome to the new age of car care and repairs. Where AI meets automotive expertise to deliver seamless, transparent, and intelligent service coordination.
             </p>
 
@@ -274,14 +274,14 @@ export default function Home() {
 
 
         <motion.div
-          className='p-3 absolute sm:left-8 left-1/2 -translate-x-1/2 sm:translate-x-0  bottom-12 rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding lg:max-w-[500px] sm:max-w-[300px] w-[90%] z-30'
+          className='p-3 absolute sm:left-8 left-1/2 -translate-x-1/2 sm:translate-x-0  bottom-12 rounded-2xl backdrop-blur-[15px] border border-white/20 shadow-[0_2px_6px_0_rgba(0,0,0,0.15)] bg-linear-to-r from-black/12 via-black/7 to-black/7 bg-clip-padding xl:max-w-[500px] sm:max-w-[300px] lg:max-w-md w-[90%] z-30'
           style={{
             y: cardYOffset.get() * 10,
             opacity: cardOpacity,
           }}
         >
           <div className="relative z-10 p-4  text-white rounded-2xl flex flex-col ">
-            <h2 className='font-medium lg:text-4xl sm:text-xl  text-2xl leading-[120%] md:leading-10 tracking-[-0.44px] sm:tracking-[-0.56px] xl:tracking-[-0.8px] text-white max-w-[25ch] text-left mb-2'
+            <h2 className='font-medium lg:text-4xl sm:text-xl md:text-3xl text-2xl leading-[120%] md:leading-10 tracking-[-0.44px] sm:tracking-[-0.56px] xl:tracking-[-0.8px] text-white max-w-[25ch] text-left mb-2'
               style={{ fontFamily: "var(--font-Jersey_20)" }}
             >AI That runs car care autonomously </h2>
             <p className='sm:text-sm text-xs xl:text-base leading-relaxed my-4 tracking-wider'>

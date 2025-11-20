@@ -20,7 +20,7 @@ export default function CoordinationPlax() {
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     return (
-        <div className=' relative h-[720vh] '>
+        <div className=' relative sm:h-[700vh] '>
             <Coordination />
 
             <div className='relative h-screen '>

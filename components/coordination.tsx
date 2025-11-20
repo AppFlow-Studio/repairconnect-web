@@ -116,6 +116,8 @@ export default function Coordination() {
     [0, itemCount + 1]
   )
 
+  console.log(scrollBasedIndex)
+
   // Update active index based on scroll
   useEffect(() => {
     const unsubscribe = scrollBasedIndex.on("change", (latest) => {
@@ -126,16 +128,16 @@ export default function Coordination() {
   }, [scrollBasedIndex, itemCount])
 
   return (
-    <section className="w-full px-6 lg:px-12 py-12 grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto sticky top-0">
+    <section className="w-full px-6 lg:px-12  grid grid-cols-1  gap-12 items-center max-w-6xl mx-auto sticky top-0">
       <div
         ref={notificationsRef}
         className='w-full relative'
         id='notifications'
         style={{
-          height: `${itemCount * 100}vh` // Each item gets 100vh of scroll space
+          height: `${itemCount  * 100}vh` // Each item gets 100vh of scroll space
         }}
       >
-        <div className='w-full lg:hidden flex items-center justify-center'>
+        {/* <div className='w-full lg:hidden flex items-center justify-center'>
           <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
             <div className="space-y-6 flex flex-col">
               <TextAnimation
@@ -156,9 +158,9 @@ export default function Coordination() {
             </div>
 
           </div>
-        </div>
+        </div> */}
         {/* Sticky container that stays in view while scrolling */}
-        <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center'>
+        <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center '>
           <div className='lg:w-[70%] w-[50%] h-full lg:flex hidden items-center justify-center px-8'>
             <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
               <div className="space-y-6 flex flex-col">
@@ -239,7 +241,7 @@ export default function Coordination() {
             </div>
           </div>
 
-          <div className="flex lg:w-[40%] sm:w-full w-[90%] mx-auto md:flex-row flex-col justify-center lg:justify-end items-center lg:mt-0 mt-14">
+          <div className="flex lg:w-[40%] sm:w-full w-[90%] mx-auto md:flex-row flex-col justify-center lg:justify-end items-center lg:mt-0 sm:mt-14 mt-0 ">
             <Iphone className='relative lg:w-full h-full md:w-[45%] w-full' src="/liquidglassphone.png">
               <div className="p-4  w-full h-fit">
                 <div className='w-full mb-4 flex items-center justify-center relative'>
