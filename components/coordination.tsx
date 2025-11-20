@@ -116,7 +116,6 @@ export default function Coordination() {
     [0, itemCount + 1]
   )
 
-  console.log(scrollBasedIndex)
 
   // Update active index based on scroll
   useEffect(() => {
