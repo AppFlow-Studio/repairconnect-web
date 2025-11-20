@@ -125,12 +125,12 @@ export default function Home() {
     <main className="min-h-screen w-full bg-white">
       <section
         ref={heroSectionRef}
-        className="relative w-full overflow-hidden flex-1 xl:h-screen h-screen sm:h-[900px]"
+        className="relative w-full overflow-hidden flex-1 xl:h-[125vh] h-screen sm:h-[900px]"
         style={{
           // minHeight: '100vh'
         }}
       >
-        <div className="relative w-full xl:h-screen h-screen sm:h-[900px]"
+        <div className="relative w-full xl:h-[125vh] h-screen sm:h-[900px]"
           style={{
 
           }}
