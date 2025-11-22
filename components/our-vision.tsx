@@ -38,20 +38,19 @@ export default function OurVision() {
 
                         className="font-af font-medium sm:text-base text-sm tracking-[-0.15px] leading-[140%] text-neutral-600"
                     >
-                        We envision a world where car care runs itself. Anyone with a vehicle can see real prices, real availability, and real reviews, then book the right mechanic in minutes.
-                    </p>
+                        Our Mission is to reinvent vehicle maintenance and care for every driver on the road today. From preset prices that dont change “when the job is done” to confirmed appointment times so you’re never late to work again.                     </p>
                     <p
 
                         className="font-af font-medium sm:text-base text-sm tracking-[-0.15px] leading-[140%] text-neutral-600"
                     >
-                        A world where someone wakes up to a weird engine light, gets a notification, and gets a confirmed repair slot in real time.
+                        Waking up a to a weird noise, or a Christmas tree dashboard in the middle of July will never be an issue again.
                     </p>
                 </div>
                 <TextAnimate animation="blurIn" as="h1"
                     className="font-af font-medium sm:text-3xl text-2xl tracking-[-0.15px] leading-[140%] text-neutral-700"
                     style={{ fontFamily: "var(--font-Jersey_20)" }}
                 >
-                    Where booking a mechanic is as easy as ordering delivery.
+                    Otopair puts automotive repair at your fingertips.
                 </TextAnimate>
             </div>
         </section>
