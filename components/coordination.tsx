@@ -136,28 +136,6 @@ export default function Coordination() {
           height: `${itemCount  * 100}vh` // Each item gets 100vh of scroll space
         }}
       >
-        {/* <div className='w-full lg:hidden flex items-center justify-center'>
-          <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
-            <div className="space-y-6 flex flex-col">
-              <TextAnimation
-                text="You need clarity before you drive over."
-                direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900 "
-              />
-              <TextAnimation
-                text="You need confidence when you hand over the keys."
-                direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900"
-              />
-              <TextAnimation
-                text="You need coordination."
-                direction="left"
-                classname="text-xl sm:text-4xl lg:text-3xl text-neutral-900"
-              />
-            </div>
-
-          </div>
-        </div> */}
         {/* Sticky container that stays in view while scrolling */}
         <div className='sticky top-0 h-screen w-full flex justify-center lg:justify-end items-center '>
           <div className='lg:w-[70%] w-[50%] h-full lg:flex hidden items-center justify-center px-8'>

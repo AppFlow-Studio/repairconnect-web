@@ -14,6 +14,7 @@ import { TypingAnimation } from "@/components/ui/typing-animation";
 import BlogSection from "@/components/blog-section";
 import CoordinationPlax from "@/components/coordination-plax";
 import { ChevronMarqueeButton } from "@/components/ui/chevron-marquee-button";
+import TextAnimation from "@/components/ui/scroll-text";
 
 const text = [
   "Booking a mechanic is now as easy as ordering takeout",
@@ -167,7 +168,7 @@ export default function Home() {
               </p>
             </div>
 
-            <p className="text-center text-sm sm:text-base lg:text-xl leading-relaxed mb-6 text-white/90 px-4 w-full sm:max-w-2xl max-w-md font-light tracking-wide  py-4">
+            <p className="text-center text-sm sm:text-base lg:text-xl leading-relaxed mb-6 text-white/90 px-4 w-full sm:max-w-2xl max-w-sm font-light tracking-wide  py-4">
               Welcome to the new age of car care and repairs. Where AI meets automotive expertise to deliver seamless, transparent, and intelligent service coordination.
             </p>
 
@@ -512,6 +513,28 @@ export default function Home() {
       <TransBarTwo />
       <Flow />
       <div className="rotate-180"><TransBarTwo /></div>
+      <div className='w-full lg:hidden flex items-center justify-center '>
+        <div className="w-full flex items-start flex-col justify-end xl:h-[70%] h-[50%] px-8 gap-y-8">
+          <div className="space-y-6 flex flex-col">
+            <TextAnimation
+              text="You need clarity before you drive over."
+              direction="left"
+              classname="text-2xl sm:text-4xl lg:text-3xl text-neutral-900 "
+            />
+            <TextAnimation
+              text="You need confidence when you hand over the keys."
+              direction="left"
+              classname="text-2xl sm:text-4xl lg:text-3xl text-neutral-900"
+            />
+            <TextAnimation
+              text="You need coordination."
+              direction="left"
+              classname="text-2xl sm:text-4xl lg:text-3xl text-neutral-900"
+            />
+          </div>
+
+        </div>
+      </div>
       <CoordinationPlax />
       <BlogSection />
 
