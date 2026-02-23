@@ -1,0 +1,107 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
+import {
+  LayoutDashboard,
+  Store,
+  Briefcase,
+  Calendar,
+  Users,
+  Settings,
+  Menu,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+
+const sidebarLinks = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/shop", label: "Shop", icon: Store },
+  { href: "/jobs", label: "Jobs", icon: Briefcase },
+  { href: "/schedule", label: "Schedule", icon: Calendar },
+  { href: "/team", label: "Team", icon: Users },
+  { href: "/settings", label: "Settings", icon: Settings },
+];
+
+export default function PortalLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
+          <Image src="/logo.png" alt="Otopair" width={32} height={32} />
+          <span className="text-lg font-semibold text-gray-900">Otopair</span>
+          <button
+            className="ml-auto lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
+        </div>
+
+        <nav className="flex-1 px-3 py-4 space-y-1">
+          {sidebarLinks.map((link) => {
+            const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                }`}
+              >
+                <link.icon className="w-5 h-5" />
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="px-6 py-4 border-t border-gray-200">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top bar */}
+        <header className="sticky top-0 z-30 flex items-center gap-4 px-6 py-4 bg-white border-b border-gray-200 lg:hidden">
+          <button onClick={() => setSidebarOpen(true)}>
+            <Menu className="w-6 h-6 text-gray-600" />
+          </button>
+          <Image src="/logo.png" alt="Otopair" width={28} height={28} />
+          <span className="text-base font-semibold text-gray-900">Otopair</span>
+          <div className="ml-auto">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        </header>
+
+        <main className="flex-1 p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
