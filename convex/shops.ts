@@ -20,28 +20,43 @@ export const create = mutation({
 
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", identity.subject))
       .unique();
 
     if (!user) throw new Error("User not found");
 
+    const existing = await ctx.db
+      .query("shops")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .first();
+    if (existing) throw new Error("This slug is already taken. Please choose another.");
+
     const now = Date.now();
 
     const shopId = await ctx.db.insert("shops", {
-      ...args,
-      isActive: true,
-      ownerId: user._id,
-      createdAt: now,
-      updatedAt: now,
+      name: args.name,
+      slug: args.slug,
+      description: args.description,
+      address: args.address,
+      city: args.city,
+      state: args.state,
+      zip: args.zipCode,
+      phone: args.phone,
+      email: args.email,
+      website: args.website,
+      is_active: true,
+      owner_user_id: user._id,
     });
 
     await ctx.db.insert("shop_users", {
-      shopId,
-      userId: user._id,
+      shop_id: shopId,
+      user_id: user._id,
       role: "owner",
-      isActive: true,
-      createdAt: now,
-      updatedAt: now,
+      is_active: true,
+      invited_at: now,
+      accepted_at: now,
+      created_at: now,
+      updated_at: now,
     });
 
     return shopId;
@@ -56,14 +71,14 @@ export const getByOwner = query({
 
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", identity.subject))
       .unique();
 
     if (!user) return [];
 
     return await ctx.db
       .query("shops")
-      .withIndex("by_ownerId", (q) => q.eq("ownerId", user._id))
+      .withIndex("by_owner_user_id", (q) => q.eq("owner_user_id", user._id))
       .collect();
   },
 });
@@ -75,6 +90,16 @@ export const getById = query({
   },
 });
 
+export const getBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("shops")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .first();
+  },
+});
+
 export const getMyShops = query({
   args: {},
   handler: async (ctx) => {
@@ -83,20 +108,20 @@ export const getMyShops = query({
 
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", identity.subject))
       .unique();
 
     if (!user) return [];
 
     const shopUsers = await ctx.db
       .query("shop_users")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .filter((q) => q.eq(q.field("isActive"), true))
+      .withIndex("by_user_id", (q) => q.eq("user_id", user._id))
+      .filter((q) => q.eq(q.field("is_active"), true))
       .collect();
 
     const shops = await Promise.all(
       shopUsers.map(async (su) => {
-        const shop = await ctx.db.get(su.shopId);
+        const shop = await ctx.db.get(su.shop_id);
         return shop ? { ...shop, memberRole: su.role } : null;
       })
     );

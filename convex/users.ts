@@ -3,24 +3,17 @@ import { mutation, query } from "./_generated/server";
 
 export const upsertFromClerk = mutation({
   args: {
-    clerkId: v.string(),
+    clerkUserId: v.string(),
     email: v.string(),
-    firstName: v.optional(v.string()),
-    lastName: v.optional(v.string()),
-    imageUrl: v.optional(v.string()),
-    role: v.optional(
-      v.union(
-        v.literal("user"),
-        v.literal("shop_owner"),
-        v.literal("mechanic"),
-        v.literal("admin")
-      )
-    ),
+    first_name: v.optional(v.string()),
+    last_name: v.optional(v.string()),
+    profile_photo_url: v.optional(v.string()),
+    role: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", args.clerkUserId))
       .unique();
 
     const now = Date.now();
@@ -28,43 +21,43 @@ export const upsertFromClerk = mutation({
     if (existing) {
       await ctx.db.patch(existing._id, {
         email: args.email,
-        firstName: args.firstName,
-        lastName: args.lastName,
-        imageUrl: args.imageUrl,
+        first_name: args.first_name,
+        last_name: args.last_name,
+        profile_photo_url: args.profile_photo_url ?? undefined,
         ...(args.role ? { role: args.role } : {}),
-        updatedAt: now,
+        lastUpdated: now,
       });
       return existing._id;
     }
 
     return await ctx.db.insert("users", {
-      clerkId: args.clerkId,
+      clerkUserId: args.clerkUserId,
       email: args.email,
-      firstName: args.firstName,
-      lastName: args.lastName,
-      imageUrl: args.imageUrl,
+      first_name: args.first_name,
+      last_name: args.last_name,
+      profile_photo_url: args.profile_photo_url ?? undefined,
       role: args.role ?? "user",
-      isActive: true,
+      onboardingCompleted: false,
       createdAt: now,
-      updatedAt: now,
     });
   },
 });
 
 export const deleteFromClerk = mutation({
   args: {
-    clerkId: v.string(),
+    clerkUserId: v.string(),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", args.clerkUserId))
       .unique();
 
     if (user) {
       await ctx.db.patch(user._id, {
-        isActive: false,
-        updatedAt: Date.now(),
+        isPendingDeletion: true,
+        deletionRequestedAt: Date.now(),
+        lastUpdated: Date.now(),
       });
     }
   },
@@ -76,23 +69,19 @@ export const getCurrentUser = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
 
-    const user = await ctx.db
+    return await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) =>
-        q.eq("clerkId", identity.subject)
-      )
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", identity.subject))
       .unique();
-
-    return user;
   },
 });
 
-export const getByClerkId = query({
-  args: { clerkId: v.string() },
+export const getByClerkUserId = query({
+  args: { clerkUserId: v.string() },
   handler: async (ctx, args) => {
     return await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .withIndex("by_clerkUserId", (q) => q.eq("clerkUserId", args.clerkUserId))
       .unique();
   },
 });
