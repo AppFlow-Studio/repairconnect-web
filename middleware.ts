@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/accept-invite(.*)",
   "/api/waitlist",
   "/api/webhooks(.*)",
   "/shop-only",
@@ -38,9 +39,14 @@ export default clerkMiddleware(async (auth, request) => {
 
   const role = (sessionClaims?.metadata as { role?: string })?.role;
 
-  // Portal routes require shop_owner, mechanic, or admin role
+  // Portal routes require a shop role or admin
   if (isPortalRoute(request)) {
-    if (role !== "shop_owner" && role !== "mechanic" && role !== "admin") {
+    if (
+      role !== "shop_owner" &&
+      role !== "shop_mechanic" &&
+      role !== "mechanic" &&
+      role !== "admin"
+    ) {
       return NextResponse.redirect(new URL("/shop-only", request.url));
     }
   }

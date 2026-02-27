@@ -1001,7 +1001,8 @@ export default defineSchema({
     stripe_customer_id: v.optional(v.string()),
     push_token: v.optional(v.string()),
   }).index("by_clerkUserId", ["clerkUserId"])
-    .index("by_isPendingDeletion", ["isPendingDeletion"]),
+    .index("by_isPendingDeletion", ["isPendingDeletion"])
+    .index("by_email", ["email"]),
 
   // ============================================================================
   // OEM PARTS & NORMALIZATION
