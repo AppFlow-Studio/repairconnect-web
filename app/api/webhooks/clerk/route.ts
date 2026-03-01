@@ -6,7 +6,6 @@ import { Id } from "@/convex/_generated/dataModel";
 
 type ShopInviteMetadata = {
   role?: string;
-  otopair_role?: string;
   shop_id?: string;
   invitation_token?: string;
   mechanic_id?: string;
@@ -28,8 +27,7 @@ export async function POST(req: NextRequest) {
       // Extract shop invite metadata copied from Clerk invitation onto the user
       const meta = (public_metadata ?? {}) as ShopInviteMetadata;
 
-      // otopair_role is set by invitation metadata; fall back to generic role for regular users
-      const role = meta.otopair_role ?? meta.role;
+      const role = meta.role;
 
       await fetchMutation(api.users.upsertFromClerk, {
         clerkUserId: id,
@@ -42,7 +40,7 @@ export async function POST(req: NextRequest) {
 
       // If this event has shop invite metadata (new mechanic OR existing user invited),
       // attempt to create the shop_users record. Idempotent — safe to call on user.updated too.
-      if (meta.otopair_role) {
+      if (meta.role === "shop_mechanic" && meta.invitation_token) {
         await fetchMutation(api.invitations.acceptIfInvited, {
           clerkUserId: id,
           email: primaryEmail,
